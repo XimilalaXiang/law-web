@@ -50,37 +50,45 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
 
   return (
     <div className="fixed bottom-0 right-0 md:bottom-6 md:right-6 z-50 flex flex-col w-full h-full md:w-[420px] md:h-[600px] md:rounded-3xl bg-white shadow-[20px_20px_60px_rgba(0,0,0,0.15),-10px_-10px_40px_rgba(255,255,255,0.8)] border border-gray-100 overflow-hidden">
-      {/* 头部 */}
-      <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg">
+      {/* 头部 - Neumorphic风格 */}
+      <div className="flex items-center justify-between px-6 py-5 bg-gradient-to-br from-gray-50 to-gray-100 shadow-[8px_8px_20px_rgba(0,0,0,0.08),-4px_-4px_15px_rgba(255,255,255,0.9)] border-b border-gray-200/50">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-inner">
-            <span className="text-lg">🤖</span>
+          {/* 机器人图标 - Neumorphic凹陷效果 */}
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 shadow-[inset_4px_4px_10px_rgba(0,0,0,0.1),inset_-4px_-4px_10px_rgba(255,255,255,0.8)] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md">
+              <span className="text-lg">🤖</span>
+            </div>
           </div>
+          
+          {/* 标题和副标题 */}
           <div>
-            <h2 className="text-base font-semibold">AI防骗助手</h2>
-            <p className="text-xs text-blue-100">守护你的求职安全</p>
+            <h2 className="text-base font-bold bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent">
+              AI防骗助手
+            </h2>
+            <p className="text-xs text-gray-500 font-medium">守护你的求职安全</p>
           </div>
         </div>
         
+        {/* 操作按钮组 */}
         <div className="flex items-center gap-2">
-          {/* 清空历史 */}
+          {/* 清空历史按钮 - Neumorphic */}
           {messages.length > 0 && (
             <button
               onClick={clearHistory}
-              className="p-2 rounded-full hover:bg-white/20 transition-colors duration-200"
+              className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 shadow-[4px_4px_10px_rgba(0,0,0,0.1),-2px_-2px_8px_rgba(255,255,255,0.9)] hover:shadow-[2px_2px_6px_rgba(0,0,0,0.12),-1px_-1px_5px_rgba(255,255,255,0.95)] active:shadow-[inset_2px_2px_6px_rgba(0,0,0,0.15),inset_-2px_-2px_6px_rgba(255,255,255,0.7)] transition-all duration-200 flex items-center justify-center group"
               title="清空历史"
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-4 w-4 text-gray-600 group-hover:text-red-500 transition-colors" />
             </button>
           )}
           
-          {/* 关闭按钮 */}
+          {/* 关闭按钮 - Neumorphic */}
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-white/20 transition-colors duration-200"
+            className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 shadow-[4px_4px_10px_rgba(0,0,0,0.1),-2px_-2px_8px_rgba(255,255,255,0.9)] hover:shadow-[2px_2px_6px_rgba(0,0,0,0.12),-1px_-1px_5px_rgba(255,255,255,0.95)] active:shadow-[inset_2px_2px_6px_rgba(0,0,0,0.15),inset_-2px_-2px_6px_rgba(255,255,255,0.7)] transition-all duration-200 flex items-center justify-center group"
             title="关闭"
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5 text-gray-600 group-hover:text-gray-800 transition-colors" />
           </button>
         </div>
       </div>
