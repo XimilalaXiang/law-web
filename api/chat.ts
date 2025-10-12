@@ -266,7 +266,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       for (const line of lines) {
         // 兼容部分上游会返回 "event: message" 行
         if (!line.startsWith('data:')) continue;
-        const data = line.slice(5).trimStart().replace(/^:/, ''); // 允许 "data:" 或 "data :"
+        
+        // 使用正则表达式提取data后的内容，更可靠
+        const data = line.replace(/^data:\s*/, '').trim();
+        
         if (data === '[DONE]') {
           res.write('data: [DONE]\n\n');
           forwardedAny = true;
@@ -291,7 +294,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           }
         } catch (e) {
           // 如果不是合法JSON，累积到缓冲，待 done 时整体解析
-          console.error('Parse error:', e);
+          console.error('SSE parse error for line:', line, e);
         }
       }
     }
