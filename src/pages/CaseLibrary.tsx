@@ -83,9 +83,9 @@ const CaseLibrary = () => {
     const matchesType = filterType === '全部' || c.type === filterType;
     return matchesSearch && matchesType;
   });
-  return <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen w-full">
+  return <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen w-full transition-colors duration-300">
       {/* Subtle pattern background */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none">
+      <div className="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <pattern id="grid-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
             <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#3B82F6" strokeWidth="0.5" />
@@ -95,42 +95,42 @@ const CaseLibrary = () => {
       </div>
       <div className="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8 lg:py-24 relative">
         {/* Neumorphic Header Card */}
-        <div className="relative bg-gray-50 rounded-3xl p-8 shadow-[20px_20px_60px_rgba(0,0,0,0.05),-20px_-20px_60px_rgba(255,255,255,0.8)] border border-gray-100 mb-16 transform transition-all duration-300 hover:shadow-[15px_15px_30px_rgba(0,0,0,0.06),-15px_-15px_30px_rgba(255,255,255,0.9)]">
+        <div className="relative bg-gray-50 dark:bg-gray-800 rounded-3xl p-8 shadow-[20px_20px_60px_rgba(0,0,0,0.05),-20px_-20px_60px_rgba(255,255,255,0.8)] dark:shadow-[20px_20px_60px_rgba(0,0,0,0.4),-20px_-20px_60px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-700 mb-16 transform transition-all duration-300 hover:shadow-[15px_15px_30px_rgba(0,0,0,0.06),-15px_-15px_30px_rgba(255,255,255,0.9)] dark:hover:shadow-[15px_15px_30px_rgba(0,0,0,0.5),-15px_-15px_30px_rgba(255,255,255,0.03)]">
           {/* Floating 3D Shield Icon */}
           <div className="absolute -top-10 left-1/2 transform -translate-x-1/2">
             <div className="relative w-20 h-20 transition-transform duration-300 hover:rotate-6 group">
               {/* Shadow layers for 3D effect */}
               <div className="absolute inset-0 bg-blue-600 rounded-full opacity-10 blur-md transform scale-90 translate-y-1"></div>
-              <div className="absolute inset-0 bg-white rounded-full shadow-lg transform scale-95"></div>
+              <div className="absolute inset-0 bg-white dark:bg-gray-700 rounded-full shadow-lg transform scale-95"></div>
               {/* Icon container with neumorphic effect */}
-              <div className="absolute inset-0 bg-gray-50 rounded-full shadow-[5px_5px_15px_rgba(0,0,0,0.1),-5px_-5px_15px_rgba(255,255,255,0.8)] flex items-center justify-center border border-gray-100 group-hover:shadow-[3px_3px_10px_rgba(0,0,0,0.12),-3px_-3px_10px_rgba(255,255,255,0.9)] transition-all duration-300">
-                <ShieldCheckIcon className="h-10 w-10 text-blue-600 transform transition-transform duration-300 group-hover:scale-110" />
+              <div className="absolute inset-0 bg-gray-50 dark:bg-gray-700 rounded-full shadow-[5px_5px_15px_rgba(0,0,0,0.1),-5px_-5px_15px_rgba(255,255,255,0.8)] dark:shadow-[5px_5px_15px_rgba(0,0,0,0.4),-5px_-5px_15px_rgba(255,255,255,0.02)] flex items-center justify-center border border-gray-100 dark:border-gray-600 group-hover:shadow-[3px_3px_10px_rgba(0,0,0,0.12),-3px_-3px_10px_rgba(255,255,255,0.9)] dark:group-hover:shadow-[3px_3px_10px_rgba(0,0,0,0.5),-3px_-3px_10px_rgba(255,255,255,0.03)] transition-all duration-300">
+                <ShieldCheckIcon className="h-10 w-10 text-blue-600 dark:text-blue-400 transform transition-transform duration-300 group-hover:scale-110" />
               </div>
             </div>
           </div>
           <div className="text-center pt-10">
-            <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl mb-4 text-shadow">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl mb-4 text-shadow">
               求职诈骗案例库
             </h1>
-            <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-500">
+            <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-500 dark:text-gray-400">
               了解真实的求职诈骗案例，提高警惕，保护自己的权益
             </p>
           </div>
           {/* Search and Filter with inner shadow */}
           <div className="mt-12 max-w-3xl mx-auto">
-            <div className="bg-gray-50 rounded-2xl p-6 shadow-[inset_4px_4px_8px_rgba(0,0,0,0.05),inset_-4px_-4px_8px_rgba(255,255,255,0.8)] border border-gray-100">
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-2xl p-6 shadow-[inset_4px_4px_8px_rgba(0,0,0,0.05),inset_-4px_-4px_8px_rgba(255,255,255,0.8)] dark:shadow-[inset_4px_4px_8px_rgba(0,0,0,0.4),inset_-4px_-4px_8px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-600">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="relative flex-grow group">
                   {/* Neumorphic search input */}
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <SearchIcon className="h-5 w-5 text-gray-400 group-hover:text-blue-500 transition-colors duration-200" aria-hidden="true" />
                   </div>
-                  <input type="text" className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg leading-5 bg-gray-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all duration-200 sm:text-sm shadow-[inset_2px_2px_5px_rgba(0,0,0,0.05),inset_-2px_-2px_5px_rgba(255,255,255,0.5)] hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)]" placeholder="搜索案例关键词..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                  <input type="text" className="block w-full pl-10 pr-3 py-3 border border-gray-200 dark:border-gray-600 rounded-lg leading-5 bg-gray-50 dark:bg-gray-600 placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent focus:bg-white dark:focus:bg-gray-700 transition-all duration-200 sm:text-sm shadow-[inset_2px_2px_5px_rgba(0,0,0,0.05),inset_-2px_-2px_5px_rgba(255,255,255,0.5)] dark:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.4),inset_-2px_-2px_5px_rgba(255,255,255,0.02)] hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)] dark:hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.5),inset_-3px_-3px_6px_rgba(255,255,255,0.03)]" placeholder="搜索案例关键词..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
                 </div>
                 <div className="relative inline-block min-w-[180px] group">
                   <div className="flex items-center">
-                    <FilterIcon className="h-4 w-4 text-gray-400 mr-2 group-hover:text-blue-500 transition-colors duration-200" aria-hidden="true" />
-                    <select className="block w-full pl-3 pr-10 py-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 focus:bg-white transition-all duration-200 shadow-[inset_2px_2px_5px_rgba(0,0,0,0.05),inset_-2px_-2px_5px_rgba(255,255,255,0.5)] hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)]" value={filterType} onChange={e => setFilterType(e.target.value)}>
+                    <FilterIcon className="h-4 w-4 text-gray-400 dark:text-gray-500 mr-2 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200" aria-hidden="true" />
+                    <select className="block w-full pl-3 pr-10 py-3 text-sm border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-gray-50 dark:bg-gray-600 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-gray-700 transition-all duration-200 shadow-[inset_2px_2px_5px_rgba(0,0,0,0.05),inset_-2px_-2px_5px_rgba(255,255,255,0.5)] dark:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.4),inset_-2px_-2px_5px_rgba(255,255,255,0.02)] hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.06),inset_-3px_-3px_6px_rgba(255,255,255,0.6)] dark:hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.5),inset_-3px_-3px_6px_rgba(255,255,255,0.03)]" value={filterType} onChange={e => setFilterType(e.target.value)}>
                       {caseTypes.map(type => <option key={type} value={type}>
                           {type}
                         </option>)}
@@ -143,28 +143,28 @@ const CaseLibrary = () => {
         </div>
         {/* Case List */}
         <div className="mt-12 grid gap-8 md:grid-cols-2">
-          {filteredCases.map(caseItem => <div key={caseItem.id} className="bg-white overflow-hidden rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 card-hover">
+          {filteredCases.map(caseItem => <div key={caseItem.id} className="bg-white dark:bg-gray-800 overflow-hidden rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300 card-hover">
               <div className="p-6">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                     {caseItem.title}
                   </h3>
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
                     {caseItem.type}
                   </span>
                 </div>
-                <p className="mt-2 text-sm text-gray-400">{caseItem.date}</p>
-                <p className="mt-4 text-gray-600">{caseItem.summary}</p>
-                <div className="mt-6 pt-6 border-t border-gray-100">
+                <p className="mt-2 text-sm text-gray-400 dark:text-gray-500">{caseItem.date}</p>
+                <p className="mt-4 text-gray-600 dark:text-gray-400">{caseItem.summary}</p>
+                <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
                   <div className="flex items-center">
-                    <AlertCircleIcon className="h-4 w-4 text-amber-500 mr-2" />
-                    <h4 className="text-sm font-medium text-gray-700">
+                    <AlertCircleIcon className="h-4 w-4 text-amber-500 dark:text-amber-400 mr-2" />
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       预警信号:
                     </h4>
                   </div>
                   <ul className="mt-3 space-y-2">
-                    {caseItem.warning_signs.map((sign, index) => <li key={index} className="flex items-start text-sm text-gray-600">
-                        <span className="inline-block w-1.5 h-1.5 bg-amber-400 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
+                    {caseItem.warning_signs.map((sign, index) => <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-400">
+                        <span className="inline-block w-1.5 h-1.5 bg-amber-400 dark:bg-amber-500 rounded-full mt-1.5 mr-2 flex-shrink-0"></span>
                         {sign}
                       </li>)}
                   </ul>
@@ -173,10 +173,10 @@ const CaseLibrary = () => {
             </div>)}
         </div>
         {filteredCases.length === 0 && <div className="text-center py-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-6">
-              <SearchIcon className="h-6 w-6 text-gray-400" />
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 mb-6">
+              <SearchIcon className="h-6 w-6 text-gray-400 dark:text-gray-500" />
             </div>
-            <p className="text-gray-500 text-lg">
+            <p className="text-gray-500 dark:text-gray-400 text-lg">
               未找到匹配的案例，请尝试其他搜索条件
             </p>
           </div>}
