@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, RefreshCw, AlertCircle, ShieldCheck, CircleStop, Plus, History } from 'lucide-react';
+import { Send, RefreshCw, AlertCircle, ShieldCheck, CircleStop, Plus, History, Minimize2 } from 'lucide-react';
 import MessageBubble from './MessageBubble';
 import QuickQuestions from './QuickQuestions';
 import { useAIChat } from '../../hooks/useAIChat';
@@ -143,6 +143,16 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
               </div>
             )}
           </div>
+
+          {/* 最小化（隐藏窗口） */}
+          <button
+            onClick={onClose}
+            className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 shadow-[4px_4px_10px_rgba(0,0,0,0.1),-2px_-2px_8px_rgba(255,255,255,0.9)] dark:shadow-[4px_4px_10px_rgba(0,0,0,0.4),-2px_-2px_8px_rgba(255,255,255,0.02)] hover:shadow-[2px_2px_6px_rgba(0,0,0,0.12),-1px_-1px_5px_rgba(255,255,255,0.95)] dark:hover:shadow-[2px_2px_6px_rgba(0,0,0,0.5),-1px_-1px_5px_rgba(255,255,255,0.03)] transition-all duration-200 flex items-center justify-center group"
+            title="最小化"
+            aria-label="最小化"
+          >
+            <Minimize2 className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+          </button>
 
           
           {isLoading && (
