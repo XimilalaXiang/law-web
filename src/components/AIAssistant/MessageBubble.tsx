@@ -33,51 +33,117 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
 
         {/* 消息内容 - Neumorphic风格 */}
         <div
-          className={`px-4 md:px-5 py-3 md:py-4 rounded-2xl min-w-0 flex-1 overflow-hidden ${
+          className={`px-4 md:px-5 py-3 md:py-4 rounded-2xl min-w-0 flex-1 ${
             isUser
               ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg'
               : 'bg-white shadow-[5px_5px_15px_rgba(0,0,0,0.08),-5px_-5px_15px_rgba(255,255,255,0.8)] border border-gray-100'
           }`}
+          style={{ 
+            overflow: 'hidden',
+            wordBreak: 'break-word',
+            overflowWrap: 'break-word'
+          }}
         >
           {isUser ? (
             // 用户消息：直接显示
-            <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+            <p 
+              className="text-sm leading-relaxed"
+              style={{
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word'
+              }}
+            >
               {message.content}
             </p>
           ) : (
             // AI消息：Markdown渲染
             <div
-              className={`prose prose-sm max-w-none break-words overflow-wrap-anywhere ${
+              className={`prose prose-sm max-w-none ${
                 message.content ? '' : 'text-gray-400 italic'
               }`}
+              style={{
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
+                wordWrap: 'break-word',
+              }}
             >
               {message.content ? (
                 <ReactMarkdown
                   components={{
                     // 自定义样式
-                    h1: ({ children }) => <h1 className="text-lg font-bold mb-2 text-gray-900 break-words">{children}</h1>,
-                    h2: ({ children }) => <h2 className="text-base font-bold mb-2 text-gray-900 break-words">{children}</h2>,
-                    h3: ({ children }) => <h3 className="text-sm font-semibold mb-1 text-gray-900 break-words">{children}</h3>,
-                    p: ({ children }) => <p className="text-sm leading-relaxed mb-2 text-gray-700 break-words">{children}</p>,
-                    ul: ({ children }) => <ul className="list-disc pl-4 md:pl-5 mb-2 space-y-1 text-gray-700">{children}</ul>,
-                    ol: ({ children }) => <ol className="list-decimal pl-4 md:pl-5 mb-2 space-y-1 text-gray-700">{children}</ol>,
-                    li: ({ children }) => <li className="text-sm text-gray-700 break-words">{children}</li>,
+                    h1: ({ children }) => (
+                      <h1 
+                        className="text-lg font-bold mb-2 text-gray-900"
+                        style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
+                      >
+                        {children}
+                      </h1>
+                    ),
+                    h2: ({ children }) => (
+                      <h2 
+                        className="text-base font-bold mb-2 text-gray-900"
+                        style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
+                      >
+                        {children}
+                      </h2>
+                    ),
+                    h3: ({ children }) => (
+                      <h3 
+                        className="text-sm font-semibold mb-1 text-gray-900"
+                        style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
+                      >
+                        {children}
+                      </h3>
+                    ),
+                    p: ({ children }) => (
+                      <p 
+                        className="text-sm leading-relaxed mb-2 text-gray-700"
+                        style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
+                      >
+                        {children}
+                      </p>
+                    ),
+                    ul: ({ children }) => <ul className="list-disc pl-4 md:pl-5 mb-2 space-y-1 text-gray-700 overflow-hidden">{children}</ul>,
+                    ol: ({ children }) => <ol className="list-decimal pl-4 md:pl-5 mb-2 space-y-1 text-gray-700 overflow-hidden">{children}</ol>,
+                    li: ({ children }) => (
+                      <li 
+                        className="text-sm text-gray-700"
+                        style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
+                      >
+                        {children}
+                      </li>
+                    ),
                     strong: ({ children }) => <strong className="font-semibold text-gray-900">{children}</strong>,
                     em: ({ children }) => <em className="italic text-gray-600">{children}</em>,
                     code: ({ children, className }) => {
                       const isInline = !className;
                       return isInline ? (
-                        <code className="px-1.5 py-0.5 bg-gray-100 rounded text-xs font-mono text-red-600 break-words">
+                        <code 
+                          className="px-1.5 py-0.5 bg-gray-100 rounded text-xs font-mono text-red-600"
+                          style={{ wordBreak: 'break-all', overflowWrap: 'anywhere' }}
+                        >
                           {children}
                         </code>
                       ) : (
-                        <code className="block p-3 bg-gray-100 rounded-lg text-xs font-mono text-gray-800 whitespace-pre-wrap break-words overflow-hidden">
+                        <code 
+                          className="block p-3 bg-gray-100 rounded-lg text-xs font-mono text-gray-800"
+                          style={{ 
+                            whiteSpace: 'pre-wrap', 
+                            wordBreak: 'break-word', 
+                            overflowWrap: 'break-word',
+                            overflow: 'hidden'
+                          }}
+                        >
                           {children}
                         </code>
                       );
                     },
                     blockquote: ({ children }) => (
-                      <blockquote className="border-l-4 border-blue-400 pl-3 md:pl-4 py-2 my-2 bg-blue-50 rounded-r text-gray-700 break-words overflow-hidden">
+                      <blockquote 
+                        className="border-l-4 border-blue-400 pl-3 md:pl-4 py-2 my-2 bg-blue-50 rounded-r text-gray-700"
+                        style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflow: 'hidden' }}
+                      >
                         {children}
                       </blockquote>
                     ),
