@@ -1,6 +1,7 @@
 import React from 'react';
 import { UserIcon, BotIcon } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import type { Message } from '../../types/chat';
 
 interface MessageBubbleProps {
@@ -70,6 +71,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
             >
               {message.content ? (
                 <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
                   components={{
                     // 自定义样式
                     h1: ({ children }) => (
@@ -146,6 +148,45 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
                       >
                         {children}
                       </blockquote>
+                    ),
+                    // 表格样式
+                    table: ({ children }) => (
+                      <div className="overflow-x-auto my-3">
+                        <table className="min-w-full border-collapse border border-gray-300 text-sm">
+                          {children}
+                        </table>
+                      </div>
+                    ),
+                    thead: ({ children }) => (
+                      <thead className="bg-gray-50">
+                        {children}
+                      </thead>
+                    ),
+                    tbody: ({ children }) => (
+                      <tbody className="bg-white">
+                        {children}
+                      </tbody>
+                    ),
+                    tr: ({ children }) => (
+                      <tr className="border-b border-gray-200">
+                        {children}
+                      </tr>
+                    ),
+                    th: ({ children }) => (
+                      <th 
+                        className="px-3 py-2 text-left font-semibold text-gray-900 border border-gray-300"
+                        style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
+                      >
+                        {children}
+                      </th>
+                    ),
+                    td: ({ children }) => (
+                      <td 
+                        className="px-3 py-2 text-gray-700 border border-gray-300"
+                        style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
+                      >
+                        {children}
+                      </td>
                     ),
                   }}
                 >
