@@ -76,14 +76,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (messages.length > 50) {
       return res.status(400).json({ error: 'Too many messages' });
     }
-    const totalLength = messages.reduce((acc: number, m: any) => acc + (m && typeof m.content === 'string' ? m.content.length : 0), 0);
+    const totalLength = messages.reduce((acc: number, m: unknown) => {
+      if (m && typeof m === 'object' && 'content' in m && typeof (m as { content: unknown }).content === 'string') {
+        return acc + (m as { content: string }).content.length;
+      }
+      return acc;
+    }, 0);
     if (totalLength > 8000) {
       return res.status(400).json({ error: 'Content too long' });
     }
 
     // Rate limiting
     const ipHeader = (req.headers['x-forwarded-for'] as string | undefined) || '';
-    const ip = ipHeader.split(',')[0]?.trim() || (req.socket as any)?.remoteAddress || 'unknown';
+    const socket = req.socket as { remoteAddress?: string } | undefined;
+    const ip = ipHeader.split(',')[0]?.trim() || socket?.remoteAddress || 'unknown';
     const now = Date.now();
     const current = rateMap.get(ip);
     if (!current || now > current.resetAt) {
@@ -156,7 +162,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     if (!response.ok) {
-      let details: any = null;
+      let details: unknown = null;
       try { details = await response.json(); } catch {
         try { details = await response.text(); } catch { details = null; }
       }
@@ -256,46 +262,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const chunk = decoder.decode(value);
       rawBuffer += chunk;
       const lines = chunk.split('\n').filter(line => line.trim() !== '');
-<<<<<<< ours
-<<<<<<< ours
 
       for (const line of lines) {
         // 兼容部分上游会返回 "event: message" 行
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
-=======
->>>>>>> theirs
-=======
->>>>>>> theirs
-        if (line.startsWith('data:')) {
-          const data = line.slice(6);
-          if (data === '[DONE]') {
-            res.write('data: [DONE]\n\n');
-            continue;
-          }
-<<<<<<< ours
-<<<<<<< ours
-
-          try {
-            const parsed = JSON.parse(data);
-            // 转发给前端
-            res.write(`data: ${JSON.stringify(parsed)}\n\n`);
-            forwardedAny = true;
-          } catch (e) {
-            // 忽略解析错误
-            console.error('Parse error:', e);
-=======
-=======
-
-      for (const line of lines) {
-        // 兼容部分上游会返回 "event: message" 行
->>>>>>> theirs
-=======
-
-      for (const line of lines) {
-        // 兼容部分上游会返回 "event: message" 行
->>>>>>> theirs
         if (!line.startsWith('data:')) continue;
         const data = line.slice(5).trimStart().replace(/^:/, ''); // 允许 "data:" 或 "data :"
         if (data === '[DONE]') {
@@ -303,34 +272,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           forwardedAny = true;
           continue;
         }
-=======
->>>>>>> theirs
-=======
->>>>>>> theirs
 
-<<<<<<< ours
-          try {
-            const parsed = JSON.parse(data);
-            // 转发给前端
-            res.write(`data: ${JSON.stringify(parsed)}\n\n`);
-            forwardedAny = true;
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
->>>>>>> theirs
-=======
->>>>>>> theirs
-=======
-          } catch (e) {
-            // 忽略解析错误
-            console.error('Parse error:', e);
->>>>>>> theirs
-=======
-          } catch (e) {
-            // 忽略解析错误
-            console.error('Parse error:', e);
->>>>>>> theirs
-=======
         try {
           const parsed = JSON.parse(data);
           // 只向前端输出精简的 delta.content，去掉上游的冗余字段
@@ -346,7 +288,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             const sseObj = { choices: [{ delta: { content } }] };
             res.write(`data: ${JSON.stringify(sseObj)}\n\n`);
             forwardedAny = true;
->>>>>>> theirs
           }
         } catch (e) {
           // 如果不是合法JSON，累积到缓冲，待 done 时整体解析
