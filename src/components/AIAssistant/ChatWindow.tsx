@@ -159,7 +159,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
       </div>
 
       {/* 消息区域 */}
-      <div className="flex-1 overflow-y-auto p-3 md:p-4 bg-gray-50 dark:bg-gray-900" aria-live="polite">
+      <div className="flex-1 overflow-y-auto p-3 md:p-4 lg:p-5 bg-gray-50 dark:bg-gray-900" aria-live="polite">
         {messages.length === 0 ? (
           // 欢迎界面
           <div className="h-full flex flex-col items-center justify-center text-center px-6">
