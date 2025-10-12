@@ -261,7 +261,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       const chunk = decoder.decode(value);
       rawBuffer += chunk;
-      const lines = chunk.split('\n');
+      // 基于累计缓冲区解析，避免跨包拆分导致丢片段
+      const lines = rawBuffer.split('\n');
 
       for (const line of lines) {
         // 跳过空行和非data行
@@ -300,6 +301,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           console.error('SSE JSON parse error:', e);
           // 解析失败，不做任何处理
         }
+      }
+      // 保留未完整的一行在缓冲中（通常是最后一行）
+      const lastLine = lines[lines.length - 1] || '';
+      if (!lastLine.endsWith('\n')) {
+        // 若最后一行不是完整事件，保留在 rawBuffer
+        rawBuffer = lastLine;
+      } else {
+        rawBuffer = '';
       }
     }
   } catch (error) {
