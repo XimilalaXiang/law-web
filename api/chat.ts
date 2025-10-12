@@ -261,14 +261,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       const chunk = decoder.decode(value);
       rawBuffer += chunk;
-      const lines = chunk.split('\n').filter(line => line.trim() !== '');
+      const lines = chunk.split('\n');
 
       for (const line of lines) {
-        // 兼容部分上游会返回 "event: message" 行
-        if (!line.startsWith('data:')) continue;
+        // 跳过空行和非data行
+        const trimmedLine = line.trim();
+        if (!trimmedLine || !trimmedLine.startsWith('data:')) continue;
         
-        // 使用正则表达式提取data后的内容，更可靠
-        const data = line.replace(/^data:\s*/, '').trim();
+        // 使用正则表达式提取data后的内容
+        const data = trimmedLine.replace(/^data:\s*/, '');
         
         if (data === '[DONE]') {
           res.write('data: [DONE]\n\n');
@@ -278,7 +279,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         try {
           const parsed = JSON.parse(data);
-          // 只向前端输出精简的 delta.content，去掉上游的冗余字段
+          
+          // 提取content
           const choice = Array.isArray(parsed?.choices) ? parsed.choices[0] : undefined;
           const delta = choice?.delta || choice?.message || {};
           const content: string = (
@@ -286,15 +288,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             (typeof parsed?.output_text === 'string' ? parsed.output_text : '') ||
             ''
           );
-          // 如果上游把 role 放在第一包，content 为空，则忽略该包
+          
+          // 只在有content时才发送（忽略role等其他数据）
           if (content && content.length > 0) {
+            // 发送精简格式
             const sseObj = { choices: [{ delta: { content } }] };
             res.write(`data: ${JSON.stringify(sseObj)}\n\n`);
             forwardedAny = true;
           }
         } catch (e) {
-          // 如果不是合法JSON，累积到缓冲，待 done 时整体解析
-          console.error('SSE parse error for line:', line, e);
+          console.error('SSE JSON parse error:', e);
+          // 解析失败，不做任何处理
         }
       }
     }
