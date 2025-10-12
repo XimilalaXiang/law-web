@@ -11,7 +11,8 @@ export async function sendMessageStream(
   signal?: AbortSignal
 ): Promise<void> {
   try {
-    const apiUrl = import.meta.env.VITE_AI_API_URL || '/api/chat';
+    // @ts-expect-error - Vite环境变量在运行时可用
+    const apiUrl = import.meta.env?.VITE_AI_API_URL || '/api/chat';
 
     // 只发送role和content，不包含id和timestamp
     const apiMessages = messages.map(msg => ({
@@ -45,7 +46,9 @@ export async function sendMessageStream(
         try {
           const text = await response.text();
           if (text) message = `${message} - ${text}`;
-        } catch {}
+        } catch {
+          // 忽略文本解析错误
+        }
       }
       throw new Error(message);
     }
@@ -59,11 +62,13 @@ export async function sendMessageStream(
     }
 
     let buffer = '';
+    let streaming = true;
 
-    while (true) {
+    while (streaming) {
       const { done, value } = await reader.read();
 
       if (done) {
+        streaming = false;
         onComplete();
         break;
       }
@@ -75,26 +80,35 @@ export async function sendMessageStream(
       buffer = lines.pop() || '';
 
       for (const line of lines) {
-        if (line.trim() === '') continue;
+        const trimmedLine = line.trim();
         
-        if (line.startsWith('data: ')) {
-          const data = line.slice(6);
-          
-          if (data === '[DONE]') {
-            onComplete();
-            return;
-          }
+        // 跳过空行
+        if (trimmedLine === '') continue;
+        
+        // 只处理data:开头的行
+        if (!trimmedLine.startsWith('data:')) continue;
+        
+        // 提取data后的内容，兼容 "data: " 和 "data:" 两种格式
+        const data = trimmedLine.replace(/^data:\s*/, '');
+        
+        // 检查是否结束
+        if (data === '[DONE]') {
+          streaming = false;
+          onComplete();
+          return;
+        }
 
-          try {
-            const chunk: StreamChunk = JSON.parse(data);
-            const content = chunk.choices?.[0]?.delta?.content;
-            
-            if (content) {
-              onChunk(content);
-            }
-          } catch (e) {
-            console.warn('Failed to parse SSE data:', e);
+        try {
+          const chunk: StreamChunk = JSON.parse(data);
+          const content = chunk.choices?.[0]?.delta?.content;
+          
+          // 只传递有效的content字符串
+          if (content && typeof content === 'string') {
+            onChunk(content);
           }
+        } catch (e) {
+          console.error('SSE解析失败:', { line: trimmedLine, error: e });
+          // JSON解析失败时不传递任何内容，避免传递原始数据
         }
       }
     }
