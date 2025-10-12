@@ -1,18 +1,31 @@
-import React from 'react';
-import { UserIcon, BotIcon } from 'lucide-react';
+import React, { useState } from 'react';
+import { UserIcon, BotIcon, Copy as CopyIcon, Check as CheckIcon, Download as DownloadIcon } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { Message } from '../../types/chat';
 
 interface MessageBubbleProps {
   message: Message;
+  onExportMarkdown?: () => void;
 }
 
 /**
  * 消息气泡组件 - 展示用户和AI的消息
  */
-const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
+const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onExportMarkdown }) => {
   const isUser = message.role === 'user';
+  const [copied, setCopied] = useState(false);
+
+  const canCopy = !isUser && !!message.content && message.content.trim().length > 0;
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(message.content);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // ignore
+    }
+  };
 
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4 px-2`}>
@@ -37,7 +50,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
           className={`px-4 md:px-5 py-3 md:py-4 rounded-2xl min-w-0 flex-1 ${
             isUser
               ? 'bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white shadow-lg'
-              : 'bg-white dark:bg-gray-700 shadow-[5px_5px_15px_rgba(0,0,0,0.08),-5px_-5px_15px_rgba(255,255,255,0.8)] dark:shadow-[5px_5px_15px_rgba(0,0,0,0.4),-5px_-5px_15px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-600'
+              : 'relative pr-20 pb-10 bg-white dark:bg-gray-700 shadow-[5px_5px_15px_rgba(0,0,0,0.08),-5px_-5px_15px_rgba(255,255,255,0.8)] dark:shadow-[5px_5px_15px_rgba(0,0,0,0.4),-5px_-5px_15px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-600'
           }`}
           style={{ 
             overflow: 'hidden',
@@ -45,6 +58,29 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
             overflowWrap: 'break-word'
           }}
         >
+          {/* 复制/导出（仅助手消息，右下角） */}
+          {canCopy && (
+            <div className="absolute bottom-2 right-2 flex gap-1">
+              <button
+                onClick={handleCopy}
+                className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 transition-colors"
+                title={copied ? '已复制' : '复制内容'}
+                aria-label={copied ? '已复制' : '复制内容'}
+              >
+                {copied ? <CheckIcon className="h-4 w-4" /> : <CopyIcon className="h-4 w-4" />}
+              </button>
+              {onExportMarkdown && (
+                <button
+                  onClick={onExportMarkdown}
+                  className="inline-flex items-center justify-center w-7 h-7 rounded-md bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 transition-colors"
+                  title="导出为 Markdown"
+                  aria-label="导出为 Markdown"
+                >
+                  <DownloadIcon className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+          )}
           {isUser ? (
             // 用户消息：直接显示
             <p 

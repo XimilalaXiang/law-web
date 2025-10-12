@@ -7,7 +7,8 @@ export async function sendMessageStream(
   messages: Message[],
   onChunk: (content: string) => void,
   onComplete: () => void,
-  onError: (error: Error) => void
+  onError: (error: Error) => void,
+  signal?: AbortSignal
 ): Promise<void> {
   try {
     const apiUrl = import.meta.env.VITE_AI_API_URL || '/api/chat';
@@ -26,11 +27,27 @@ export async function sendMessageStream(
       body: JSON.stringify({
         messages: apiMessages
       }),
+      signal,
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Network error' }));
-      throw new Error(errorData.error || `HTTP ${response.status}`);
+      // Try to surface backend details for better diagnosis
+      let message = `HTTP ${response.status}`;
+      try {
+        const data = await response.json();
+        message = data?.error || data?.message || message;
+        if (data?.details) {
+          const d = data.details;
+          const detailsMsg = d?.error || d?.message || (typeof d === 'string' ? d : '');
+          if (detailsMsg) message = `${message} - ${detailsMsg}`;
+        }
+      } catch {
+        try {
+          const text = await response.text();
+          if (text) message = `${message} - ${text}`;
+        } catch {}
+      }
+      throw new Error(message);
     }
 
     // 处理SSE流式响应
@@ -82,6 +99,11 @@ export async function sendMessageStream(
       }
     }
   } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      // Aborted by user: treat as graceful stop
+      onComplete();
+      return;
+    }
     console.error('AI Service Error:', error);
     onError(error instanceof Error ? error : new Error('Unknown error'));
   }

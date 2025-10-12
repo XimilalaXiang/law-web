@@ -30,3 +30,17 @@ export interface QuickQuestion {
   icon?: string;
 }
 
+// 多会话支持
+export interface ChatSession {
+  id: string;
+  title: string;
+  createdAt: number;
+  updatedAt: number;
+  messages: Message[];
+}
+
+export interface ChatStore {
+  sessions: ChatSession[];
+  activeId: string | null;
+}
+

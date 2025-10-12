@@ -1,6 +1,5 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
 import { sendMessageStream } from '../utils/aiService';
-import type { Message, ChatState, ChatStore, ChatSession } from '../types/chat';
+import type { ChatStore, ChatSession } from '../types/chat';
 
 const LEGACY_KEY = 'safecareer_chat_history';
 const SESSIONS_KEY = 'safecareer_chat_sessions';
@@ -83,9 +82,7 @@ export function useAIChat() {
       ...s,
       messages: [...s.messages, userMessage, assistantMessage],
       updatedAt: Date.now(),
-      title: ((s.title === '新的会话' || !s.title) && userMessage.content)
-        ? userMessage.content.slice(0, 12)
-        : s.title,
+      title: s.title === '新的会话' && userMessage.content ? userMessage.content.slice(0, 12) : s.title,
     } : s);
     const nextStore: ChatStore = { sessions: nextSessions, activeId: active.id };
     setStore(nextStore);
@@ -129,46 +126,12 @@ export function useAIChat() {
   // 清空当前会话
   const clearHistory = useCallback(() => {
     const active = getActiveSession();
-    const nextSessions = store.sessions.map(s => s.id === active.id ? { ...s, messages: [], title: '', updatedAt: 0 } : s);
+    const nextSessions = store.sessions.map(s => s.id === active.id ? { ...s, messages: [] } : s);
     const next: ChatStore = { sessions: nextSessions, activeId: active.id };
     setStore(next);
     setState(prev => ({ ...prev, messages: [], error: null, isLoading: false }));
     persistStore(next);
   }, [store.sessions, getActiveSession, persistStore]);
-
-  // 清空指定会话（历史面板中的按钮）
-  const clearSession = useCallback((id: string) => {
-    const target = store.sessions.find(s => s.id === id);
-    if (!target) return;
-    const nextSessions = store.sessions.map(s => s.id === id ? { ...s, messages: [], title: '', updatedAt: 0 } : s);
-    const next: ChatStore = { sessions: nextSessions, activeId: store.activeId };
-    setStore(next);
-    if (store.activeId === id) setState(prev => ({ ...prev, messages: [] }));
-    persistStore(next);
-  }, [store.sessions, store.activeId, persistStore]);
-
-  // 删除指定会话（从列表中移除）
-  const deleteSession = useCallback((id: string) => {
-    const filtered = store.sessions.filter(s => s.id !== id);
-    if (filtered.length === 0) {
-      // 若删除后无会话，创建一个空会话并设为当前
-      const s: ChatSession = { id: `s-${Date.now()}`, title: '', createdAt: Date.now(), updatedAt: 0, messages: [] };
-      const next: ChatStore = { sessions: [s], activeId: s.id };
-      setStore(next);
-      setState(prev => ({ ...prev, messages: [] }));
-      persistStore(next);
-      return;
-    }
-    const isDeletingActive = store.activeId === id;
-    const nextActiveId = isDeletingActive ? filtered[0].id : store.activeId;
-    const next: ChatStore = { sessions: filtered, activeId: nextActiveId };
-    setStore(next);
-    if (isDeletingActive) {
-      const active = filtered.find(s => s.id === nextActiveId);
-      setState(prev => ({ ...prev, messages: active ? active.messages : [] }));
-    }
-    persistStore(next);
-  }, [store.sessions, store.activeId, persistStore]);
 
   // 重试最后一条用户消息
   const retryLastMessage = useCallback(() => {
@@ -231,8 +194,7 @@ export function useAIChat() {
     activeSessionId: store.activeId,
     newSession,
     switchSession,
-    clearSession,
-    deleteSession,
   };
 }
+
 

@@ -1,11 +1,13 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 
 type Theme = 'light' | 'dark';
+type ThemePreference = 'system' | Theme;
 
 interface ThemeContextType {
-  theme: Theme;
-  toggleTheme: () => void;
-  setTheme: (theme: Theme) => void;
+  theme: Theme; // 实际生效的主题
+  preference: ThemePreference; // 用户偏好（含 system）
+  toggleTheme: () => void; // 循环切换：light -> dark -> system -> light
+  setThemePreference: (pref: ThemePreference) => void;
 }
 
 export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -15,62 +17,59 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    // 1. 尝试从localStorage读取
-    const savedTheme = localStorage.getItem('theme') as Theme | null;
-    if (savedTheme) {
-      return savedTheme;
-    }
-    
-    // 2. 检查系统偏好
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
-    
-    // 3. 默认亮色
-    return 'light';
+  const getSystemTheme = (): Theme =>
+    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
+
+  // 读取偏好，兼容旧 key
+  const [preference, setPreference] = useState<ThemePreference>(() => {
+    const savedPref = localStorage.getItem('themePreference') as ThemePreference | null;
+    const legacyTheme = localStorage.getItem('theme') as Theme | null;
+    return savedPref || (legacyTheme ? legacyTheme : 'system');
   });
 
-  // 应用主题到DOM
-  useEffect(() => {
-    const root = window.document.documentElement;
-    
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-    
-    // 保存到localStorage
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+  const [theme, setTheme] = useState<Theme>(() => (preference === 'system' ? getSystemTheme() : preference));
 
-  // 监听系统主题变化
+  // 应用主题并持久化
+  useEffect(() => {
+    const effective: Theme = preference === 'system' ? getSystemTheme() : preference;
+    setTheme(effective);
+
+    const root = window.document.documentElement;
+    if (effective === 'dark') root.classList.add('dark');
+    else root.classList.remove('dark');
+
+    localStorage.setItem('themePreference', preference);
+    // legacy 同步
+    localStorage.setItem('theme', effective);
+  }, [preference]);
+
+  // 跟随系统变化（当 preference === 'system'）
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
-    const handleChange = (e: MediaQueryListEvent) => {
-      // 只有在用户没有手动设置时才跟随系统
-      if (!localStorage.getItem('theme')) {
-        setThemeState(e.matches ? 'dark' : 'light');
+    const handleChange = () => {
+      if (preference === 'system') {
+        const effective = getSystemTheme();
+        setTheme(effective);
+        const root = window.document.documentElement;
+        if (effective === 'dark') root.classList.add('dark');
+        else root.classList.remove('dark');
+        localStorage.setItem('theme', effective);
       }
     };
-    
     mediaQuery.addEventListener('change', handleChange);
-    
     return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+  }, [preference]);
 
   const toggleTheme = () => {
-    setThemeState(prev => prev === 'light' ? 'dark' : 'light');
+    setPreference(prev => (prev === 'light' ? 'dark' : prev === 'dark' ? 'system' : 'light'));
   };
 
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-  };
+  const setThemePreference = (pref: ThemePreference) => setPreference(pref);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
+    <ThemeContext.Provider value={{ theme, preference, toggleTheme, setThemePreference }}>
       {children}
     </ThemeContext.Provider>
   );
