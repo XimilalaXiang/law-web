@@ -82,7 +82,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
     >
       {/* 顶部栏 */}
       <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-b border-gray-200/50 dark:border-gray-700/50">
-        <div className="flex items-center gap-2">
+       <div className="flex items-center gap-2 w-full max-w-full">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 shadow-[inset_3px_3px_8px_rgba(0,0,0,0.1),inset_-3px_-3px_8px_rgba(255,255,255,0.8)] dark:shadow-[inset_3px_3px_8px_rgba(0,0,0,0.6),inset_-3px_-3px_8px_rgba(255,255,255,0.05)] flex items-center justify-center">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 flex items-center justify-center shadow-md">
               <ShieldCheck className="h-5 w-5 text-white" />
