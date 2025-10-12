@@ -100,11 +100,14 @@ export async function sendMessageStream(
 
         try {
           const chunk: StreamChunk = JSON.parse(data);
-          const content = chunk.choices?.[0]?.delta?.content;
+          // 严格只使用增量 delta.content，避免 message.content / output_text 导致重复
+          const firstChoice = Array.isArray(chunk.choices) ? chunk.choices[0] : undefined;
+          const deltaContent = firstChoice && typeof firstChoice.delta?.content === 'string'
+            ? (firstChoice.delta.content as string)
+            : '';
           
-          // 只传递有效的content字符串
-          if (content && typeof content === 'string') {
-            onChunk(content);
+          if (deltaContent) {
+            onChunk(deltaContent);
           }
         } catch (e) {
           console.error('SSE解析失败:', { line: trimmedLine, error: e });

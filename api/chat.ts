@@ -281,19 +281,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         try {
           const parsed = JSON.parse(data);
           
-          // 提取content
+          // 严格只使用增量 delta.content，避免上游 message.content 或 output_text 导致重复
           const choice = Array.isArray(parsed?.choices) ? parsed.choices[0] : undefined;
-          const delta = choice?.delta || choice?.message || {};
-          const content: string = (
-            (typeof delta.content === 'string' ? delta.content : '') ||
-            (typeof parsed?.output_text === 'string' ? parsed.output_text : '') ||
-            ''
-          );
+          const deltaContent = choice && typeof choice.delta?.content === 'string' ? choice.delta.content : '';
           
-          // 只在有content时才发送（忽略role等其他数据）
-          if (content && content.length > 0) {
-            // 发送精简格式
-            const sseObj = { choices: [{ delta: { content } }] };
+          if (deltaContent) {
+            const sseObj = { choices: [{ delta: { content: deltaContent } }] };
             res.write(`data: ${JSON.stringify(sseObj)}\n\n`);
             forwardedAny = true;
           }
