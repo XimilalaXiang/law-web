@@ -25,12 +25,16 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onExportMarkdown
     }
   };
 
+  const rowClass = isUser
+    ? 'grid grid-cols-[1fr,auto] items-start w-full gap-2 md:gap-3'
+    : 'grid grid-cols-[auto,1fr] items-start w-full gap-2 md:gap-3';
+
   return (
-      <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-3 md:mb-4 px-2 w-full`}>
-      <div className={`flex ${isUser ? 'flex-row-reverse' : 'flex-row'} items-start w-full max-w-[98%] sm:max-w-none gap-2 md:gap-3`}>
+      <div className={`mb-3 md:mb-4 px-2 w-full`}>
+      <div className={rowClass}>
         {/* 头像 */}
         <div
-          className={`flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shadow-md ${
+          className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shadow-md ${
             isUser
               ? 'bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white'
               : 'bg-white dark:bg-gray-700 shadow-[3px_3px_6px_rgba(0,0,0,0.1),-3px_-3px_6px_rgba(255,255,255,0.8)] dark:shadow-[3px_3px_6px_rgba(0,0,0,0.4),-3px_-3px_6px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-600'
@@ -45,7 +49,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onExportMarkdown
 
         {/* 内容卡片 */}
         <div
-          className={`px-4 md:px-5 py-3 md:py-4 rounded-2xl min-w-0 flex-1 ${
+          className={`px-4 md:px-5 py-3 md:py-4 rounded-2xl min-w-0 w-full ${
             isUser
               ? 'bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white shadow-lg'
               : 'relative pr-12 sm:pr-10 md:pr-10 lg:pr-12 xl:pr-14 pb-10 bg-white dark:bg-gray-700 shadow-[5px_5px_15px_rgba(0,0,0,0.08),-5px_-5px_15px_rgba(255,255,255,0.8)] dark:shadow-[5px_5px_15px_rgba(0,0,0,0.4),-5px_-5px_15px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-600 md:self-stretch'
