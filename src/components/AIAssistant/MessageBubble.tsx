@@ -21,14 +21,14 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
         <div
           className={`flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shadow-md ${
             isUser
-              ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white'
-              : 'bg-white shadow-[3px_3px_6px_rgba(0,0,0,0.1),-3px_-3px_6px_rgba(255,255,255,0.8)] border border-gray-100'
+              ? 'bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white'
+              : 'bg-white dark:bg-gray-700 shadow-[3px_3px_6px_rgba(0,0,0,0.1),-3px_-3px_6px_rgba(255,255,255,0.8)] dark:shadow-[3px_3px_6px_rgba(0,0,0,0.4),-3px_-3px_6px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-600'
           }`}
         >
           {isUser ? (
             <UserIcon className="h-4 w-4 md:h-5 md:w-5" />
           ) : (
-            <BotIcon className="h-4 w-4 md:h-5 md:w-5 text-blue-600" />
+            <BotIcon className="h-4 w-4 md:h-5 md:w-5 text-blue-600 dark:text-blue-400" />
           )}
         </div>
 
@@ -36,8 +36,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
         <div
           className={`px-4 md:px-5 py-3 md:py-4 rounded-2xl min-w-0 flex-1 ${
             isUser
-              ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg'
-              : 'bg-white shadow-[5px_5px_15px_rgba(0,0,0,0.08),-5px_-5px_15px_rgba(255,255,255,0.8)] border border-gray-100'
+              ? 'bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white shadow-lg'
+              : 'bg-white dark:bg-gray-700 shadow-[5px_5px_15px_rgba(0,0,0,0.08),-5px_-5px_15px_rgba(255,255,255,0.8)] dark:shadow-[5px_5px_15px_rgba(0,0,0,0.4),-5px_-5px_15px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-600'
           }`}
           style={{ 
             overflow: 'hidden',
@@ -61,7 +61,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
             // AI消息：Markdown渲染
             <div
               className={`prose prose-sm max-w-none ${
-                message.content ? '' : 'text-gray-400 italic'
+                message.content ? '' : 'text-gray-400 dark:text-gray-500 italic'
               }`}
               style={{
                 wordBreak: 'break-word',
@@ -76,7 +76,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
                     // 自定义样式
                     h1: ({ children }) => (
                       <h1 
-                        className="text-lg font-bold mb-2 text-gray-900"
+                        className="text-lg font-bold mb-2 text-gray-900 dark:text-gray-100"
                         style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                       >
                         {children}
@@ -84,7 +84,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
                     ),
                     h2: ({ children }) => (
                       <h2 
-                        className="text-base font-bold mb-2 text-gray-900"
+                        className="text-base font-bold mb-2 text-gray-900 dark:text-gray-100"
                         style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                       >
                         {children}
@@ -92,7 +92,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
                     ),
                     h3: ({ children }) => (
                       <h3 
-                        className="text-sm font-semibold mb-1 text-gray-900"
+                        className="text-sm font-semibold mb-1 text-gray-900 dark:text-gray-100"
                         style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                       >
                         {children}
@@ -100,39 +100,39 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
                     ),
                     p: ({ children }) => (
                       <p 
-                        className="text-sm leading-relaxed mb-2 text-gray-700"
+                        className="text-sm leading-relaxed mb-2 text-gray-700 dark:text-gray-300"
                         style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                       >
                         {children}
                       </p>
                     ),
-                    ul: ({ children }) => <ul className="list-disc pl-4 md:pl-5 mb-2 space-y-1 text-gray-700 overflow-hidden">{children}</ul>,
-                    ol: ({ children }) => <ol className="list-decimal pl-4 md:pl-5 mb-2 space-y-1 text-gray-700 overflow-hidden">{children}</ol>,
+                    ul: ({ children }) => <ul className="list-disc pl-4 md:pl-5 mb-2 space-y-1 text-gray-700 dark:text-gray-300 overflow-hidden">{children}</ul>,
+                    ol: ({ children }) => <ol className="list-decimal pl-4 md:pl-5 mb-2 space-y-1 text-gray-700 dark:text-gray-300 overflow-hidden">{children}</ol>,
                     li: ({ children }) => (
                       <li 
-                        className="text-sm text-gray-700"
+                        className="text-sm text-gray-700 dark:text-gray-300"
                         style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                       >
                         {children}
                       </li>
                     ),
-                    strong: ({ children }) => <strong className="font-semibold text-gray-900">{children}</strong>,
-                    em: ({ children }) => <em className="italic text-gray-600">{children}</em>,
+                    strong: ({ children }) => <strong className="font-semibold text-gray-900 dark:text-gray-100">{children}</strong>,
+                    em: ({ children }) => <em className="italic text-gray-600 dark:text-gray-400">{children}</em>,
                     code: ({ children, className }) => {
                       const isInline = !className;
                       return isInline ? (
                         <code 
-                          className="px-1.5 py-0.5 bg-gray-100 rounded text-xs font-mono text-red-600"
+                          className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs font-mono text-red-600 dark:text-red-400"
                           style={{ wordBreak: 'break-all', overflowWrap: 'anywhere' }}
                         >
                           {children}
                         </code>
                       ) : (
                         <code 
-                          className="block p-3 bg-gray-100 rounded-lg text-xs font-mono text-gray-800"
-                          style={{ 
-                            whiteSpace: 'pre-wrap', 
-                            wordBreak: 'break-word', 
+                          className="block p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-xs font-mono text-gray-800 dark:text-gray-200"
+                          style={{
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-word',
                             overflowWrap: 'break-word',
                             overflow: 'hidden'
                           }}
@@ -143,7 +143,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
                     },
                     blockquote: ({ children }) => (
                       <blockquote 
-                        className="border-l-4 border-blue-400 pl-3 md:pl-4 py-2 my-2 bg-blue-50 rounded-r text-gray-700"
+                        className="border-l-4 border-blue-400 dark:border-blue-500 pl-3 md:pl-4 py-2 my-2 bg-blue-50 dark:bg-blue-900/20 rounded-r text-gray-700 dark:text-gray-300"
                         style={{ wordBreak: 'break-word', overflowWrap: 'break-word', overflow: 'hidden' }}
                       >
                         {children}
@@ -152,29 +152,29 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
                     // 表格样式
                     table: ({ children }) => (
                       <div className="overflow-x-auto my-3">
-                        <table className="min-w-full border-collapse border border-gray-300 text-sm">
+                        <table className="min-w-full border-collapse border border-gray-300 dark:border-gray-600 text-sm">
                           {children}
                         </table>
                       </div>
                     ),
                     thead: ({ children }) => (
-                      <thead className="bg-gray-50">
+                      <thead className="bg-gray-50 dark:bg-gray-800">
                         {children}
                       </thead>
                     ),
                     tbody: ({ children }) => (
-                      <tbody className="bg-white">
+                      <tbody className="bg-white dark:bg-gray-700">
                         {children}
                       </tbody>
                     ),
                     tr: ({ children }) => (
-                      <tr className="border-b border-gray-200">
+                      <tr className="border-b border-gray-200 dark:border-gray-600">
                         {children}
                       </tr>
                     ),
                     th: ({ children }) => (
                       <th 
-                        className="px-3 py-2 text-left font-semibold text-gray-900 border border-gray-300"
+                        className="px-3 py-2 text-left font-semibold text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600"
                         style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                       >
                         {children}
@@ -182,7 +182,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
                     ),
                     td: ({ children }) => (
                       <td 
-                        className="px-3 py-2 text-gray-700 border border-gray-300"
+                        className="px-3 py-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600"
                         style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                       >
                         {children}
@@ -203,7 +203,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
           )}
 
           {/* 时间戳 */}
-          <div className={`text-xs mt-2 ${isUser ? 'text-blue-100' : 'text-gray-400'}`}>
+          <div className={`text-xs mt-2 ${isUser ? 'text-blue-100 dark:text-blue-200' : 'text-gray-400 dark:text-gray-500'}`}>
             {new Date(message.timestamp).toLocaleTimeString('zh-CN', {
               hour: '2-digit',
               minute: '2-digit',
