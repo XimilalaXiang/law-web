@@ -12,25 +12,25 @@ const QUICK_QUESTIONS: QuickQuestion[] = [
   {
     id: 'analyze',
     label: '帮我分析招聘信息',
-    prompt: '我想让你帮我分析一个招聘信息是否可靠',
+    prompt: '请帮我判断这条招聘信息是否可靠，并说明理由。',
     icon: 'search',
   },
   {
     id: 'training-loan',
-    label: '什么是培训贷？',
-    prompt: '什么是培训贷骗局？如何识别和防范？',
+    label: '什么是培训贷',
+    prompt: '什么是培训贷？常见套路有哪些？如何识别和规避？',
     icon: 'alert',
   },
   {
     id: 'black-agency',
-    label: '如何识别黑中介？',
-    prompt: '求职时如何识别黑中介？有哪些特征？',
+    label: '如何识别黑中介',
+    prompt: '求职中如何识别黑中介？有哪些核验方式？',
     icon: 'help',
   },
   {
     id: 'scammed',
-    label: '被骗了怎么办？',
-    prompt: '如果不幸遭遇求职诈骗，应该怎么办？',
+    label: '被骗了怎么办',
+    prompt: '如果已经遇到求职诈骗，我现在应该怎么做？',
     icon: 'phone',
   },
 ];
@@ -42,9 +42,7 @@ const iconMap = {
   phone: PhoneIcon,
 };
 
-/**
- * 快速提问组件 - 预设常见问题
- */
+// 快速提问：预置常用问题
 const QuickQuestions: React.FC<QuickQuestionsProps> = ({ onSelect, disabled = false }) => {
   return (
     <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-[inset_3px_3px_6px_rgba(0,0,0,0.05),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] dark:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-700">
@@ -52,11 +50,11 @@ const QuickQuestions: React.FC<QuickQuestionsProps> = ({ onSelect, disabled = fa
         <span className="inline-block w-2 h-2 rounded-full bg-blue-500 dark:bg-blue-400 mr-2"></span>
         快速提问
       </h3>
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {QUICK_QUESTIONS.map((question) => {
           const IconComponent = iconMap[question.icon as keyof typeof iconMap] || HelpCircleIcon;
-          
+
           return (
             <button
               key={question.id}
@@ -68,8 +66,8 @@ const QuickQuestions: React.FC<QuickQuestionsProps> = ({ onSelect, disabled = fa
               <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-50 dark:bg-gray-800 shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.7)] dark:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.4),inset_-2px_-2px_4px_rgba(255,255,255,0.02)] flex items-center justify-center group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 transition-colors duration-200">
                 <IconComponent className="h-4 w-4 text-blue-600 dark:text-blue-400" />
               </div>
-              
-              {/* 文本 */}
+
+              {/* 文案 */}
               <span className="flex-1 text-left text-sm text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
                 {question.label}
               </span>
@@ -82,4 +80,3 @@ const QuickQuestions: React.FC<QuickQuestionsProps> = ({ onSelect, disabled = fa
 };
 
 export default QuickQuestions;
-

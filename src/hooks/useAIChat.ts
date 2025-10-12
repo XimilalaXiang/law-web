@@ -6,9 +6,7 @@ const LEGACY_KEY = 'safecareer_chat_history';
 const SESSIONS_KEY = 'safecareer_chat_sessions';
 const ACTIVE_KEY = 'safecareer_active_session';
 
-/**
- * AI聊天Hook - 多会话、流式、复制/导出可由组件调用
- */
+// AI 聊天 Hook - 多会话管理 + 流式生成
 export function useAIChat() {
   const [store, setStore] = useState<ChatStore>({ sessions: [], activeId: null });
   const [state, setState] = useState<ChatState>({ messages: [], isLoading: false, error: null });
@@ -37,7 +35,7 @@ export function useAIChat() {
           localStorage.setItem(ACTIVE_KEY, next.activeId || '');
           localStorage.removeItem(LEGACY_KEY);
         } else {
-          const s: ChatSession = { id: `s-${Date.now()}`, title: '新的会话', createdAt: Date.now(), updatedAt: Date.now(), messages: [] };
+          const s: ChatSession = { id: `s-${Date.now()}`, title: '新会话', createdAt: Date.now(), updatedAt: Date.now(), messages: [] };
           const next: ChatStore = { sessions: [s], activeId: s.id };
           setStore(next);
           setState(prev => ({ ...prev, messages: [] }));
@@ -62,7 +60,7 @@ export function useAIChat() {
   const getActiveSession = useCallback((): ChatSession => {
     let active = store.sessions.find(s => s.id === store.activeId);
     if (!active) {
-      const s: ChatSession = { id: `s-${Date.now()}`, title: '新的会话', createdAt: Date.now(), updatedAt: Date.now(), messages: [] };
+      const s: ChatSession = { id: `s-${Date.now()}`, title: '新会话', createdAt: Date.now(), updatedAt: Date.now(), messages: [] };
       const next: ChatStore = { sessions: [s, ...store.sessions], activeId: s.id };
       setStore(next);
       persistStore(next);
@@ -71,7 +69,7 @@ export function useAIChat() {
     return active;
   }, [store.sessions, store.activeId, persistStore]);
 
-  // 发送消息（当前会话）
+  // 发送消息到当前会话
   const sendMessage = useCallback(async (content: string) => {
     if (!content.trim() || state.isLoading) return;
 
@@ -83,9 +81,9 @@ export function useAIChat() {
       ...s,
       messages: [...s.messages, userMessage, assistantMessage],
       updatedAt: Date.now(),
-      title: ((s.title === '新的会话' || !s.title) && userMessage.content)
+      title: ((!(s.title && s.title.trim()) || s.title.trim() === '新会话') && userMessage.content)
         ? userMessage.content.slice(0, 12)
-        : s.title,
+        : (s.title || ''),
     } : s);
     const nextStore: ChatStore = { sessions: nextSessions, activeId: active.id };
     setStore(nextStore);
@@ -136,7 +134,7 @@ export function useAIChat() {
     persistStore(next);
   }, [store.sessions, getActiveSession, persistStore]);
 
-  // 清空指定会话（历史面板中的按钮）
+  // 清空指定会话（保留在列表）
   const clearSession = useCallback((id: string) => {
     const target = store.sessions.find(s => s.id === id);
     if (!target) return;
@@ -147,11 +145,11 @@ export function useAIChat() {
     persistStore(next);
   }, [store.sessions, store.activeId, persistStore]);
 
-  // 删除指定会话（从列表中移除）
+  // 删除指定会话（从列表移除）
   const deleteSession = useCallback((id: string) => {
     const filtered = store.sessions.filter(s => s.id !== id);
     if (filtered.length === 0) {
-      // 若删除后无会话，创建一个空会话并设为当前
+      // 全删后无会话，生成一个空会话作为当前
       const s: ChatSession = { id: `s-${Date.now()}`, title: '', createdAt: Date.now(), updatedAt: 0, messages: [] };
       const next: ChatStore = { sessions: [s], activeId: s.id };
       setStore(next);
@@ -199,9 +197,9 @@ export function useAIChat() {
     setState(prev => ({ ...prev, isLoading: false }));
   }, []);
 
-  // 新建会话
+  // 新会话
   const newSession = useCallback(() => {
-    const s: ChatSession = { id: `s-${Date.now()}`, title: '新的会话', createdAt: Date.now(), updatedAt: Date.now(), messages: [] };
+    const s: ChatSession = { id: `s-${Date.now()}`, title: '新会话', createdAt: Date.now(), updatedAt: Date.now(), messages: [] };
     const next: ChatStore = { sessions: [s, ...store.sessions], activeId: s.id };
     setStore(next);
     setState(prev => ({ ...prev, messages: [], error: null }));
@@ -226,7 +224,7 @@ export function useAIChat() {
     clearHistory,
     retryLastMessage,
     stopGenerating,
-    // 多会话支持
+    // 会话支持
     sessions: store.sessions,
     activeSessionId: store.activeId,
     newSession,

@@ -2,9 +2,7 @@ import React from 'react';
 import { Sun, Moon, Monitor } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 
-/**
- * 主题切换按钮 - Neumorphic风格
- */
+// 主题切换按钮（Neumorphic 风格）
 const ThemeToggle: React.FC = () => {
   const { theme, preference, toggleTheme } = useTheme() as any;
   const { icon, label } = (() => {
@@ -26,4 +24,3 @@ const ThemeToggle: React.FC = () => {
 };
 
 export default ThemeToggle;
-
