@@ -217,14 +217,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     let streaming = true;
     let forwardedAny = false;
-    let rawBuffer = '';
+    // 累计完整上游响应，用于回退
+    let accum = '';
+    // SSE 行缓冲（仅保留未结束的最后一行）
+    let sseBuffer = '';
     while (streaming) {
       const { done, value } = await reader.read();
       
       if (done) {
         // 如果完全没有解析到 SSE 片段，则尝试把累计文本按 JSON 或纯文本回写
         if (!forwardedAny) {
-          const text = rawBuffer.trim();
+          const text = accum.trim();
           if (text.length > 0) {
             // 先尝试把整段当 JSON 解析
             let content = '';
@@ -260,11 +263,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
 
       const chunk = decoder.decode(value);
-      rawBuffer += chunk;
-      // 基于累计缓冲区解析，避免跨包拆分导致丢片段
-      const lines = rawBuffer.split('\n');
+      accum += chunk;
+      sseBuffer += chunk;
 
-      for (const line of lines) {
+      // 按行消费（逐个提取以避免重复处理）
+      // 逐行消费，直到没有完整的换行
+      for (;;) {
+        const idx = sseBuffer.indexOf('\n');
+        if (idx === -1) break;
+        const line = sseBuffer.slice(0, idx);
+        sseBuffer = sseBuffer.slice(idx + 1);
         // 跳过空行和非data行
         const trimmedLine = line.trim();
         if (!trimmedLine || !trimmedLine.startsWith('data:')) continue;
@@ -294,14 +302,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           console.error('SSE JSON parse error:', e);
           // 解析失败，不做任何处理
         }
-      }
-      // 保留未完整的一行在缓冲中（通常是最后一行）
-      const lastLine = lines[lines.length - 1] || '';
-      if (!lastLine.endsWith('\n')) {
-        // 若最后一行不是完整事件，保留在 rawBuffer
-        rawBuffer = lastLine;
-      } else {
-        rawBuffer = '';
       }
     }
   } catch (error) {

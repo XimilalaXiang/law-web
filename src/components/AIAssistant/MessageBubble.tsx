@@ -28,8 +28,8 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onExportMarkdown
   };
 
   return (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4 px-2`}>
-      <div className={`flex ${isUser ? 'flex-row-reverse' : 'flex-row'} items-start w-full max-w-[95%] md:max-w-[85%] gap-2 md:gap-3`}>
+      <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-3 md:mb-4 px-2`}>
+      <div className={`flex ${isUser ? 'flex-row-reverse' : 'flex-row'} items-start w-full max-w-[98%] md:max-w-[85%] gap-2 md:gap-3`}>
         {/* 头像 */}
         <div
           className={`flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center shadow-md ${
@@ -50,7 +50,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onExportMarkdown
           className={`px-4 md:px-5 py-3 md:py-4 rounded-2xl min-w-0 flex-1 ${
             isUser
               ? 'bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white shadow-lg'
-              : 'relative pr-20 pb-10 bg-white dark:bg-gray-700 shadow-[5px_5px_15px_rgba(0,0,0,0.08),-5px_-5px_15px_rgba(255,255,255,0.8)] dark:shadow-[5px_5px_15px_rgba(0,0,0,0.4),-5px_-5px_15px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-600'
+              : 'relative pr-12 md:pr-20 pb-10 bg-white dark:bg-gray-700 shadow-[5px_5px_15px_rgba(0,0,0,0.08),-5px_-5px_15px_rgba(255,255,255,0.8)] dark:shadow-[5px_5px_15px_rgba(0,0,0,0.4),-5px_-5px_15px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-600'
           }`}
           style={{ 
             overflow: 'hidden',
@@ -103,6 +103,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onExportMarkdown
                 wordBreak: 'break-word',
                 overflowWrap: 'break-word',
                 wordWrap: 'break-word',
+                maxWidth: '100%'
               }}
             >
               {message.content ? (
