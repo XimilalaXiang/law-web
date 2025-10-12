@@ -1,0 +1,332 @@
+/* PLEASE NOTE: THESE TAILWIND IMPORTS SHOULD NEVER BE DELETED */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+/* DO NOT DELETE THESE TAILWIND IMPORTS, OTHERWISE THE STYLING WILL NOT RENDER AT ALL */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* Reset and base styles */
+html {
+  height: 100%;
+  /* Use dynamic viewport height for mobile browsers */
+  height: 100dvh;
+  /* Fallback for browsers that don't support dvh */
+  height: 100vh;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #1f2937;
+  background-color: #f9fafb;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  /* Use dynamic viewport height for mobile browsers */
+  min-height: 100dvh;
+  /* Fallback for browsers that don't support dvh */
+  min-height: 100vh;
+  /* Prevent horizontal scrolling */
+  overflow-x: hidden;
+  /* Ensure consistent rendering on mobile */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+/* Root element styling */
+#root {
+  min-height: 100%;
+  min-height: 100dvh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.gradient-text {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+.btn-primary {
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+.btn-secondary {
+  transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+/* Animated particles */
+.particles-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  opacity: 0.4;
+  background-color: rgba(255, 255, 255, 0.5);
+  animation-duration: 15s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+.circle-particle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  animation-name: float-circle;
+}
+.square-particle {
+  width: 20px;
+  height: 20px;
+  animation-name: float-square;
+}
+.triangle-particle {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 25px solid rgba(255, 255, 255, 0.5);
+  background-color: transparent;
+  animation-name: float-triangle;
+}
+.top-1\/5 { top: 20%; }
+.top-1\/4 { top: 25%; }
+.top-1\/3 { top: 33.333%; }
+.top-2\/3 { top: 66.666%; }
+.top-3\/4 { top: 75%; }
+.left-1\/5 { left: 20%; }
+.left-1\/4 { left: 25%; }
+.left-1\/3 { left: 33.333%; }
+.left-1\/2 { left: 50%; }
+.right-1\/5 { right: 20%; }
+.right-1\/4 { right: 25%; }
+.right-1\/3 { right: 33.333%; }
+.bottom-1\/4 { bottom: 25%; }
+.bottom-1\/3 { bottom: 33.333%; }
+.bottom-1\/2 { bottom: 50%; }
+@keyframes float-circle {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(10px, 10px) rotate(90deg); }
+  50% { transform: translate(0, 20px) rotate(180deg); }
+  75% { transform: translate(-10px, 10px) rotate(270deg); }
+  100% { transform: translate(0, 0) rotate(360deg); }
+}
+@keyframes float-square {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(15px, 15px) rotate(120deg); }
+  66% { transform: translate(-15px, 15px) rotate(240deg); }
+  100% { transform: translate(0, 0) rotate(360deg); }
+}
+@keyframes float-triangle {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(20px, -10px) rotate(180deg); }
+  100% { transform: translate(0, 0) rotate(360deg); }
+}
+.animate-pulse-slow {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+/* Neumorphic effects */
+.neumorphic-red {
+  background-color: #fee2e2;
+  box-shadow: 
+    8px 8px 16px rgba(178, 15, 15, 0.15),
+    -8px -8px 16px rgba(255, 255, 255, 0.7);
+  border-radius: 24px;
+  border: 1px solid rgba(254, 226, 226, 0.7);
+}
+.neumorphic-inset-red {
+  background-color: #fee2e2;
+  box-shadow: 
+    inset 4px 4px 8px rgba(178, 15, 15, 0.1),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.7);
+  border-radius: 16px;
+  border: 1px solid rgba(254, 226, 226, 0.7);
+}
+/* Blob animation */
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(20px, -30px) scale(1.1);
+  }
+  50% {
+    transform: translate(0, 20px) scale(0.9);
+  }
+  75% {
+    transform: translate(-20px, -15px) scale(1.05);
+  }
+}
+.animate-blob {
+  animation: blob 20s infinite;
+}
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+/* Fluid wave animations */
+.wave {
+  transform-origin: center bottom;
+  transition: all 0.3s ease-in-out;
+}
+.wave-1 {
+  animation: wave-flow-1 20s linear infinite alternate;
+}
+.wave-2 {
+  animation: wave-flow-2 15s linear infinite alternate;
+}
+.wave-3 {
+  animation: wave-flow-3 10s linear infinite alternate;
+}
+.wave-4 {
+  animation: wave-flow-4 8s linear infinite alternate;
+}
+@keyframes wave-flow-1 {
+  0% {
+    transform: translateX(-5%) scaleY(1);
+  }
+  50% {
+    transform: translateX(0%) scaleY(1.05);
+  }
+  100% {
+    transform: translateX(5%) scaleY(1);
+  }
+}
+@keyframes wave-flow-2 {
+  0% {
+    transform: translateX(5%) scaleY(1);
+  }
+  50% {
+    transform: translateX(0%) scaleY(1.03);
+  }
+  100% {
+    transform: translateX(-5%) scaleY(1);
+  }
+}
+@keyframes wave-flow-3 {
+  0% {
+    transform: translateX(-3%) scaleY(1);
+  }
+  50% {
+    transform: translateX(2%) scaleY(1.02);
+  }
+  100% {
+    transform: translateX(3%) scaleY(1);
+  }
+}
+@keyframes wave-flow-4 {
+  0% {
+    transform: translateX(2%) scaleY(1);
+  }
+  50% {
+    transform: translateX(-1%) scaleY(1.01);
+  }
+  100% {
+    transform: translateX(-2%) scaleY(1);
+  }
+}
+/* Floating circles animation */
+.floating-circle {
+  animation: float-circle-animation 25s ease-in-out infinite;
+}
+.circle-1 {
+  animation-delay: 0s;
+}
+.circle-2 {
+  animation-delay: -5s;
+}
+.circle-3 {
+  animation-delay: -12s;
+}
+@keyframes float-circle-animation {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(50px, -30px);
+  }
+  50% {
+    transform: translate(0, 50px);
+  }
+  75% {
+    transform: translate(-50px, -20px);
+  }
+}
+/* Added text shadow for neumorphic titles */
+.text-shadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1), -1px -1px 3px rgba(255, 255, 255, 0.7);
+}
+
+/* Mobile-specific fixes */
+@media screen and (max-width: 768px) {
+  /* Prevent bounce scrolling on iOS */
+  body {
+    position: fixed;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    height: 100vh;
+  }
+  
+  #root {
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+    height: 100dvh;
+    height: 100vh;
+  }
+  
+  /* Handle safe areas for devices with notches */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  /* Prevent zoom on input focus */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+  
+  /* Fix for address bar height changes */
+  .mobile-full-height {
+    height: 100dvh;
+    height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+}

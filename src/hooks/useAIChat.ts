@@ -1,0 +1,143 @@
+import { useState, useCallback, useEffect } from 'react';
+import type { Message, ChatState } from '../types/chat';
+import { sendMessageStream } from '../utils/aiService';
+
+const STORAGE_KEY = 'safecareer_chat_history';
+
+/**
+ * AI聊天Hook - 处理消息发送、接收和状态管理
+ */
+export function useAIChat() {
+  const [state, setState] = useState<ChatState>({
+    messages: [],
+    isLoading: false,
+    error: null,
+  });
+
+  // 从localStorage加载历史消息
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setState(prev => ({ ...prev, messages: parsed }));
+      }
+    } catch (error) {
+      console.error('Failed to load chat history:', error);
+    }
+  }, []);
+
+  // 保存消息到localStorage
+  const saveMessages = useCallback((messages: Message[]) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    } catch (error) {
+      console.error('Failed to save chat history:', error);
+    }
+  }, []);
+
+  // 发送消息
+  const sendMessage = useCallback(async (content: string) => {
+    if (!content.trim() || state.isLoading) return;
+
+    const userMessage: Message = {
+      id: `user-${Date.now()}`,
+      role: 'user',
+      content: content.trim(),
+      timestamp: Date.now(),
+    };
+
+    // 创建空的助手消息用于流式填充
+    const assistantMessage: Message = {
+      id: `assistant-${Date.now()}`,
+      role: 'assistant',
+      content: '',
+      timestamp: Date.now(),
+    };
+
+    // 更新状态：添加用户消息和空的助手消息
+    setState(prev => {
+      const newMessages = [...prev.messages, userMessage, assistantMessage];
+      saveMessages(newMessages);
+      return {
+        ...prev,
+        messages: newMessages,
+        isLoading: true,
+        error: null,
+      };
+    });
+
+    // 发送到API
+    await sendMessageStream(
+      [...state.messages, userMessage],
+      // onChunk: 追加内容到助手消息
+      (chunk: string) => {
+        setState(prev => {
+          const messages = [...prev.messages];
+          const lastMessage = messages[messages.length - 1];
+          
+          if (lastMessage && lastMessage.role === 'assistant') {
+            lastMessage.content += chunk;
+          }
+          
+          saveMessages(messages);
+          return { ...prev, messages };
+        });
+      },
+      // onComplete
+      () => {
+        setState(prev => ({ ...prev, isLoading: false }));
+      },
+      // onError
+      (error: Error) => {
+        setState(prev => ({
+          ...prev,
+          isLoading: false,
+          error: error.message,
+        }));
+      }
+    );
+  }, [state.messages, state.isLoading, saveMessages]);
+
+  // 清空聊天历史
+  const clearHistory = useCallback(() => {
+    setState({
+      messages: [],
+      isLoading: false,
+      error: null,
+    });
+    localStorage.removeItem(STORAGE_KEY);
+  }, []);
+
+  // 重试最后一条消息
+  const retryLastMessage = useCallback(() => {
+    const messages = state.messages;
+    if (messages.length < 2) return;
+
+    // 找到最后一条用户消息
+    const lastUserMessageIndex = messages.findLastIndex(m => m.role === 'user');
+    if (lastUserMessageIndex === -1) return;
+
+    const lastUserMessage = messages[lastUserMessageIndex];
+    
+    // 移除最后一条用户消息及之后的所有消息
+    setState(prev => {
+      const newMessages = prev.messages.slice(0, lastUserMessageIndex);
+      saveMessages(newMessages);
+      return { ...prev, messages: newMessages, error: null };
+    });
+
+    // 重新发送
+    sendMessage(lastUserMessage.content);
+  }, [state.messages, sendMessage, saveMessages]);
+
+  return {
+    messages: state.messages,
+    isLoading: state.isLoading,
+    error: state.error,
+    sendMessage,
+    clearHistory,
+    retryLastMessage,
+  };
+}
+

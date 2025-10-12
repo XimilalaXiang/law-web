@@ -1,0 +1,174 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { X, Send, Trash2, RefreshCw, AlertCircle } from 'lucide-react';
+import MessageBubble from './MessageBubble';
+import QuickQuestions from './QuickQuestions';
+import { useAIChat } from '../../hooks/useAIChat';
+
+interface ChatWindowProps {
+  onClose: () => void;
+}
+
+/**
+ * 聊天窗口组件 - 主界面
+ */
+const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
+  const [input, setInput] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  
+  const { messages, isLoading, error, sendMessage, clearHistory, retryLastMessage } = useAIChat();
+
+  // 自动滚动到底部
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  // 处理发送
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
+    
+    await sendMessage(input);
+    setInput('');
+    
+    // 重新聚焦输入框
+    setTimeout(() => inputRef.current?.focus(), 100);
+  };
+
+  // 处理键盘事件
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  // 处理快速提问
+  const handleQuickQuestion = (prompt: string) => {
+    setInput(prompt);
+    inputRef.current?.focus();
+  };
+
+  return (
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col w-[420px] h-[600px] bg-white rounded-3xl shadow-[20px_20px_60px_rgba(0,0,0,0.15),-10px_-10px_40px_rgba(255,255,255,0.8)] border border-gray-100 overflow-hidden">
+      {/* 头部 */}
+      <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-inner">
+            <span className="text-lg">🤖</span>
+          </div>
+          <div>
+            <h2 className="text-base font-semibold">AI防骗助手</h2>
+            <p className="text-xs text-blue-100">守护你的求职安全</p>
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          {/* 清空历史 */}
+          {messages.length > 0 && (
+            <button
+              onClick={clearHistory}
+              className="p-2 rounded-full hover:bg-white/20 transition-colors duration-200"
+              title="清空历史"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          )}
+          
+          {/* 关闭按钮 */}
+          <button
+            onClick={onClose}
+            className="p-2 rounded-full hover:bg-white/20 transition-colors duration-200"
+            title="关闭"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* 消息区域 */}
+      <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
+        {messages.length === 0 ? (
+          // 欢迎界面
+          <div className="h-full flex flex-col items-center justify-center text-center px-6">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center mb-4 shadow-[5px_5px_15px_rgba(0,0,0,0.1),-5px_-5px_15px_rgba(255,255,255,0.8)]">
+              <span className="text-4xl">🛡️</span>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              你好！我是AI防骗助手
+            </h3>
+            <p className="text-sm text-gray-600 mb-6 leading-relaxed">
+              我可以帮你分析招聘信息、识别诈骗特征、提供防范建议。
+              有任何求职防骗问题，随时问我！
+            </p>
+            
+            {/* 快速提问 */}
+            <QuickQuestions onSelect={handleQuickQuestion} disabled={isLoading} />
+          </div>
+        ) : (
+          // 消息列表
+          <>
+            {messages.map((message) => (
+              <MessageBubble key={message.id} message={message} />
+            ))}
+            
+            {/* 错误提示 */}
+            {error && (
+              <div className="flex items-start gap-3 p-4 bg-red-50 rounded-xl border border-red-100 shadow-sm">
+                <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm text-red-700 mb-2">{error}</p>
+                  <button
+                    onClick={retryLastMessage}
+                    className="inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-700 font-medium"
+                  >
+                    <RefreshCw className="h-3 w-3" />
+                    重试
+                  </button>
+                </div>
+              </div>
+            )}
+            
+            <div ref={messagesEndRef} />
+          </>
+        )}
+      </div>
+
+      {/* 输入区域 */}
+      <div className="p-4 bg-white border-t border-gray-100 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+        <div className="flex gap-2">
+          <textarea
+            ref={inputRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={isLoading ? 'AI正在思考...' : '输入你的问题...'}
+            disabled={isLoading}
+            rows={1}
+            className="flex-1 px-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-sm shadow-[inset_2px_2px_5px_rgba(0,0,0,0.05),inset_-2px_-2px_5px_rgba(255,255,255,0.7)] disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ minHeight: '44px', maxHeight: '120px' }}
+            onInput={(e) => {
+              const target = e.target as HTMLTextAreaElement;
+              target.style.height = 'auto';
+              target.style.height = target.scrollHeight + 'px';
+            }}
+          />
+          
+          <button
+            onClick={handleSend}
+            disabled={!input.trim() || isLoading}
+            className="flex-shrink-0 w-11 h-11 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white shadow-[4px_4px_10px_rgba(59,130,246,0.3),-2px_-2px_8px_rgba(147,197,253,0.2)] transition-all duration-200 hover:shadow-[3px_3px_8px_rgba(59,130,246,0.4),-1px_-1px_6px_rgba(147,197,253,0.3)] hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center"
+          >
+            <Send className="h-5 w-5" />
+          </button>
+        </div>
+        
+        <p className="text-xs text-gray-400 mt-2 text-center">
+          按 Enter 发送，Shift + Enter 换行
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default ChatWindow;
+
