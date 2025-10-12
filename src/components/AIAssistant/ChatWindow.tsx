@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Send, Trash2, RefreshCw, AlertCircle } from 'lucide-react';
+import { X, Send, Trash2, RefreshCw, AlertCircle, ShieldCheck } from 'lucide-react';
 import MessageBubble from './MessageBubble';
 import QuickQuestions from './QuickQuestions';
 import { useAIChat } from '../../hooks/useAIChat';
@@ -53,10 +53,10 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
       {/* 头部 - Neumorphic风格 */}
       <div className="flex items-center justify-between px-6 py-5 bg-gradient-to-br from-gray-50 to-gray-100 shadow-[8px_8px_20px_rgba(0,0,0,0.08),-4px_-4px_15px_rgba(255,255,255,0.9)] border-b border-gray-200/50">
         <div className="flex items-center gap-3">
-          {/* 机器人图标 - Neumorphic凹陷效果 */}
+          {/* SafeCareer图标 - Neumorphic凹陷效果 */}
           <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 shadow-[inset_4px_4px_10px_rgba(0,0,0,0.1),inset_-4px_-4px_10px_rgba(255,255,255,0.8)] flex items-center justify-center">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md">
-              <span className="text-lg">🤖</span>
+              <ShieldCheck className="h-6 w-6 text-white" />
             </div>
           </div>
           
