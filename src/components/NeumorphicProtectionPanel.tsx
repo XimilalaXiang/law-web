@@ -1,7 +1,14 @@
-import React from 'react';
 import { ShieldCheckIcon, BuildingIcon, BriefcaseIcon, DollarSignIcon, MessageCircleIcon, AlertCircleIcon } from 'lucide-react';
+
+type ColorKey = 'green' | 'blue' | 'purple' | 'amber' | 'indigo' | 'rose';
+
 const NeumorphicProtectionPanel = () => {
-  const strategies = [{
+  const strategies: Array<{
+    icon: typeof BuildingIcon;
+    color: ColorKey;
+    title: string;
+    content: string;
+  }> = [{
     icon: BuildingIcon,
     color: 'green',
     title: '公司背景调查',
@@ -32,8 +39,9 @@ const NeumorphicProtectionPanel = () => {
     title: '保留证据',
     content: '保存所有沟通记录、招聘信息和合同文件，一旦发现问题，可作为举报证据。'
   }];
+  
   // Color mapping for icon backgrounds
-  const colorMap = {
+  const colorMap: Record<ColorKey, string> = {
     green: 'text-green-600',
     blue: 'text-blue-600',
     purple: 'text-purple-600',
