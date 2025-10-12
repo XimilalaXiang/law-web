@@ -49,7 +49,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col w-[420px] h-[600px] bg-white rounded-3xl shadow-[20px_20px_60px_rgba(0,0,0,0.15),-10px_-10px_40px_rgba(255,255,255,0.8)] border border-gray-100 overflow-hidden">
+    <div className="fixed bottom-0 right-0 md:bottom-6 md:right-6 z-50 flex flex-col w-full h-full md:w-[420px] md:h-[600px] md:rounded-3xl bg-white shadow-[20px_20px_60px_rgba(0,0,0,0.15),-10px_-10px_40px_rgba(255,255,255,0.8)] border border-gray-100 overflow-hidden">
       {/* 头部 */}
       <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg">
         <div className="flex items-center gap-3">
@@ -134,7 +134,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
       </div>
 
       {/* 输入区域 */}
-      <div className="p-4 bg-white border-t border-gray-100 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+      <div className="p-4 pb-6 md:pb-4 bg-white border-t border-gray-100 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
         <div className="flex gap-2">
           <textarea
             ref={inputRef}
@@ -162,7 +162,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
           </button>
         </div>
         
-        <p className="text-xs text-gray-400 mt-2 text-center">
+        <p className="hidden md:block text-xs text-gray-400 mt-2 text-center">
           按 Enter 发送，Shift + Enter 换行
         </p>
       </div>
