@@ -41,34 +41,34 @@ const NeumorphicProtectionPanel = () => {
     indigo: 'text-indigo-600',
     rose: 'text-rose-600'
   };
-  return <div className="relative bg-gray-50 rounded-3xl p-8 shadow-[20px_20px_60px_rgba(249,250,251,0.5),-20px_-20px_60px_rgba(255,255,255,0.8)] border border-gray-100 transition-all duration-300 hover:shadow-[15px_15px_30px_rgba(249,250,251,0.6),-15px_-15px_30px_rgba(255,255,255,0.9)]">
+  return <div className="relative bg-gray-50 dark:bg-gray-800 rounded-3xl p-8 shadow-[20px_20px_60px_rgba(249,250,251,0.5),-20px_-20px_60px_rgba(255,255,255,0.8)] dark:shadow-[20px_20px_60px_rgba(0,0,0,0.3),-20px_-20px_60px_rgba(75,85,99,0.2)] border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-[15px_15px_30px_rgba(249,250,251,0.6),-15px_-15px_30px_rgba(255,255,255,0.9)] dark:hover:shadow-[15px_15px_30px_rgba(0,0,0,0.4),-15px_-15px_30px_rgba(75,85,99,0.3)]">
       {/* Header with pill-shaped embossed effect */}
       <div className="flex items-center mb-8">
-        <div className="flex items-center bg-gray-50 rounded-full py-3 px-6 shadow-[inset_3px_3px_6px_rgba(0,0,0,0.05),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] border border-gray-100">
-          <div className="mr-4 w-12 h-12 rounded-full flex items-center justify-center bg-gray-50 shadow-[-3px_-3px_7px_rgba(255,255,255,0.7),3px_3px_5px_rgba(0,0,0,0.05)]">
-            <ShieldCheckIcon className="h-6 w-6 text-green-600" />
+        <div className="flex items-center bg-gray-50 dark:bg-gray-800 rounded-full py-3 px-6 shadow-[inset_3px_3px_6px_rgba(0,0,0,0.05),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] dark:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.3),inset_-3px_-3px_6px_rgba(75,85,99,0.2)] border border-gray-100 dark:border-gray-700">
+          <div className="mr-4 w-12 h-12 rounded-full flex items-center justify-center bg-gray-50 dark:bg-gray-800 shadow-[-3px_-3px_7px_rgba(255,255,255,0.7),3px_3px_5px_rgba(0,0,0,0.05)] dark:shadow-[-3px_-3px_7px_rgba(75,85,99,0.2),3px_3px_5px_rgba(0,0,0,0.3)]">
+            <ShieldCheckIcon className="h-6 w-6 text-green-600 dark:text-green-400" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-800">如何保护自己</h3>
+          <h3 className="text-2xl font-bold text-gray-800 dark:text-white">如何保护自己</h3>
         </div>
       </div>
       {/* Content grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {strategies.map((strategy, index) => <div key={index} className="bg-white rounded-2xl p-6 shadow-[5px_5px_15px_rgba(0,0,0,0.05),-5px_-5px_15px_rgba(255,255,255,0.8)] border border-gray-100 transition-all duration-300 hover:shadow-[3px_3px_10px_rgba(0,0,0,0.06),-3px_-3px_10px_rgba(255,255,255,0.8)] group">
+        {strategies.map((strategy, index) => <div key={index} className="bg-white dark:bg-gray-700 rounded-2xl p-6 shadow-[5px_5px_15px_rgba(0,0,0,0.05),-5px_-5px_15px_rgba(255,255,255,0.8)] dark:shadow-[5px_5px_15px_rgba(0,0,0,0.3),-5px_-5px_15px_rgba(75,85,99,0.2)] border border-gray-100 dark:border-gray-600 transition-all duration-300 hover:shadow-[3px_3px_10px_rgba(0,0,0,0.06),-3px_-3px_10px_rgba(255,255,255,0.8)] dark:hover:shadow-[3px_3px_10px_rgba(0,0,0,0.4),-3px_-3px_10px_rgba(75,85,99,0.3)] group">
             <div className="flex items-start">
               <div className="relative flex-shrink-0 mr-5">
                 {/* Outer circle with shadow */}
-                <div className="w-12 h-12 rounded-full bg-white shadow-[4px_4px_8px_rgba(0,0,0,0.05),-4px_-4px_8px_rgba(255,255,255,0.8)] flex items-center justify-center group-hover:shadow-[2px_2px_5px_rgba(0,0,0,0.05),-2px_-2px_5px_rgba(255,255,255,0.8)] transition-all duration-300">
+                <div className="w-12 h-12 rounded-full bg-white dark:bg-gray-700 shadow-[4px_4px_8px_rgba(0,0,0,0.05),-4px_-4px_8px_rgba(255,255,255,0.8)] dark:shadow-[4px_4px_8px_rgba(0,0,0,0.3),-4px_-4px_8px_rgba(75,85,99,0.2)] flex items-center justify-center group-hover:shadow-[2px_2px_5px_rgba(0,0,0,0.05),-2px_-2px_5px_rgba(255,255,255,0.8)] dark:group-hover:shadow-[2px_2px_5px_rgba(0,0,0,0.3),-2px_-2px_5px_rgba(75,85,99,0.2)] transition-all duration-300">
                   {/* Inner colored circle */}
-                  <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-[inset_2px_2px_4px_rgba(0,0,0,0.03),inset_-2px_-2px_4px_rgba(255,255,255,0.6)]">
+                  <div className="w-8 h-8 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center shadow-[inset_2px_2px_4px_rgba(0,0,0,0.03),inset_-2px_-2px_4px_rgba(255,255,255,0.6)] dark:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.3),inset_-2px_-2px_4px_rgba(75,85,99,0.2)]">
                     <strategy.icon className={`h-4 w-4 ${colorMap[strategy.color]}`} />
                   </div>
                 </div>
               </div>
               <div className="flex-1">
-                <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
                   {strategy.title}
                 </h4>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                   {strategy.content}
                 </p>
               </div>

@@ -40,16 +40,16 @@ const WarningChip = ({
 }) => {
   return <div className={`
         flex items-center p-3 rounded-lg transition-all duration-200 cursor-pointer
-        ${checked ? 'bg-blue-100 border-blue-300 shadow-sm' : 'bg-white border-gray-200 hover:shadow-md hover:-translate-y-1'}
+        ${checked ? 'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700 shadow-sm' : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:shadow-md hover:-translate-y-1'}
         border mb-3
       `} onClick={onToggle}>
       <div className={`
         w-6 h-6 rounded-full flex items-center justify-center mr-3 flex-shrink-0
-        ${checked ? 'bg-blue-500' : 'bg-gray-100'}
+        ${checked ? 'bg-blue-500 dark:bg-blue-600' : 'bg-gray-100 dark:bg-gray-600'}
       `}>
-        {checked ? <CheckIcon className="h-4 w-4 text-white" /> : <XCircleIcon className="h-4 w-4 text-gray-400" />}
+        {checked ? <CheckIcon className="h-4 w-4 text-white" /> : <XCircleIcon className="h-4 w-4 text-gray-400 dark:text-gray-500" />}
       </div>
-      <span className={`text-sm ${checked ? 'text-blue-800 font-medium' : 'text-gray-600'}`}>
+      <span className={`text-sm ${checked ? 'text-blue-800 dark:text-blue-300 font-medium' : 'text-gray-600 dark:text-gray-300'}`}>
         {text}
       </span>
     </div>;
@@ -109,20 +109,20 @@ const AntiScamGuide = () => {
       progressFill: 'bg-blue-500'
     }
   };
-  return <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen w-full">
+  return <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen w-full">
       <div className="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
         {/* Hero Section with Card Design */}
         <div className="relative mx-auto max-w-4xl">
           {/* Floating Shield Icon */}
           <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-20">
-            <div className="w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center animate-pulse-slow border-4 border-blue-100">
-              <ShieldCheckIcon className="h-8 w-8 text-blue-500" />
+            <div className="w-16 h-16 bg-white dark:bg-gray-800 rounded-full shadow-lg dark:shadow-blue-900/50 flex items-center justify-center animate-pulse-slow border-4 border-blue-100 dark:border-blue-900">
+              <ShieldCheckIcon className="h-8 w-8 text-blue-500 dark:text-blue-400" />
             </div>
           </div>
           {/* Card Container with Mesh Gradient */}
-          <div className="relative rounded-xl overflow-hidden shadow-xl border border-white/15 backdrop-blur-sm">
+          <div className="relative rounded-xl overflow-hidden shadow-xl dark:shadow-blue-900/50 border border-white/15 dark:border-gray-700/50 backdrop-blur-sm">
             {/* Mesh Gradient Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 opacity-80"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 dark:from-blue-600 dark:to-indigo-700 opacity-80 dark:opacity-70"></div>
             {/* Animated Particles */}
             <div className="absolute inset-0 overflow-hidden">
               <div className="particles-container">
@@ -148,12 +148,12 @@ const AntiScamGuide = () => {
                 掌握这些防骗技巧，让你的求职之路更加安全顺畅
               </p>
               {/* Glass-morphic Button Container */}
-              <div className="mt-10 bg-white/10 backdrop-blur-md rounded-full p-2 border border-white/20 shadow-inner flex">
-                <a href="#warnings" className="group bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-full px-6 py-3 text-sm font-medium transition-all duration-300 flex items-center mr-2">
+              <div className="mt-10 bg-white/10 dark:bg-black/20 backdrop-blur-md rounded-full p-2 border border-white/20 dark:border-gray-600/30 shadow-inner flex">
+                <a href="#warnings" className="group bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 text-white border border-white/30 dark:border-white/20 rounded-full px-6 py-3 text-sm font-medium transition-all duration-300 flex items-center mr-2">
                   查看预警信号
                   <AlertTriangleIcon className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </a>
-                <a href="#strategies" className="group bg-white text-blue-500 hover:bg-blue-50 rounded-full px-6 py-3 text-sm font-medium shadow-md transition-all duration-300 flex items-center">
+                <a href="#strategies" className="group bg-white dark:bg-gray-800 text-blue-500 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-full px-6 py-3 text-sm font-medium shadow-md transition-all duration-300 flex items-center">
                   防护策略
                   <ShieldCheckIcon className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </a>
@@ -163,39 +163,39 @@ const AntiScamGuide = () => {
         </div>
         {/* Introduction Card */}
         <div className="relative -mt-12 mx-auto max-w-4xl">
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden transform transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-            <div className="px-6 py-6 sm:px-8 sm:py-7 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-blue-900/30 border border-gray-100 dark:border-gray-700 overflow-hidden transform transition-all duration-300 hover:shadow-2xl dark:hover:shadow-blue-900/50 hover:-translate-y-1">
+            <div className="px-6 py-6 sm:px-8 sm:py-7 bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-700 border-b border-gray-100 dark:border-gray-600">
               <div className="flex items-center">
-                <div className="flex-shrink-0 bg-blue-100 rounded-xl p-3">
-                  <ShieldCheckIcon className="h-6 w-6 text-blue-600" />
+                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-900/30 rounded-xl p-3">
+                  <ShieldCheckIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h2 className="ml-4 text-xl font-bold text-gray-900">
+                <h2 className="ml-4 text-xl font-bold text-gray-900 dark:text-white">
                   防骗指南简介
                 </h2>
               </div>
             </div>
             <div className="px-6 py-8 sm:px-8 sm:py-10">
-              <p className="text-gray-600 leading-relaxed text-lg">
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
                 在求职过程中，大学生由于经验不足和急切就业的心态，容易成为诈骗分子的目标。本攻略整合了常见的求职诈骗手段和防范措施，帮助大学生提高警惕，安全求职。
               </p>
               <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                <div className="bg-blue-50 rounded-xl p-4 text-center">
-                  <div className="text-blue-600 font-semibold text-xl mb-1">
+                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 text-center">
+                  <div className="text-blue-600 dark:text-blue-400 font-semibold text-xl mb-1">
                     100+
                   </div>
-                  <div className="text-blue-700 text-sm">真实案例分析</div>
+                  <div className="text-blue-700 dark:text-blue-300 text-sm">真实案例分析</div>
                 </div>
-                <div className="bg-indigo-50 rounded-xl p-4 text-center">
-                  <div className="text-indigo-600 font-semibold text-xl mb-1">
+                <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-4 text-center">
+                  <div className="text-indigo-600 dark:text-indigo-400 font-semibold text-xl mb-1">
                     20+
                   </div>
-                  <div className="text-indigo-700 text-sm">防骗策略</div>
+                  <div className="text-indigo-700 dark:text-indigo-300 text-sm">防骗策略</div>
                 </div>
-                <div className="bg-purple-50 rounded-xl p-4 text-center">
-                  <div className="text-purple-600 font-semibold text-xl mb-1">
+                <div className="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4 text-center">
+                  <div className="text-purple-600 dark:text-purple-400 font-semibold text-xl mb-1">
                     1000+
                   </div>
-                  <div className="text-purple-700 text-sm">学生受益</div>
+                  <div className="text-purple-700 dark:text-purple-300 text-sm">学生受益</div>
                 </div>
               </div>
             </div>
@@ -206,15 +206,15 @@ const AntiScamGuide = () => {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
             <div>
               
-              <h2 className="text-3xl font-bold text-gray-900">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
                 求职诈骗预警信号
               </h2>
-              <p className="mt-3 text-gray-500 max-w-2xl">
+              <p className="mt-3 text-gray-500 dark:text-gray-400 max-w-2xl">
                 检查并了解这些预警信号，提高你的求职安全意识，远离求职陷阱
               </p>
             </div>
             <div className="mt-6 sm:mt-0">
-              <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-50 text-blue-700">
+              <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
                 <span className="text-xs font-medium mr-1.5">完成度</span>
                 <span className="text-sm font-semibold">
                   {progress.percentage}%
@@ -223,65 +223,65 @@ const AntiScamGuide = () => {
             </div>
           </div>
           {/* Progress tracker - Redesigned */}
-          <div className="mb-16 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-md p-8 border border-blue-100">
+          <div className="mb-16 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl shadow-md dark:shadow-blue-900/30 p-8 border border-blue-100 dark:border-blue-800/50">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-gray-800 flex items-center">
-                <span className="inline-block w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center mr-3 text-sm">
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white flex items-center">
+                <span className="inline-block w-8 h-8 rounded-full bg-blue-600 dark:bg-blue-500 text-white flex items-center justify-center mr-3 text-sm">
                   <CheckIcon className="h-4 w-4" />
                 </span>
                 预警信号学习进度
               </h3>
               <div className="mt-4 sm:mt-0 flex items-center">
-                <span className="text-gray-500 text-sm mr-3">已学习</span>
-                <div className="bg-white rounded-full px-3 py-1 shadow-sm border border-gray-200">
-                  <span className="font-mono text-blue-600 font-semibold">
+                <span className="text-gray-500 dark:text-gray-400 text-sm mr-3">已学习</span>
+                <div className="bg-white dark:bg-gray-800 rounded-full px-3 py-1 shadow-sm border border-gray-200 dark:border-gray-600">
+                  <span className="font-mono text-blue-600 dark:text-blue-400 font-semibold">
                     {progress.reviewed}
                   </span>
-                  <span className="text-gray-400 mx-1">/</span>
-                  <span className="font-mono text-gray-600">
+                  <span className="text-gray-400 dark:text-gray-500 mx-1">/</span>
+                  <span className="font-mono text-gray-600 dark:text-gray-300">
                     {progress.total}
                   </span>
                 </div>
               </div>
             </div>
             <div className="relative">
-              <div className="w-full h-3 bg-white rounded-full shadow-inner overflow-hidden border border-gray-200">
-                <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-1000 ease-out" style={{
+              <div className="w-full h-3 bg-white dark:bg-gray-700 rounded-full shadow-inner overflow-hidden border border-gray-200 dark:border-gray-600">
+                <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-400 dark:to-indigo-500 transition-all duration-1000 ease-out" style={{
                 width: `${progress.percentage}%`
               }}></div>
               </div>
               {/* Progress markers */}
               <div className="mt-2 flex justify-between">
-                <div className="text-xs text-gray-500">0%</div>
-                <div className="text-xs text-gray-500">25%</div>
-                <div className="text-xs text-gray-500">50%</div>
-                <div className="text-xs text-gray-500">75%</div>
-                <div className="text-xs text-gray-500">100%</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">0%</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">25%</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">50%</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">75%</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">100%</div>
               </div>
             </div>
             <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 dark:text-gray-300">
                 继续学习预警信号，提高你的求职安全意识
               </p>
             </div>
           </div>
           {/* Warning cards grid */}
           <div className="grid gap-8 lg:grid-cols-2">
-            {warningCategories.map(category => <div key={category.id} className="group bg-white overflow-hidden rounded-2xl shadow-lg transition-all duration-500 hover:shadow-xl relative" style={{
+            {warningCategories.map(category => <div key={category.id} className="group bg-white dark:bg-gray-800 overflow-hidden rounded-2xl shadow-lg dark:shadow-blue-900/30 transition-all duration-500 hover:shadow-xl dark:hover:shadow-blue-900/50 relative" style={{
             backgroundImage: category.bgPattern
           }}>
                 {/* Accent color bar */}
                 <div className={`h-1.5 w-full ${colorMap[category.color].accent}`}></div>
-                <div className="px-7 py-6 border-b border-gray-100">
+                <div className="px-7 py-6 border-b border-gray-100 dark:border-gray-700">
                   <div className="flex items-center">
-                    <div className={`w-12 h-12 rounded-xl ${colorMap[category.color].iconBg} flex items-center justify-center mr-4 transition-transform duration-300 group-hover:scale-110`}>
+                    <div className={`w-12 h-12 rounded-xl ${colorMap[category.color].iconBg} dark:opacity-80 flex items-center justify-center mr-4 transition-transform duration-300 group-hover:scale-110`}>
                       <category.icon className={`h-6 w-6 ${colorMap[category.color].iconColor}`} />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                         {category.title}
                       </h3>
-                      <div className="mt-1 text-xs text-gray-500">
+                      <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                         点击下方选项以标记为已学习
                       </div>
                     </div>
@@ -292,18 +292,18 @@ const AntiScamGuide = () => {
                     {category.warnings.map((warning, index) => <WarningChip key={index} text={warning} checked={reviewedWarnings[`${category.id}-${index}`] || false} onToggle={() => toggleWarning(category.id, index)} />)}
                   </div>
                   {/* Category progress indicator */}
-                  <div className="mt-6 pt-4 border-t border-gray-100">
-                    <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+                  <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
+                    <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-2">
                       <span>类别学习进度</span>
                       <div className="flex items-center">
-                        <span className="font-medium text-sm text-gray-700">
+                        <span className="font-medium text-sm text-gray-700 dark:text-gray-300">
                           {category.warnings.filter((_, index) => reviewedWarnings[`${category.id}-${index}`]).length}
                         </span>
                         <span className="mx-1">/</span>
                         <span>{category.warnings.length}</span>
                       </div>
                     </div>
-                    <div className="relative w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="relative w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                       <div className={`absolute top-0 left-0 h-full ${colorMap[category.color].progressFill} transition-all duration-500 ease-out`} style={{
                     width: `${category.warnings.filter((_, index) => reviewedWarnings[`${category.id}-${index}`]).length / category.warnings.length * 100}%`
                   }}></div>
@@ -316,14 +316,14 @@ const AntiScamGuide = () => {
         {/* Protection Strategies */}
         <div id="strategies" className="mt-24 scroll-mt-20">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-medium mb-4">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-sm font-medium mb-4">
               <ShieldCheckIcon className="h-4 w-4 mr-2" />
               安全策略
             </div>
-            <h2 className="text-3xl font-bold text-gray-900">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
               求职安全防护策略
             </h2>
-            <p className="mt-3 text-gray-500 max-w-2xl mx-auto">
+            <p className="mt-3 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
               采用这些策略来保护自己，确保求职过程安全无忧
             </p>
           </div>
