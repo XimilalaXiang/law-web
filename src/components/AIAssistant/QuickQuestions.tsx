@@ -42,12 +42,12 @@ const iconMap = {
   phone: PhoneIcon,
 };
 
-// 快速提问：预置常用问题
+// 快速提问 - 深色科技风格
 const QuickQuestions: React.FC<QuickQuestionsProps> = ({ onSelect, disabled = false }) => {
   return (
-    <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-[inset_3px_3px_6px_rgba(0,0,0,0.05),inset_-3px_-3px_6px_rgba(255,255,255,0.7)] dark:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-700">
-      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-        <span className="inline-block w-2 h-2 rounded-full bg-blue-500 dark:bg-blue-400 mr-2"></span>
+    <div className="w-full p-4 bg-white/5 rounded-xl border border-white/10">
+      <h3 className="text-sm font-semibold text-white/70 mb-3 flex items-center">
+        <span className="inline-block w-2 h-2 rounded-full bg-[var(--primary)] mr-2 shadow-[0_0_8px_rgba(255,199,0,0.5)]"></span>
         快速提问
       </h3>
 
@@ -60,17 +60,20 @@ const QuickQuestions: React.FC<QuickQuestionsProps> = ({ onSelect, disabled = fa
               key={question.id}
               onClick={() => !disabled && onSelect(question.prompt)}
               disabled={disabled}
-              className="group relative flex items-center gap-3 px-4 py-3 bg-white dark:bg-gray-700 rounded-lg shadow-[3px_3px_8px_rgba(0,0,0,0.06),-3px_-3px_8px_rgba(255,255,255,0.8)] dark:shadow-[3px_3px_8px_rgba(0,0,0,0.3),-3px_-3px_8px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-600 transition-all duration-200 hover:shadow-[2px_2px_5px_rgba(0,0,0,0.08),-2px_-2px_5px_rgba(255,255,255,0.9)] dark:hover:shadow-[2px_2px_5px_rgba(0,0,0,0.4),-2px_-2px_5px_rgba(255,255,255,0.03)] hover:translate-y-[-1px] active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.06),inset_-2px_-2px_5px_rgba(255,255,255,0.7)] dark:active:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.02)] active:translate-y-[1px] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+              className="group relative flex items-center gap-3 px-4 py-3 bg-white/5 rounded-xl border border-white/10 transition-all duration-200 hover:bg-[var(--primary)]/10 hover:border-[var(--primary)]/30 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-white/5 disabled:hover:border-white/10"
             >
               {/* 图标 */}
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-50 dark:bg-gray-800 shadow-[inset_2px_2px_4px_rgba(0,0,0,0.05),inset_-2px_-2px_4px_rgba(255,255,255,0.7)] dark:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.4),inset_-2px_-2px_4px_rgba(255,255,255,0.02)] flex items-center justify-center group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 transition-colors duration-200">
-                <IconComponent className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-[var(--primary)]/20 transition-colors duration-200">
+                <IconComponent className="h-4 w-4 text-[var(--primary)]" />
               </div>
 
               {/* 文案 */}
-              <span className="flex-1 text-left text-sm text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+              <span className="flex-1 text-left text-sm text-white/70 group-hover:text-white transition-colors duration-200">
                 {question.label}
               </span>
+
+              {/* Hover 装饰线 */}
+              <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--primary)]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </button>
           );
         })}

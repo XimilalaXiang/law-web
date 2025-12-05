@@ -9,7 +9,7 @@ interface ChatWindowProps {
   onClose: () => void;
 }
 
-// 聊天对话框
+// 聊天对话框 - 深色科技风格
 const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
   const [input, setInput] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -75,18 +75,21 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
 
   return (
     <div
-      className="fixed bottom-0 right-0 md:bottom-6 md:right-6 z-50 flex flex-col w-full h-full md:w-[460px] lg:w-[520px] md:h-[600px] md:rounded-3xl bg-white dark:bg-gray-800 shadow-[20px_20px_60px_rgba(0,0,0,0.15),-10px_-10px_40px_rgba(255,255,255,0.8)] dark:shadow-[20px_20px_60px_rgba(0,0,0,0.5),-10px_-10px_40px_rgba(255,255,255,0.02)] border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors duration-300"
+      className="fixed bottom-0 right-0 md:bottom-6 md:right-6 z-50 flex flex-col w-full h-full md:w-[460px] lg:w-[520px] md:h-[600px] md:rounded-2xl bg-[#0a0a0a] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] border border-[var(--border)] overflow-hidden"
       role="dialog"
       aria-modal="true"
       aria-label="AI反诈助手"
     >
       {/* 顶部栏 */}
-      <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-b border-gray-200/50 dark:border-gray-700/50">
-       <div className="flex items-center gap-2 w-full max-w-full">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 shadow-[inset_3px_3px_8px_rgba(0,0,0,0.1),inset_-3px_-3px_8px_rgba(255,255,255,0.8)] dark:shadow-[inset_3px_3px_8px_rgba(0,0,0,0.6),inset_-3px_-3px_8px_rgba(255,255,255,0.05)] flex items-center justify-center">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 flex items-center justify-center shadow-md">
-              <ShieldCheck className="h-5 w-5 text-white" />
-            </div>
+      <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-[#0f0f0f] to-[#141414] border-b border-[var(--border)]">
+        <div className="flex items-center gap-3">
+          {/* Logo 图标 */}
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--primary)] to-[#EBB800] flex items-center justify-center shadow-[0_4px_15px_rgba(255,199,0,0.3)]">
+            <ShieldCheck className="h-5 w-5 text-black" />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-white">AI 反诈助手</h3>
+            <p className="text-xs text-white/40">随时为你守护</p>
           </div>
         </div>
 
@@ -95,39 +98,39 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
           {/* 新会话 */}
           <button
             onClick={() => { newSession(); setInput(''); }}
-            className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 shadow-[4px_4px_10px_rgba(0,0,0,0.1),-2px_-2px_8px_rgba(255,255,255,0.9)] dark:shadow-[4px_4px_10px_rgba(0,0,0,0.4),-2px_-2px_8px_rgba(255,255,255,0.02)] hover:shadow-[2px_2px_6px_rgba(0,0,0,0.12),-1px_-1px_5px_rgba(255,255,255,0.95)] dark:hover:shadow-[2px_2px_6px_rgba(0,0,0,0.5),-1px_-1px_5px_rgba(255,255,255,0.03)] transition-all duration-200 flex items-center justify-center group"
+            className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[var(--primary)]/50 transition-all duration-200 flex items-center justify-center group"
             title="新会话"
             aria-label="新会话"
           >
-            <Plus className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+            <Plus className="h-4 w-4 text-white/60 group-hover:text-[var(--primary)]" />
           </button>
 
           {/* 历史列表 */}
           <div className="relative">
             <button
               onClick={() => setShowHistory(v => !v)}
-              className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 shadow-[4px_4px_10px_rgba(0,0,0,0.1),-2px_-2px_8px_rgba(255,255,255,0.9)] dark:shadow-[4px_4px_10px_rgba(0,0,0,0.4),-2px_-2px_8px_rgba(255,255,255,0.02)] hover:shadow-[2px_2px_6px_rgba(0,0,0,0.12),-1px_-1px_5px_rgba(255,255,255,0.95)] dark:hover:shadow-[2px_2px_6px_rgba(0,0,0,0.5),-1px_-1px_5px_rgba(255,255,255,0.03)] transition-all duration-200 flex items-center justify-center group"
+              className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[var(--primary)]/50 transition-all duration-200 flex items-center justify-center group"
               title="会话历史"
               aria-expanded={showHistory}
             >
-              <History className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+              <History className="h-4 w-4 text-white/60 group-hover:text-[var(--primary)]" />
             </button>
             {showHistory && (
-              <div className="absolute right-0 mt-2 w-64 max-h-72 overflow-y-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-50">
-                <div className="p-2 text-xs text-gray-500 dark:text-gray-400">历史对话</div>
-                <ul className="divide-y divide-gray-100 dark:divide-gray-700">
+              <div className="absolute right-0 mt-2 w-64 max-h-72 overflow-y-auto bg-[#0f0f0f] border border-[var(--border)] rounded-xl shadow-2xl z-50">
+                <div className="p-3 text-xs text-white/40 border-b border-[var(--border)]">历史对话</div>
+                <ul className="divide-y divide-[var(--border)]">
                   {sessions
                     .filter((s: any) => (s.messages?.length > 0) || (s.title && s.title.trim().length > 0) || (s.updatedAt && s.updatedAt > 0))
                     .map((s: any) => (
                     <li key={s.id}>
-                      <div className={`flex items-center justify-between px-3 py-2 text-sm ${s.id === activeSessionId ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'}`}>
+                      <div className={`flex items-center justify-between px-3 py-2 text-sm ${s.id === activeSessionId ? 'bg-[var(--primary)]/10 text-[var(--primary)]' : 'text-white/70 hover:bg-white/5'}`}>
                         <button onClick={() => { switchSession(s.id); setShowHistory(false); setInput(''); }} className="flex-1 text-left">
-                          <div className="truncate font-medium">{(s.title || '').trim()}</div>
+                          <div className="truncate font-medium">{(s.title || '').trim() || '新对话'}</div>
                           {s.updatedAt ? (
-                            <div className="text-xs text-gray-400 dark:text-gray-500">{new Date(s.updatedAt).toLocaleString('zh-CN')}</div>
+                            <div className="text-xs text-white/40">{new Date(s.updatedAt).toLocaleString('zh-CN')}</div>
                           ) : null}
                         </button>
-                        <button onClick={() => { if (window.confirm('确认删除该会话？删除后不可恢复！')) deleteSession(s.id); }} className="ml-2 text-xs text-red-600 dark:text-red-400 hover:underline">删除</button>
+                        <button onClick={() => { if (window.confirm('确认删除该会话？删除后不可恢复！')) deleteSession(s.id); }} className="ml-2 text-xs text-red-400 hover:text-red-300">删除</button>
                       </div>
                     </li>
                   ))}
@@ -139,39 +142,48 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
           {/* 最小化 */}
           <button
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 shadow-[4px_4px_10px_rgba(0,0,0,0.1),-2px_-2px_8px_rgba(255,255,255,0.9)] dark:shadow-[4px_4px_10px_rgba(0,0,0,0.4),-2px_-2px_8px_rgba(255,255,255,0.02)] hover:shadow-[2px_2px_6px_rgba(0,0,0,0.12),-1px_-1px_5px_rgba(255,255,255,0.95)] dark:hover:shadow-[2px_2px_6px_rgba(0,0,0,0.5),-1px_-1px_5px_rgba(255,255,255,0.03)] transition-all duration-200 flex items-center justify-center group"
+            className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[var(--primary)]/50 transition-all duration-200 flex items-center justify-center group"
             title="最小化"
             aria-label="最小化"
           >
-            <Minimize2 className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+            <Minimize2 className="h-4 w-4 text-white/60 group-hover:text-[var(--primary)]" />
           </button>
 
           {isLoading && (
             <button
               onClick={stopGenerating}
-              className="w-9 h-9 rounded-full bg-gradient-to-br from-red-100 to-red-200 dark:from-red-900 dark:to-red-800 text-red-700 dark:text-red-300 shadow-[4px_4px_10px_rgba(0,0,0,0.1),-2px_-2px_8px_rgba(255,255,255,0.9)] dark:shadow-[4px_4px_10px_rgba(0,0,0,0.4),-2px_-2px_8px_rgba(255,255,255,0.02)] hover:shadow-[2px_2px_6px_rgba(0,0,0,0.12),-1px_-1px_5px_rgba(255,255,255,0.95)] dark:hover:shadow-[2px_2px_6px_rgba(0,0,0,0.5),-1px_-1px_5px_rgba(255,255,255,0.03)] active:shadow-[inset_2px_2px_6px_rgba(0,0,0,0.15),inset_-2px_-2px_6px_rgba(255,255,255,0.7)] dark:active:shadow-[inset_2px_2px_6px_rgba(0,0,0,0.6),inset_-2px_-2px_6px_rgba(255,255,255,0.05)] transition-all duration-200 flex items-center justify-center group"
+              className="w-9 h-9 rounded-lg bg-red-500/20 border border-red-500/30 hover:bg-red-500/30 transition-all duration-200 flex items-center justify-center"
               title="停止生成"
               aria-label="停止生成"
             >
-              <CircleStop className="h-4 w-4" />
+              <CircleStop className="h-4 w-4 text-red-400" />
             </button>
           )}
         </div>
       </div>
 
       {/* 消息区 */}
-      <div className="flex-1 overflow-y-auto p-3 md:p-4 lg:p-5 bg-gray-50 dark:bg-gray-900" aria-live="polite">
+      <div className="flex-1 overflow-y-auto p-4 bg-[#050505]" aria-live="polite">
         {messages.length === 0 ? (
-          // 欢迎
+          // 欢迎界面
           <div className="h-full flex flex-col items-center justify-center text-center px-6">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/40 dark:to-blue-800/40 flex items-center justify-center mb-4 shadow-[5px_5px_15px_rgba(0,0,0,0.1),-5px_-5px_15px_rgba(255,255,255,0.8)] dark:shadow-[5px_5px_15px_rgba(0,0,0,0.4),-5px_-5px_15px_rgba(255,255,255,0.02)]">
-              <span className="text-4xl">🛡️</span>
+            {/* 主图标 */}
+            <div className="relative mb-6">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[var(--primary)] to-[#EBB800] flex items-center justify-center shadow-[0_8px_30px_rgba(255,199,0,0.3)]">
+                <span className="text-4xl">🛡️</span>
+              </div>
+              {/* 状态指示灯 */}
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-[#050505] flex items-center justify-center">
+                <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+              </div>
             </div>
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">你好，我是 AI 反诈助手</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+            
+            <h3 className="text-lg font-semibold text-white mb-2">你好，我是 AI 反诈助手</h3>
+            <p className="text-sm text-white/50 mb-6 leading-relaxed max-w-xs">
               我可以帮你分析招聘信息、识别风险，并提供应对建议。
               遇到任何求职诈骗相关问题，随时问我。
             </p>
+            
             {/* 快速提问 */}
             <QuickQuestions onSelect={handleQuickQuestion} disabled={isLoading} />
           </div>
@@ -184,11 +196,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
 
             {/* 错误提示 */}
             {error && (
-              <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-800/50 shadow-sm">
-                <AlertCircle className="h-5 w-5 text-red-500 dark:text-red-400 flex-shrink-0 mt-0.5" />
+              <div className="flex items-start gap-3 p-4 bg-red-500/10 rounded-xl border border-red-500/30">
+                <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <p className="text-sm text-red-700 dark:text-red-300 mb-2">{error}</p>
-                  <button onClick={retryLastMessage} className="inline-flex items-center gap-1 text-xs text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium">
+                  <p className="text-sm text-red-300 mb-2">{error}</p>
+                  <button onClick={retryLastMessage} className="inline-flex items-center gap-1 text-xs text-red-400 hover:text-red-300 font-medium">
                     <RefreshCw className="h-3 w-3" />
                     重试
                   </button>
@@ -202,8 +214,8 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
       </div>
 
       {/* 输入区 */}
-      <div className="p-4 pb-6 md:pb-4 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] dark:shadow-[0_-4px_10px_rgba(0,0,0,0.3)]">
-        <div className="flex gap-2">
+      <div className="p-4 bg-[#0a0a0a] border-t border-[var(--border)]">
+        <div className="flex gap-3">
           <textarea
             ref={inputRef}
             value={input}
@@ -212,7 +224,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
             placeholder={isLoading ? 'AI 正在思考...' : '请输入消息...'}
             disabled={isLoading}
             rows={1}
-            className="flex-1 px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent resize-none text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 shadow-[inset_2px_2px_5px_rgba(0,0,0,0.05),inset_-2px_-2px_5px_rgba(255,255,255,0.7)] dark:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.4),inset_-2px_-2px_5px_rgba(255,255,255,0.02)] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-3 bg-white/5 rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 focus:border-[var(--primary)]/50 resize-none text-sm text-white placeholder-white/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
             style={{ minHeight: '44px', maxHeight: '120px' }}
             onInput={(e) => {
               const target = e.target as HTMLTextAreaElement;
@@ -224,17 +236,16 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
           <button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
-            className="flex-shrink-0 w-11 h-11 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-xl text-white shadow-[4px_4px_10px_rgba(59,130,246,0.3),-2px_-2px_8px_rgba(147,197,253,0.2)] dark:shadow-[4px_4px_10px_rgba(0,0,0,0.4),-2px_-2px_8px_rgba(59,130,246,0.1)] transition-all duration-200 hover:shadow-[3px_3px_8px_rgba(59,130,246,0.4),-1px_-1px_6px_rgba(147,197,253,0.3)] dark:hover:shadow-[3px_3px_8px_rgba(0,0,0,0.5),-1px_-1px_6px_rgba(59,130,246,0.15)] hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center"
+            className="flex-shrink-0 w-11 h-11 bg-gradient-to-br from-[var(--primary)] to-[#EBB800] rounded-xl text-black shadow-[0_4px_15px_rgba(255,199,0,0.3)] transition-all duration-200 hover:shadow-[0_6px_20px_rgba(255,199,0,0.4)] hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none flex items-center justify-center"
           >
             <Send className="h-5 w-5" />
           </button>
         </div>
 
-        <p className="hidden md:block text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">按 Enter 发送，Shift + Enter 换行</p>
+        <p className="hidden md:block text-xs text-white/30 mt-2 text-center">按 Enter 发送，Shift + Enter 换行</p>
       </div>
     </div>
   );
 };
 
 export default ChatWindow;
-
