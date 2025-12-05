@@ -1,344 +1,365 @@
 import React, { useState } from 'react';
-import { ShieldCheckIcon, AlertCircleIcon, CheckCircleIcon, XCircleIcon, AlertTriangleIcon, PhoneCallIcon, DollarSignIcon, BuildingIcon, BriefcaseIcon, MessageCircleIcon, CheckIcon } from 'lucide-react';
-import NeumorphicEmergencyPanel from '../components/NeumorphicEmergencyPanel';
-import NeumorphicProtectionPanel from '../components/NeumorphicProtectionPanel';
-// Define warning categories and their content
-const warningCategories = [{
-  id: 'financial',
-  title: '金钱相关预警',
-  icon: DollarSignIcon,
-  color: 'red',
-  bgPattern: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FEE2E2' fill-opacity='0.7'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
-  warnings: ['要求预先支付培训费、押金、材料费等', '承诺不合理的高薪或回报', '要求使用个人银行账户进行资金周转', '以任何理由索要银行卡信息或转账']
-}, {
-  id: 'company',
-  title: '公司背景预警',
-  icon: BuildingIcon,
-  color: 'amber',
-  bgPattern: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FEF3C7' fill-opacity='0.7'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
-  warnings: ['公司信息模糊，无法在官方渠道查证', '工作地点频繁变更或在非正规场所', '招聘信息过于简单，缺少具体岗位描述', '只提供手机联系方式，无固定电话或邮箱']
-}, {
-  id: 'process',
-  title: '招聘流程预警',
-  icon: BriefcaseIcon,
-  color: 'purple',
-  bgPattern: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23F3E8FF' fill-opacity='0.7'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
-  warnings: ['无需面试或简单聊天后立即录用', '要求提供过多的个人敏感信息', '急切催促做决定，制造紧迫感', '招聘信息长期存在，不限招聘人数']
-}, {
-  id: 'communication',
-  title: '沟通方式预警',
-  icon: MessageCircleIcon,
-  color: 'blue',
-  bgPattern: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23DBEAFE' fill-opacity='0.7'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
-  warnings: ['只通过非正规渠道如个人社交账号联系', '拒绝视频面试或当面交流', '邮件地址使用免费邮箱而非企业邮箱', '要求添加私人社交账号并发送敏感信息']
-}];
-// Warning Chip component
-const WarningChip = ({
-  text,
-  checked,
-  onToggle
-}) => {
-  return <div className={`
-        flex items-center p-3 rounded-lg transition-all duration-200 cursor-pointer
-        ${checked ? 'bg-blue-100 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700 shadow-sm' : 'bg-white dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:shadow-md hover:-translate-y-1'}
-        border mb-3
-      `} onClick={onToggle}>
-      <div className={`
-        w-6 h-6 rounded-full flex items-center justify-center mr-3 flex-shrink-0
-        ${checked ? 'bg-blue-500 dark:bg-blue-600' : 'bg-gray-100 dark:bg-gray-600'}
-      `}>
-        {checked ? <CheckIcon className="h-4 w-4 text-white" /> : <XCircleIcon className="h-4 w-4 text-gray-400 dark:text-gray-500" />}
-      </div>
-      <span className={`text-sm ${checked ? 'text-blue-800 dark:text-blue-300 font-medium' : 'text-gray-600 dark:text-gray-300'}`}>
-        {text}
-      </span>
-    </div>;
+import { 
+  ShieldCheckIcon, 
+  AlertCircleIcon, 
+  CheckIcon, 
+  DollarSignIcon, 
+  BuildingIcon, 
+  BriefcaseIcon, 
+  MessageCircleIcon,
+  PhoneIcon,
+  FileTextIcon,
+  EyeIcon,
+  LockIcon
+} from 'lucide-react';
+
+// Warning categories data
+const warningCategories = [
+  {
+    id: 'financial',
+    title: '金钱相关预警',
+    icon: DollarSignIcon,
+    color: '#ef4444',
+    warnings: [
+      '要求预先支付培训费、押金、材料费等',
+      '承诺不合理的高薪或回报',
+      '要求使用个人银行账户进行资金周转',
+      '以任何理由索要银行卡信息或转账'
+    ]
+  },
+  {
+    id: 'company',
+    title: '公司背景预警',
+    icon: BuildingIcon,
+    color: '#f59e0b',
+    warnings: [
+      '公司信息模糊，无法在官方渠道查证',
+      '工作地点频繁变更或在非正规场所',
+      '招聘信息过于简单，缺少具体岗位描述',
+      '只提供手机联系方式，无固定电话或邮箱'
+    ]
+  },
+  {
+    id: 'process',
+    title: '招聘流程预警',
+    icon: BriefcaseIcon,
+    color: '#a855f7',
+    warnings: [
+      '无需面试或简单聊天后立即录用',
+      '要求提供过多的个人敏感信息',
+      '急切催促做决定，制造紧迫感',
+      '招聘信息长期存在，不限招聘人数'
+    ]
+  },
+  {
+    id: 'communication',
+    title: '沟通方式预警',
+    icon: MessageCircleIcon,
+    color: '#3b82f6',
+    warnings: [
+      '只通过非正规渠道如个人社交账号联系',
+      '拒绝视频面试或当面交流',
+      '邮件地址使用免费邮箱而非企业邮箱',
+      '要求添加私人社交账号并发送敏感信息'
+    ]
+  }
+];
+
+// Protection strategies
+const protectionStrategies = [
+  {
+    icon: EyeIcon,
+    title: '核实企业信息',
+    description: '通过国家企业信用信息公示系统、天眼查等渠道核实企业真实性',
+  },
+  {
+    icon: FileTextIcon,
+    title: '签订正规合同',
+    description: '入职前签订正式劳动合同，明确工作内容、薪资待遇等条款',
+  },
+  {
+    icon: LockIcon,
+    title: '保护个人信息',
+    description: '不轻易提供身份证、银行卡等敏感信息，不随意签署空白文件',
+  },
+  {
+    icon: PhoneIcon,
+    title: '保持警惕沟通',
+    description: '优先选择正规招聘平台，警惕私人联系方式和非官方渠道',
+  },
+];
+
+// Pill component
+const Pill = ({ children, variant = 'default' }: { children: React.ReactNode; variant?: 'default' | 'danger' | 'success' }) => {
+  const variantClasses = {
+    default: '',
+    danger: 'pill-danger',
+    success: 'pill-success',
+  };
+  return (
+    <div className={`pill ${variantClasses[variant]}`}>
+      {children}
+    </div>
+  );
 };
+
 const AntiScamGuide = () => {
-  // State to track which warnings have been reviewed
-  const [reviewedWarnings, setReviewedWarnings] = useState({});
-  // Toggle the reviewed state of a warning
-  const toggleWarning = (categoryId, index) => {
-    setReviewedWarnings(prev => {
-      const key = `${categoryId}-${index}`;
-      return {
-        ...prev,
-        [key]: !prev[key]
-      };
-    });
+  const [reviewedWarnings, setReviewedWarnings] = useState<Record<string, boolean>>({});
+
+  const toggleWarning = (categoryId: string, index: number) => {
+    const key = `${categoryId}-${index}`;
+    setReviewedWarnings(prev => ({ ...prev, [key]: !prev[key] }));
   };
-  // Calculate progress
-  const calculateProgress = () => {
-    const totalWarnings = warningCategories.reduce((sum, category) => sum + category.warnings.length, 0);
-    const reviewedCount = Object.values(reviewedWarnings).filter(Boolean).length;
-    return {
-      percentage: Math.round(reviewedCount / totalWarnings * 100),
-      reviewed: reviewedCount,
-      total: totalWarnings
-    };
-  };
-  const progress = calculateProgress();
-  // Color mapping
-  const colorMap = {
-    red: {
-      accent: 'bg-red-500',
-      iconBg: 'bg-red-50',
-      iconColor: 'text-red-500',
-      progressBg: 'bg-red-100',
-      progressFill: 'bg-red-500'
-    },
-    amber: {
-      accent: 'bg-amber-500',
-      iconBg: 'bg-amber-50',
-      iconColor: 'text-amber-500',
-      progressBg: 'bg-amber-100',
-      progressFill: 'bg-amber-500'
-    },
-    purple: {
-      accent: 'bg-purple-500',
-      iconBg: 'bg-purple-50',
-      iconColor: 'text-purple-500',
-      progressBg: 'bg-purple-100',
-      progressFill: 'bg-purple-500'
-    },
-    blue: {
-      accent: 'bg-blue-500',
-      iconBg: 'bg-blue-50',
-      iconColor: 'text-blue-500',
-      progressBg: 'bg-blue-100',
-      progressFill: 'bg-blue-500'
-    }
-  };
-  return <div className="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen w-full">
-      <div className="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-        {/* Hero Section with Card Design */}
-        <div className="relative mx-auto max-w-4xl">
-          {/* Floating Shield Icon */}
-          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-20">
-            <div className="w-16 h-16 bg-white dark:bg-gray-800 rounded-full shadow-lg dark:shadow-blue-900/50 flex items-center justify-center animate-pulse-slow border-4 border-blue-100 dark:border-blue-900">
-              <ShieldCheckIcon className="h-8 w-8 text-blue-500 dark:text-blue-400" />
+
+  const totalWarnings = warningCategories.reduce((sum, cat) => sum + cat.warnings.length, 0);
+  const reviewedCount = Object.values(reviewedWarnings).filter(Boolean).length;
+  const progress = Math.round((reviewedCount / totalWarnings) * 100);
+
+  return (
+    <div className="bg-black min-h-screen w-full pt-20">
+      {/* Background */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="grid-bg" />
+        <div className="glow-orb glow-orb-1" />
+        <div className="glow-orb glow-orb-2" />
+        <div className="vignette" />
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8 relative z-10">
+        {/* Hero Section */}
+        <div className="text-center mb-20">
+          <Pill variant="success">防骗攻略</Pill>
+          
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl text-white mt-6">
+            大学生求职 <br className="sm:hidden" />
+            <span className="italic font-light">防骗</span> 指南
+          </h1>
+          
+          <p className="font-mono text-sm text-white/50 mt-6 max-w-lg mx-auto">
+            掌握这些防骗技巧，让你的求职之路更加安全顺畅
+          </p>
+
+          {/* Quick Stats */}
+          <div className="mt-12 flex flex-wrap justify-center gap-8">
+            <div className="text-center">
+              <div className="font-display text-3xl text-[var(--primary)]">100+</div>
+              <div className="font-mono text-xs text-white/40 mt-1">真实案例</div>
             </div>
-          </div>
-          {/* Card Container with Mesh Gradient */}
-          <div className="relative rounded-xl overflow-hidden shadow-xl dark:shadow-blue-900/50 border border-white/15 dark:border-gray-700/50 backdrop-blur-sm">
-            {/* Mesh Gradient Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-indigo-500 dark:from-blue-600 dark:to-indigo-700 opacity-80 dark:opacity-70"></div>
-            {/* Animated Particles */}
-            <div className="absolute inset-0 overflow-hidden">
-              <div className="particles-container">
-                {/* Circles */}
-                <div className="particle circle-particle top-1/4 left-1/5"></div>
-                <div className="particle circle-particle top-3/4 right-1/4"></div>
-                <div className="particle circle-particle bottom-1/3 left-1/3"></div>
-                {/* Squares */}
-                <div className="particle square-particle top-1/3 right-1/5"></div>
-                <div className="particle square-particle bottom-1/4 left-1/4"></div>
-                {/* Triangles */}
-                <div className="particle triangle-particle top-2/3 right-1/3"></div>
-                <div className="particle triangle-particle bottom-1/2 left-1/2"></div>
-              </div>
+            <div className="text-center">
+              <div className="font-display text-3xl text-[var(--primary)]">20+</div>
+              <div className="font-mono text-xs text-white/40 mt-1">防骗策略</div>
             </div>
-            {/* Content */}
-            <div className="relative px-6 py-10 flex flex-col items-center text-center z-10">
-              <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl drop-shadow-md mt-6">
-                大学生求职防骗攻略
-              </h1>
-              <div className="w-24 h-1 bg-white/30 rounded-full my-6"></div>
-              <p className="max-w-2xl text-lg text-blue-50 leading-relaxed">
-                掌握这些防骗技巧，让你的求职之路更加安全顺畅
-              </p>
-              {/* Glass-morphic Button Container */}
-              <div className="mt-10 bg-white/10 dark:bg-black/20 backdrop-blur-md rounded-full p-2 border border-white/20 dark:border-gray-600/30 shadow-inner flex">
-                <a href="#warnings" className="group bg-white/10 hover:bg-white/20 dark:bg-white/5 dark:hover:bg-white/10 text-white border border-white/30 dark:border-white/20 rounded-full px-6 py-3 text-sm font-medium transition-all duration-300 flex items-center mr-2">
-                  查看预警信号
-                  <AlertTriangleIcon className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </a>
-                <a href="#strategies" className="group bg-white dark:bg-gray-800 text-blue-500 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-full px-6 py-3 text-sm font-medium shadow-md transition-all duration-300 flex items-center">
-                  防护策略
-                  <ShieldCheckIcon className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </div>
+            <div className="text-center">
+              <div className="font-display text-3xl text-[var(--primary)]">1000+</div>
+              <div className="font-mono text-xs text-white/40 mt-1">学生受益</div>
             </div>
           </div>
         </div>
-        {/* Introduction Card */}
-        <div className="relative -mt-12 mx-auto max-w-4xl">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-blue-900/30 border border-gray-100 dark:border-gray-700 overflow-hidden transform transition-all duration-300 hover:shadow-2xl dark:hover:shadow-blue-900/50 hover:-translate-y-1">
-            <div className="px-6 py-6 sm:px-8 sm:py-7 bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-700 border-b border-gray-100 dark:border-gray-600">
-              <div className="flex items-center">
-                <div className="flex-shrink-0 bg-blue-100 dark:bg-blue-900/30 rounded-xl p-3">
-                  <ShieldCheckIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                </div>
-                <h2 className="ml-4 text-xl font-bold text-gray-900 dark:text-white">
-                  防骗指南简介
-                </h2>
+
+        {/* Progress Tracker */}
+        <div className="card mb-16">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-[var(--primary)]/10 border border-[var(--primary)]/30 flex items-center justify-center"
+                style={{ clipPath: 'polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px)' }}
+              >
+                <CheckIcon className="h-5 w-5 text-[var(--primary)]" />
+              </div>
+              <div>
+                <h3 className="text-white font-semibold">学习进度</h3>
+                <p className="font-mono text-xs text-white/40">点击预警项标记为已学习</p>
               </div>
             </div>
-            <div className="px-6 py-8 sm:px-8 sm:py-10">
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
-                在求职过程中，大学生由于经验不足和急切就业的心态，容易成为诈骗分子的目标。本攻略整合了常见的求职诈骗手段和防范措施，帮助大学生提高警惕，安全求职。
-              </p>
-              <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 text-center">
-                  <div className="text-blue-600 dark:text-blue-400 font-semibold text-xl mb-1">
-                    100+
-                  </div>
-                  <div className="text-blue-700 dark:text-blue-300 text-sm">真实案例分析</div>
-                </div>
-                <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-4 text-center">
-                  <div className="text-indigo-600 dark:text-indigo-400 font-semibold text-xl mb-1">
-                    20+
-                  </div>
-                  <div className="text-indigo-700 dark:text-indigo-300 text-sm">防骗策略</div>
-                </div>
-                <div className="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4 text-center">
-                  <div className="text-purple-600 dark:text-purple-400 font-semibold text-xl mb-1">
-                    1000+
-                  </div>
-                  <div className="text-purple-700 dark:text-purple-300 text-sm">学生受益</div>
-                </div>
-              </div>
+            <div className="text-right">
+              <div className="font-mono text-2xl text-[var(--primary)]">{progress}%</div>
+              <div className="font-mono text-xs text-white/40">{reviewedCount}/{totalWarnings}</div>
             </div>
           </div>
+
+          {/* Progress Bar */}
+          <div className="h-2 bg-white/5 overflow-hidden"
+            style={{ clipPath: 'polygon(4px 0, calc(100% - 4px) 0, 100% 4px, 100% calc(100% - 4px), calc(100% - 4px) 100%, 4px 100%, 0 calc(100% - 4px), 0 4px)' }}
+          >
+            <div 
+              className="h-full bg-gradient-to-r from-[var(--primary)] to-[#ffdb4d] transition-all duration-500"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
-        {/* Warning Signs Section */}
-        <div id="warnings" className="mt-24 scroll-mt-20">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
-            <div>
+
+        {/* Warning Categories */}
+        <section className="mb-24">
+          <div className="text-center mb-12">
+            <Pill variant="danger">预警信号</Pill>
+            <h2 className="font-display text-3xl text-white mt-6">
+              求职诈骗 <span className="italic font-light">预警信号</span>
+            </h2>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-2">
+            {warningCategories.map(category => {
+              const CategoryIcon = category.icon;
+              const categoryReviewed = category.warnings.filter((_, i) => reviewedWarnings[`${category.id}-${i}`]).length;
               
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                求职诈骗预警信号
-              </h2>
-              <p className="mt-3 text-gray-500 dark:text-gray-400 max-w-2xl">
-                检查并了解这些预警信号，提高你的求职安全意识，远离求职陷阱
-              </p>
-            </div>
-            <div className="mt-6 sm:mt-0">
-              <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
-                <span className="text-xs font-medium mr-1.5">完成度</span>
-                <span className="text-sm font-semibold">
-                  {progress.percentage}%
-                </span>
-              </div>
-            </div>
-          </div>
-          {/* Progress tracker - Redesigned */}
-          <div className="mb-16 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl shadow-md dark:shadow-blue-900/30 p-8 border border-blue-100 dark:border-blue-800/50">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-gray-800 dark:text-white flex items-center">
-                <span className="inline-block w-8 h-8 rounded-full bg-blue-600 dark:bg-blue-500 text-white flex items-center justify-center mr-3 text-sm">
-                  <CheckIcon className="h-4 w-4" />
-                </span>
-                预警信号学习进度
-              </h3>
-              <div className="mt-4 sm:mt-0 flex items-center">
-                <span className="text-gray-500 dark:text-gray-400 text-sm mr-3">已学习</span>
-                <div className="bg-white dark:bg-gray-800 rounded-full px-3 py-1 shadow-sm border border-gray-200 dark:border-gray-600">
-                  <span className="font-mono text-blue-600 dark:text-blue-400 font-semibold">
-                    {progress.reviewed}
-                  </span>
-                  <span className="text-gray-400 dark:text-gray-500 mx-1">/</span>
-                  <span className="font-mono text-gray-600 dark:text-gray-300">
-                    {progress.total}
-                  </span>
+              return (
+                <div key={category.id} className="feature-card group">
+                  {/* Header */}
+                  <div className="flex items-center gap-4 mb-6">
+                    <div 
+                      className="w-12 h-12 flex items-center justify-center border"
+                      style={{ 
+                        borderColor: `${category.color}50`,
+                        backgroundColor: `${category.color}10`,
+                        clipPath: 'polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px)'
+                      }}
+                    >
+                      <CategoryIcon className="h-6 w-6" style={{ color: category.color }} />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-white">{category.title}</h3>
+                      <div className="font-mono text-xs text-white/40">
+                        {categoryReviewed}/{category.warnings.length} 已学习
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Warning Items */}
+                  <div className="space-y-3">
+                    {category.warnings.map((warning, index) => {
+                      const isChecked = reviewedWarnings[`${category.id}-${index}`];
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => toggleWarning(category.id, index)}
+                          className={`w-full flex items-start gap-3 p-3 text-left transition-all duration-200 border ${
+                            isChecked 
+                              ? 'bg-white/5 border-[var(--primary)]/30' 
+                              : 'bg-black/30 border-white/5 hover:border-white/20'
+                          }`}
+                          style={{
+                            clipPath: 'polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px)'
+                          }}
+                        >
+                          <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                            isChecked ? 'bg-[var(--primary)]' : 'border border-white/20'
+                          }`}>
+                            {isChecked && <CheckIcon className="h-3 w-3 text-black" />}
+                          </div>
+                          <span className={`text-sm ${isChecked ? 'text-white' : 'text-white/60'}`}>
+                            {warning}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Category Progress */}
+                  <div className="mt-6 pt-4 border-t border-white/10">
+                    <div className="h-1 bg-white/5 overflow-hidden rounded-full">
+                      <div 
+                        className="h-full transition-all duration-500 rounded-full"
+                        style={{ 
+                          width: `${(categoryReviewed / category.warnings.length) * 100}%`,
+                          backgroundColor: category.color
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="w-full h-3 bg-white dark:bg-gray-700 rounded-full shadow-inner overflow-hidden border border-gray-200 dark:border-gray-600">
-                <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-400 dark:to-indigo-500 transition-all duration-1000 ease-out" style={{
-                width: `${progress.percentage}%`
-              }}></div>
-              </div>
-              {/* Progress markers */}
-              <div className="mt-2 flex justify-between">
-                <div className="text-xs text-gray-500 dark:text-gray-400">0%</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">25%</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">50%</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">75%</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">100%</div>
-              </div>
-            </div>
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                继续学习预警信号，提高你的求职安全意识
-              </p>
-            </div>
+              );
+            })}
           </div>
-          {/* Warning cards grid */}
-          <div className="grid gap-8 lg:grid-cols-2">
-            {warningCategories.map(category => <div key={category.id} className="group bg-white dark:bg-gray-800 overflow-hidden rounded-2xl shadow-lg dark:shadow-blue-900/30 transition-all duration-500 hover:shadow-xl dark:hover:shadow-blue-900/50 relative" style={{
-            backgroundImage: category.bgPattern
-          }}>
-                {/* Accent color bar */}
-                <div className={`h-1.5 w-full ${colorMap[category.color].accent}`}></div>
-                <div className="px-7 py-6 border-b border-gray-100 dark:border-gray-700">
-                  <div className="flex items-center">
-                    <div className={`w-12 h-12 rounded-xl ${colorMap[category.color].iconBg} dark:opacity-80 flex items-center justify-center mr-4 transition-transform duration-300 group-hover:scale-110`}>
-                      <category.icon className={`h-6 w-6 ${colorMap[category.color].iconColor}`} />
+        </section>
+
+        {/* Protection Strategies */}
+        <section className="mb-24">
+          <div className="text-center mb-12">
+            <Pill variant="success">安全策略</Pill>
+            <h2 className="font-display text-3xl text-white mt-6">
+              求职安全 <span className="italic font-light">防护策略</span>
+            </h2>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            {protectionStrategies.map((strategy, index) => {
+              const StrategyIcon = strategy.icon;
+              return (
+                <div key={index} className="feature-card group">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-green-500/10 border border-green-500/30 flex items-center justify-center flex-shrink-0"
+                      style={{ clipPath: 'polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px)' }}
+                    >
+                      <StrategyIcon className="h-5 w-5 text-green-500" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                        {category.title}
+                      <h3 className="text-lg font-semibold text-white group-hover:text-[var(--primary)] transition-colors">
+                        {strategy.title}
                       </h3>
-                      <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                        点击下方选项以标记为已学习
-                      </div>
+                      <p className="text-white/50 text-sm mt-2 leading-relaxed">
+                        {strategy.description}
+                      </p>
                     </div>
                   </div>
                 </div>
-                <div className="px-7 py-7">
-                  <div className="space-y-3">
-                    {category.warnings.map((warning, index) => <WarningChip key={index} text={warning} checked={reviewedWarnings[`${category.id}-${index}`] || false} onToggle={() => toggleWarning(category.id, index)} />)}
-                  </div>
-                  {/* Category progress indicator */}
-                  <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
-                    <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-2">
-                      <span>类别学习进度</span>
-                      <div className="flex items-center">
-                        <span className="font-medium text-sm text-gray-700 dark:text-gray-300">
-                          {category.warnings.filter((_, index) => reviewedWarnings[`${category.id}-${index}`]).length}
-                        </span>
-                        <span className="mx-1">/</span>
-                        <span>{category.warnings.length}</span>
-                      </div>
-                    </div>
-                    <div className="relative w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                      <div className={`absolute top-0 left-0 h-full ${colorMap[category.color].progressFill} transition-all duration-500 ease-out`} style={{
-                    width: `${category.warnings.filter((_, index) => reviewedWarnings[`${category.id}-${index}`]).length / category.warnings.length * 100}%`
-                  }}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>)}
+              );
+            })}
           </div>
-        </div>
-        {/* Protection Strategies */}
-        <div id="strategies" className="mt-24 scroll-mt-20">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-sm font-medium mb-4">
-              <ShieldCheckIcon className="h-4 w-4 mr-2" />
-              安全策略
+        </section>
+
+        {/* Emergency Response */}
+        <section>
+          <div className="card bg-red-500/5 border-red-500/20">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-14 h-14 bg-red-500/10 border border-red-500/30 flex items-center justify-center"
+                style={{ clipPath: 'polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px)' }}
+              >
+                <AlertCircleIcon className="h-7 w-7 text-red-500" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-white">遇到诈骗怎么办？</h3>
+                <p className="font-mono text-xs text-white/40">紧急应对措施</p>
+              </div>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-              求职安全防护策略
-            </h2>
-            <p className="mt-3 text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-              采用这些策略来保护自己，确保求职过程安全无忧
-            </p>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {[
+                { num: '01', text: '立即停止转账和支付行为' },
+                { num: '02', text: '保留所有聊天记录和证据' },
+                { num: '03', text: '拨打110或12315举报' },
+                { num: '04', text: '向学校就业指导中心反映' },
+              ].map((item, index) => (
+                <div key={index} className="bg-black/30 border border-white/5 p-4"
+                  style={{ clipPath: 'polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px)' }}
+                >
+                  <div className="font-mono text-red-500 text-lg mb-2">{item.num}</div>
+                  <p className="text-white/70 text-sm">{item.text}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Emergency Contacts */}
+            <div className="mt-8 pt-6 border-t border-white/10 flex flex-wrap gap-6 justify-center">
+              <div className="flex items-center gap-2">
+                <PhoneIcon className="h-4 w-4 text-red-500" />
+                <span className="font-mono text-sm text-white/60">报警电话：</span>
+                <span className="font-mono text-[var(--primary)]">110</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <PhoneIcon className="h-4 w-4 text-red-500" />
+                <span className="font-mono text-sm text-white/60">消费维权：</span>
+                <span className="font-mono text-[var(--primary)]">12315</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <PhoneIcon className="h-4 w-4 text-red-500" />
+                <span className="font-mono text-sm text-white/60">反诈热线：</span>
+                <span className="font-mono text-[var(--primary)]">96110</span>
+              </div>
+            </div>
           </div>
-          {/* Replace the old protection strategies section with the new neumorphic panel */}
-          <NeumorphicProtectionPanel />
-        </div>
-        {/* Emergency Response - Replaced with Neumorphic Panel */}
-        <div className="mt-24">
-          <NeumorphicEmergencyPanel />
-        </div>
-        {/* Placeholder for future content */}
-        <div className="mt-20 text-center">
-          
-        </div>
+        </section>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default AntiScamGuide;

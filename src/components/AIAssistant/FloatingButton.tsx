@@ -7,7 +7,7 @@ interface FloatingButtonProps {
 }
 
 /**
- * 悬浮按钮 - 唤起AI助手
+ * 悬浮按钮 - 唤起AI助手（深色科技风格）
  */
 const FloatingButton: React.FC<FloatingButtonProps> = ({ onClick, hasUnread = false }) => {
   return (
@@ -16,24 +16,39 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({ onClick, hasUnread = fa
       className="fixed bottom-6 right-6 z-50 group"
       aria-label="打开AI防骗助手"
     >
-      {/* 悬浮阴影层 */}
-      <div className="absolute inset-0 bg-blue-600 dark:bg-blue-500 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+      {/* 外层发光效果 */}
+      <div className="absolute inset-0 bg-[var(--primary)] rounded-xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-300" />
       
-      {/* 主按钮 - Neumorphic风格 */}
-      <div className="relative w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-full shadow-[8px_8px_20px_rgba(59,130,246,0.3),-4px_-4px_15px_rgba(147,197,253,0.2)] dark:shadow-[8px_8px_20px_rgba(0,0,0,0.4),-4px_-4px_15px_rgba(59,130,246,0.1)] flex items-center justify-center transition-all duration-300 group-hover:shadow-[6px_6px_15px_rgba(59,130,246,0.4),-3px_-3px_10px_rgba(147,197,253,0.3)] dark:group-hover:shadow-[6px_6px_15px_rgba(0,0,0,0.5),-3px_-3px_10px_rgba(59,130,246,0.15)] group-hover:scale-105 group-active:scale-95 border border-blue-400/30 dark:border-blue-500/30">
-        <MessageCircleIcon className="h-6 w-6 md:h-7 md:w-7 text-white" />
+      {/* 脉冲动画圈 */}
+      <div 
+        className="absolute inset-0 border border-[var(--primary)]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          clipPath: 'polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px)',
+          animation: 'ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite',
+        }}
+      />
+      
+      {/* 主按钮 - 斜角切角风格 */}
+      <div 
+        className="relative w-14 h-14 md:w-16 md:h-16 bg-black border border-[var(--primary)] flex items-center justify-center transition-all duration-300 group-hover:bg-[var(--primary)]/10 group-hover:shadow-[0_0_30px_rgba(255,199,0,0.4)] group-active:scale-95"
+        style={{
+          clipPath: 'polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px)',
+          boxShadow: 'inset 0 0 20px rgba(255, 199, 0, 0.1)',
+        }}
+      >
+        <MessageCircleIcon className="h-6 w-6 md:h-7 md:w-7 text-[var(--primary)] group-hover:scale-110 transition-transform duration-300" />
         
         {/* 未读提示点 */}
         {hasUnread && (
-          <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-gray-900 shadow-lg animate-pulse"></div>
+          <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-black shadow-[0_0_10px_rgba(239,68,68,0.5)] animate-pulse" />
         )}
+        
+        {/* 角落装饰线 */}
+        <span className="absolute top-1 left-1 w-3 h-px bg-[var(--primary)]/50 -rotate-45 origin-left" />
+        <span className="absolute bottom-1 right-1 w-3 h-px bg-[var(--primary)]/50 -rotate-45 origin-right" />
       </div>
-
-      {/* 脉冲动画圈 */}
-      <div className="absolute inset-0 rounded-full border-2 border-blue-400 dark:border-blue-500 opacity-0 group-hover:opacity-100 group-hover:animate-ping"></div>
     </button>
   );
 };
 
 export default FloatingButton;
-
