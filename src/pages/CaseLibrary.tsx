@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SearchIcon, FilterIcon, AlertCircleIcon, ShieldCheckIcon, BookOpenIcon } from 'lucide-react';
 import { realCases, CASE_COUNT } from '../data/cases';
 
@@ -19,14 +19,27 @@ const Pill = ({ children, variant = 'default' }: { children: React.ReactNode; va
 const CaseLibrary = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('全部');
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const caseTypes = ['全部', ...Array.from(new Set(realCases.map(c => c.type)))];
+  const caseTypes = ['全部', ...Array.from(new Set(realCases.map(c => c.category)))];
 
   const filteredCases = realCases.filter(c => {
     const matchesSearch = c.title.includes(searchTerm) || c.summary.includes(searchTerm) || c.warning_signs.some(sign => sign.includes(searchTerm));
-    const matchesType = filterType === '全部' || c.type === filterType;
+    const matchesType = filterType === '全部' || c.category === filterType;
     return matchesSearch && matchesType;
   });
+
+  // 点击外部关闭下拉
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, []);
 
   return (
     <div className="bg-black min-h-screen w-full pt-20">
@@ -72,25 +85,38 @@ const CaseLibrary = () => {
                   </div>
 
             {/* Filter Select */}
-            <div className="relative min-w-[200px] group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <FilterIcon className="h-4 w-4 text-white/40 group-focus-within:text-[var(--primary)] transition-colors duration-200" />
-                </div>
-              <select
-                className="block w-full pl-12 pr-4 py-3 bg-black/50 border border-white/10 text-white focus:outline-none focus:border-[var(--primary)]/50 focus:ring-1 focus:ring-[var(--primary)]/30 transition-all duration-200 font-mono text-sm appearance-none cursor-pointer"
-                style={{
-                  clipPath: 'polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px)',
-                }}
-                value={filterType}
-                onChange={e => setFilterType(e.target.value)}
+            <div className="relative min-w-[220px]" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setOpen(v => !v)}
+                className="filter-button group"
               >
-                {caseTypes.map(type => (
-                  <option key={type} value={type} className="bg-black text-white">
-                          {type}
-                  </option>
-                ))}
-                    </select>
-                  </div>
+                <FilterIcon className="h-4 w-4 text-white/60 group-hover:text-[var(--primary)] transition-colors duration-200" />
+                <span className="truncate">{filterType}</span>
+                <span className={`chevron ${open ? 'rotate-180' : ''}`}>▾</span>
+                <span className="filter-active-bar" />
+              </button>
+
+              {open && (
+                <div className="filter-dropdown">
+                  {caseTypes.map((type, idx) => (
+                    <button
+                      key={type}
+                      onClick={() => {
+                        setFilterType(type);
+                        setOpen(false);
+                      }}
+                      className={`filter-item ${filterType === type ? 'is-active' : ''}`}
+                      style={{ transitionDelay: `${idx * 12}ms` }}
+                    >
+                      <span className="filter-bullet" />
+                      <span className="truncate">{type}</span>
+                      {filterType === type && <span className="filter-indicator" />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
                 </div>
 
           {/* Stats */}
@@ -123,7 +149,7 @@ const CaseLibrary = () => {
                   className="pill text-[10px] px-2 py-1 flex-shrink-0"
                   style={{ fontSize: '10px' }}
                 >
-                    {caseItem.type}
+                    {caseItem.category}
                   </span>
                 </div>
 
