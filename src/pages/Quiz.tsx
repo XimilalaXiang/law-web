@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import html2canvas from 'html2canvas';
 import {
   PlayIcon,
   ClockIcon,
   CheckCircleIcon,
   XCircleIcon,
-  TrophyIcon,
   ArrowRightIcon,
   RotateCcwIcon,
   ShareIcon,
@@ -14,7 +12,6 @@ import {
   CloudIcon,
   UserPlusIcon,
   DownloadIcon,
-  ImageIcon,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -53,7 +50,6 @@ const Quiz = () => {
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
   const [timeLeft, setTimeLeft] = useState(0);
   const [isTimerActive, setIsTimerActive] = useState(false);
-  const certificateRef = useRef<HTMLDivElement>(null);
 
   // 开始游戏
   const startGame = (selectedDifficulty: Difficulty) => {
@@ -125,22 +121,122 @@ const Quiz = () => {
 
   const [isGenerating, setIsGenerating] = useState(false);
 
-  // 下载证书为PNG图片
+  // 使用Canvas API直接绘制证书（完全避免CSS兼容性问题）
   const downloadCertificatePNG = async () => {
-    if (!certificateRef.current || isGenerating) return;
+    if (isGenerating) return;
     
     setIsGenerating(true);
     try {
-      const canvas = await html2canvas(certificateRef.current, {
-        backgroundColor: '#000000',
-        scale: 2, // 2倍清晰度
-        useCORS: true,
-        allowTaint: true,
-      });
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas not supported');
+
+      // 设置画布尺寸 (2倍清晰度)
+      const scale = 2;
+      const width = 600;
+      const height = 450;
+      canvas.width = width * scale;
+      canvas.height = height * scale;
+      ctx.scale(scale, scale);
+
+      // 绘制背景渐变
+      const gradient = ctx.createLinearGradient(0, 0, width, height);
+      gradient.addColorStop(0, '#1a1a1a');
+      gradient.addColorStop(1, '#000000');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
+
+      // 绘制边框
+      ctx.strokeStyle = 'rgba(255, 199, 0, 0.5)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(10, 10, width - 20, height - 20);
+
+      // 绘制表情符号
+      ctx.font = '48px serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(grade.emoji, width / 2, 70);
+
+      // 绘制"测验完成"标签
+      const tagWidth = 100;
+      const tagHeight = 28;
+      const tagX = (width - tagWidth) / 2;
+      const tagY = 90;
+      ctx.fillStyle = 'rgba(34, 197, 94, 0.2)';
+      ctx.fillRect(tagX, tagY, tagWidth, tagHeight);
+      ctx.strokeStyle = 'rgba(34, 197, 94, 0.5)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(tagX, tagY, tagWidth, tagHeight);
+      ctx.fillStyle = '#22c55e';
+      ctx.font = '12px "Space Mono", monospace';
+      ctx.fillText('测验完成', width / 2, tagY + 19);
+
+      // 绘制评级标题
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 32px "Playfair Display", serif';
+      ctx.fillText(grade.text, width / 2, 165);
+
+      // 绘制分数区域
+      const scoreY = 220;
       
-      // 转换为PNG并下载
+      // 正确数
+      ctx.fillStyle = grade.color;
+      ctx.font = '42px "Playfair Display", serif';
+      ctx.fillText(String(score), width / 2 - 120, scoreY);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.font = '12px "Space Mono", monospace';
+      ctx.fillText('正确', width / 2 - 120, scoreY + 24);
+
+      // 错误数
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.font = '42px "Playfair Display", serif';
+      ctx.fillText(String(total - score), width / 2, scoreY);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.font = '12px "Space Mono", monospace';
+      ctx.fillText('错误', width / 2, scoreY + 24);
+
+      // 正确率
+      ctx.fillStyle = '#FFC700';
+      ctx.font = '42px "Playfair Display", serif';
+      ctx.fillText(`${percentage}%`, width / 2 + 120, scoreY);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.font = '12px "Space Mono", monospace';
+      ctx.fillText('正确率', width / 2 + 120, scoreY + 24);
+
+      // 绘制分割线
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(50, 280);
+      ctx.lineTo(width - 50, 280);
+      ctx.stroke();
+
+      // 绘制祝贺文字
+      const userName = user?.username || '匿名用户';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      ctx.font = '14px "Space Mono", monospace';
+      ctx.fillText(`恭喜 ${userName} 同学完成测验`, width / 2, 320);
+
+      // 绘制日期和品牌
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.font = '12px "Space Mono", monospace';
+      ctx.fillText(`SafeCareer · ${new Date().toLocaleDateString('zh-CN')}`, width / 2, 350);
+
+      // 绘制装饰线
+      ctx.strokeStyle = '#FFC700';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(width / 2 - 60, 380);
+      ctx.lineTo(width / 2 + 60, 380);
+      ctx.stroke();
+
+      // 绘制网址
+      ctx.fillStyle = 'rgba(255, 199, 0, 0.6)';
+      ctx.font = '10px "Space Mono", monospace';
+      ctx.fillText('safecareer.vercel.app', width / 2, 410);
+
+      // 下载图片
       const link = document.createElement('a');
-      link.download = `SafeCareer_防骗证书_${user?.username || '匿名用户'}_${new Date().toLocaleDateString('zh-CN').replace(/\//g, '-')}.png`;
+      link.download = `SafeCareer_防骗证书_${userName}_${new Date().toLocaleDateString('zh-CN').replace(/\//g, '-')}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     } catch (error) {
@@ -402,62 +498,34 @@ const Quiz = () => {
         {/* ===== 结果页 ===== */}
         {gameState === 'result' && (
           <div className="text-center">
-            {/* 证书卡片 - 使用纯内联样式以兼容html2canvas（不支持oklch颜色） */}
-            <div 
-              ref={certificateRef} 
-              style={{
-                background: 'linear-gradient(to bottom right, #1a1a1a, #000000)',
-                border: '1px solid rgba(255, 199, 0, 0.3)',
-                borderRadius: '16px',
-                padding: '32px',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-              }}
-            >
-              <div style={{ fontSize: '60px', marginBottom: '16px' }}>{grade.emoji}</div>
+            {/* 证书卡片 - 仅用于页面展示，下载使用Canvas API生成 */}
+            <div className="card bg-gradient-to-br from-[#1a1a1a] to-black border-[var(--primary)]/30">
+              <div className="text-6xl mb-4">{grade.emoji}</div>
               
-              <div style={{
-                display: 'inline-block',
-                padding: '6px 16px',
-                fontSize: '12px',
-                fontFamily: '"Space Mono", monospace',
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase',
-                backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                color: '#22c55e',
-                border: '1px solid rgba(34, 197, 94, 0.3)',
-                borderRadius: '4px',
-              }}>
-                测验完成
-              </div>
+              <Pill variant="success">测验完成</Pill>
               
-              <h1 style={{
-                fontFamily: '"Playfair Display", serif',
-                fontSize: '36px',
-                color: '#ffffff',
-                marginTop: '24px',
-                fontWeight: 600,
-              }}>{grade.text}</h1>
+              <h1 className="font-display text-4xl text-white mt-6">{grade.text}</h1>
               
-              <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'center', gap: '48px' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '48px', color: grade.color }}>{score}</div>
-                  <div style={{ fontFamily: '"Space Mono", monospace', fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>正确</div>
+              <div className="mt-8 flex justify-center gap-8">
+                <div className="text-center">
+                  <div className="font-display text-5xl" style={{ color: grade.color }}>{score}</div>
+                  <div className="font-mono text-xs text-white/40 mt-1">正确</div>
                 </div>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '48px', color: 'rgba(255,255,255,0.4)' }}>{total - score}</div>
-                  <div style={{ fontFamily: '"Space Mono", monospace', fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>错误</div>
+                <div className="text-center">
+                  <div className="font-display text-5xl text-white/40">{total - score}</div>
+                  <div className="font-mono text-xs text-white/40 mt-1">错误</div>
                 </div>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '48px', color: '#FFC700' }}>{percentage}%</div>
-                  <div style={{ fontFamily: '"Space Mono", monospace', fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>正确率</div>
+                <div className="text-center">
+                  <div className="font-display text-5xl text-[var(--primary)]">{percentage}%</div>
+                  <div className="font-mono text-xs text-white/40 mt-1">正确率</div>
                 </div>
               </div>
 
-              <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                <p style={{ fontFamily: '"Space Mono", monospace', fontSize: '14px', color: 'rgba(255,255,255,0.6)' }}>
-                  恭喜 <span style={{ color: '#FFC700' }}>{user?.username || '匿名用户'}</span> 同学完成测验
+              <div className="mt-8 pt-6 border-t border-white/10">
+                <p className="font-mono text-sm text-white/60">
+                  恭喜 <span className="text-[var(--primary)]">{user?.username || '匿名用户'}</span> 同学完成测验
                 </p>
-                <p style={{ fontFamily: '"Space Mono", monospace', fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginTop: '8px' }}>
+                <p className="font-mono text-xs text-white/40 mt-2">
                   SafeCareer · {new Date().toLocaleDateString('zh-CN')}
                 </p>
               </div>
