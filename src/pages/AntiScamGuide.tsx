@@ -25,6 +25,7 @@ import {
   getUnlockedAchievements,
   getNextAchievement,
 } from '../data/antiScamContent';
+import WaveParticlesBackground from '../components/WaveParticlesBackground';
 
 // Pill component
 const Pill = ({ children, variant = 'default' }: { children: React.ReactNode; variant?: 'default' | 'danger' | 'success' }) => {
@@ -114,6 +115,7 @@ const AntiScamGuide = () => {
     <div className="bg-black min-h-screen w-full pt-20">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
+        <WaveParticlesBackground position="bottom" />
         <div className="grid-bg" />
         <div className="glow-orb glow-orb-1" />
         <div className="glow-orb glow-orb-2" />

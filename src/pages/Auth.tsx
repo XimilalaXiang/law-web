@@ -12,6 +12,7 @@ import {
   LoaderIcon
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import WaveParticlesBackground from '../components/WaveParticlesBackground';
 
 type AuthMode = 'login' | 'register';
 
@@ -117,6 +118,7 @@ const Auth = () => {
     <div className="min-h-screen bg-black flex items-center justify-center px-4 py-12 relative overflow-hidden">
       {/* 背景效果 */}
       <div className="absolute inset-0">
+        <WaveParticlesBackground position="bottom" />
         <div className="grid-bg" />
         <div className="glow-orb glow-orb-1" />
         <div className="glow-orb glow-orb-2" />

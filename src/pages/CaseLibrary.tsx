@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { SearchIcon, FilterIcon, AlertCircleIcon, ShieldCheckIcon, BookOpenIcon } from 'lucide-react';
 import { realCases, CASE_COUNT } from '../data/cases';
+import WaveParticlesBackground from '../components/WaveParticlesBackground';
 
 // Pill 标签组件
 const Pill = ({ children, variant = 'default' }: { children: React.ReactNode; variant?: 'default' | 'danger' | 'success' }) => {
@@ -45,6 +46,7 @@ const CaseLibrary = () => {
     <div className="bg-black min-h-screen w-full pt-20">
       {/* 背景效果 */}
       <div className="fixed inset-0 pointer-events-none">
+        <WaveParticlesBackground position="bottom" />
         <div className="grid-bg" />
         <div className="glow-orb glow-orb-2" />
         <div className="vignette" />
