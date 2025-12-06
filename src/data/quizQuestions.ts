@@ -351,10 +351,19 @@ export const getQuestionsByCategory = (categoryId: string): QuizQuestion[] => {
   return quizQuestions.filter(q => q.category === categoryId);
 };
 
-// 难度配置
-export const difficultyConfig = {
-  easy: { label: '简单', time: 45, questions: 10, color: '#22c55e' },
-  medium: { label: '中等', time: 30, questions: 10, color: '#f59e0b' },
-  hard: { label: '困难', time: 20, questions: 10, color: '#ef4444' },
+// 难度配置 - 动态计算题目数量
+export const getDifficultyConfig = () => {
+  const easyCount = quizQuestions.filter(q => q.difficulty === 'easy').length;
+  const mediumCount = quizQuestions.filter(q => q.difficulty === 'medium').length;
+  const hardCount = quizQuestions.filter(q => q.difficulty === 'hard').length;
+  
+  return {
+    easy: { label: '简单', time: 45, questions: easyCount, color: '#22c55e' },
+    medium: { label: '中等', time: 30, questions: mediumCount, color: '#f59e0b' },
+    hard: { label: '困难', time: 20, questions: hardCount, color: '#ef4444' },
+  };
 };
+
+// 向后兼容的静态导出
+export const difficultyConfig = getDifficultyConfig();
 
