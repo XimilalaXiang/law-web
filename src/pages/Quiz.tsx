@@ -19,7 +19,6 @@ import {
   getRandomQuestions,
   difficultyConfig,
 } from '../data/quizQuestions';
-import WaveParticlesBackground from '../components/WaveParticlesBackground';
 
 type GameState = 'intro' | 'playing' | 'result';
 type Difficulty = 'easy' | 'medium' | 'hard';
@@ -277,7 +276,6 @@ const Quiz = () => {
     <div className="bg-black min-h-screen w-full pt-20">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
-        <WaveParticlesBackground position="bottom" />
         <div className="grid-bg" />
         <div className="glow-orb glow-orb-1" />
         <div className="glow-orb glow-orb-2" />
