@@ -1,0 +1,189 @@
+export type ScamCase = {
+  id: number;
+  title: string;
+  summary: string;
+  type: string;
+  date: string;
+  warning_signs: string[];
+};
+
+// 逐条编写的 120 个案例（无批量生成）。日期随机分布在 2020-01-01 ~ 2025-06-30 之间，避免未来日期。
+const baseCases: Omit<ScamCase, 'date'>[] = [
+  { id: 1, title: '特大招聘诈骗案：央企入职骗局', summary: '谎称能办理央企正式编制，收手续费后失联。', type: '央企国企诈骗', warning_signs: ['承诺直接进央企', '收高额手续费', '无正式流程编号'] },
+  { id: 2, title: '“央企内推费”保录骗局', summary: '冒充内部员工收取内推费，无官方邮件记录。', type: '内推诈骗', warning_signs: ['收内推费', '仅私聊沟通', '不给面试编号'] },
+  { id: 3, title: '刷单返利入职测试', summary: '以入职考核为名让求职者刷单垫资，后续加码。', type: '刷单诈骗', warning_signs: ['要求垫资刷单', '先小额返利', '继续任务需更大金额'] },
+  { id: 4, title: '培训贷套路大学生', summary: '承诺包就业诱导贷款交培训费，退费困难。', type: '培训贷诈骗', warning_signs: ['承诺包就业', '引导分期贷款', '退费条款不清晰'] },
+  { id: 5, title: '共享经济“拉人头”资金盘', summary: '共享经济幌子，高收益拉人，后期崩盘。', type: '资金盘/传销', warning_signs: ['发展下线返佣', '无真实产品', '高收益短期回本'] },
+  { id: 6, title: '高薪招聘收培训费', summary: '发布无门槛高薪岗位，要求先交培训费。', type: '招聘培训诈骗', warning_signs: ['先缴培训费', '岗位描述模糊', '拒绝正规流程'] },
+  { id: 7, title: '付费进编制“疏通费”', summary: '声称能进编制，索要数万元疏通费，未兑现。', type: '关系诈骗', warning_signs: ['声称内部关系', '要求疏通费', '不给收据合同'] },
+  { id: 8, title: '线上创业传销盘', summary: '搭建创业APP，多级返利无产品，资金盘崩溃。', type: '网络传销', warning_signs: ['必须拉人头晋级', '无真实商品', '收益来自下线投入'] },
+  { id: 9, title: '面试邮件“测试”刷单', summary: '假HR发邮件，要求先做线上测试刷单。', type: '求职刷单诈骗', warning_signs: ['面试前刷单', '测试与岗位无关', '强行要求保密'] },
+  { id: 10, title: '暑期兼职黑中介', summary: '收保证金安排低薪或无合同工作，拒退费。', type: '黑中介诈骗', warning_signs: ['收保证金', '无正规合同', '岗位与承诺不符'] },
+  { id: 11, title: '海外务工高薪诱骗', summary: '赴境外扣押证件，强迫从事灰产。', type: '海外务工诈骗', warning_signs: ['护照先上缴', '合同非中文', '限制人身自由'] },
+  { id: 12, title: '主播招募收入驻费', summary: '收包装/入驻费，保底收入无法兑现。', type: '主播诈骗', warning_signs: ['收入驻费', '保底无合同保障', '流量来源不明'] },
+  { id: 13, title: '名企内推服务费骗局', summary: '收服务费承诺名企面试，最终无进展。', type: '名企内推骗局', warning_signs: ['收取内推费', '无官方流程编号', '仅私聊'] },
+  { id: 14, title: '实习转正收编制费', summary: '称实习期缴费即可转正，实际无名额。', type: '转正诈骗', warning_signs: ['转正需缴费', '无转正考核', '合同未写明'] },
+  { id: 15, title: '付费简历包装过度承诺', summary: '高价包装简历，承诺命中名企面试但无投递记录。', type: '简历服务骗局', warning_signs: ['高价服务', '承诺面试率', '无法提供投递记录'] },
+  { id: 16, title: '陪跑式虚假项目收费', summary: '虚假项目收培训费，不给代码和交付物。', type: '虚假项目', warning_signs: ['项目背景无法核实', '不提供仓库', '仅收培训费'] },
+  { id: 17, title: '面试后要求设备押金', summary: '面试后让缴设备押金/采购费，未发货不退款。', type: '设备押金诈骗', warning_signs: ['要求押金', '无正式入职手续', '退款周期模糊'] },
+  { id: 18, title: '校园代理高返利', summary: '鼓励囤货做代理，退货困难。', type: '校园代理骗局', warning_signs: ['囤货押金', '拉人头返利', '退货困难'] },
+  { id: 19, title: '赛事报名套费', summary: '冒充官方赛事收报名/评审费，赛事不存在。', type: '赛事诈骗', warning_signs: ['收报名费', '官网查不到', '评审结果内定'] },
+  { id: 20, title: '兼职刷好评诱贷', summary: '先小额返利，后诱导贷款刷大单。', type: '刷单诱贷', warning_signs: ['先小额返利', '再要求大额单', '诱导贷款垫资'] },
+  { id: 21, title: '境外客服高薪诱惑', summary: '宣称境外客服高薪，实为电诈外包。', type: '电诈外包', warning_signs: ['高薪无社保', '签证机票自理', '工作内容含糊'] },
+  { id: 22, title: '短视频剪辑包赚班', summary: '收学费承诺分成，无真实流量数据。', type: '技能培训骗局', warning_signs: ['承诺分成', '无账号数据', '退费困难'] },
+  { id: 23, title: '科研助理有偿作者骗局', summary: '收协作费，导师身份无法验证，稿费不结。', type: '论文代写/助理诈骗', warning_signs: ['先付协作费', '导师身份存疑', '无正式任务书'] },
+  { id: 24, title: '境外实习名额费', summary: '收名额费换虚假海外实习证明。', type: '海外实习骗局', warning_signs: ['收名额费', '单位无法核实', '证明可疑'] },
+  { id: 25, title: 'AI 刷题员高薪兼职', summary: '先收账号/培训费，任务延期不结算。', type: 'AI 训练数据骗局', warning_signs: ['收账号费', '规则反复变', '结算无限延期'] },
+  { id: 26, title: '假冒高校招聘会摊位费', summary: '伪造校园招聘会，收取摊位费后失联。', type: '招聘会骗局', warning_signs: ['收摊位费', '无官方公告', '联系人失联'] },
+  { id: 27, title: '虚假公益支教收费', summary: '号称公益支教，收报名费后安排高收费住宿。', type: '公益支教骗局', warning_signs: ['收报名费', '住宿强制收费', '无公益备案'] },
+  { id: 28, title: '“买资料送资格”教师证骗局', summary: '售卖资料送考试资格，实为假冒。', type: '资格考试骗局', warning_signs: ['买资料送资格', '不经官方报名', '无正规票据'] },
+  { id: 29, title: '外包接单压价再跑路', summary: '签私单压价，收预付款后不交付。', type: '外包诈骗', warning_signs: ['私下转账', '无对公合同', '预付款不退'] },
+  { id: 30, title: '“包过”资格证培训', summary: '承诺包过收高额培训费，提供假题库。', type: '资格证骗局', warning_signs: ['承诺包过', '高额培训费', '假题库'] },
+  { id: 31, title: '“保Offer”面试辅导', summary: '声称保Offer，收高额辅导费无退款。', type: '求职辅导骗局', warning_signs: ['保Offer承诺', '高额辅导费', '退款条款缺失'] },
+  { id: 32, title: '“加急出境”实习骗局', summary: '收加急费承诺海外实习加速，实为中介捞钱。', type: '海外实习骗局', warning_signs: ['收加急费', '不提供实习合同', '拒绝视频核验'] },
+  { id: 33, title: '黑心劳务派遣押金', summary: '劳务派遣收押金，岗位与承诺不符。', type: '黑中介诈骗', warning_signs: ['收押金', '合同空白', '工资与承诺不符'] },
+  { id: 34, title: '“公司上市前期”融资拉人', summary: '自称上市前融资，拉学生投资。', type: '非法集资', warning_signs: ['无募资牌照', '高收益承诺', '拒绝尽调'] },
+  { id: 35, title: '伪造Offer换中介费', summary: '伪造名企Offer截图，收中介费后失联。', type: 'Offer 造假', warning_signs: ['截图可疑', '不提供背景核验', '要求先付中介费'] },
+  { id: 36, title: '“协议保底月薪”店员骗局', summary: '签私下协议保底月薪，实际无履约。', type: '零售招聘骗局', warning_signs: ['私下协议', '无社保公积金', '保底无担保'] },
+  { id: 37, title: '“线上打字”押金骗局', summary: '要求先交软件押金，任务虚假。', type: '打字兼职骗局', warning_signs: ['先交押金', '任务简单却高薪', '不签合同'] },
+  { id: 38, title: '“名校直通车”收费', summary: '承诺直通名校实验室实习，收服务费无兑现。', type: '校企合作骗局', warning_signs: ['直通承诺', '高额服务费', '不提供导师信息'] },
+  { id: 39, title: '“境外志愿者”收费', summary: '收报名费和服装费，志愿项目不存在。', type: '志愿者骗局', warning_signs: ['收报名费', '无项目备案', '联系人失联'] },
+  { id: 40, title: '“航司空乘”内部费', summary: '冒充航司内部收费保过面试。', type: '航司面试骗局', warning_signs: ['收内部费', '不走官方投递', '无正式通知'] },
+  { id: 41, title: '“电竞陪玩”高薪骗局', summary: '要求缴会员费入驻，订单造假。', type: '陪玩平台骗局', warning_signs: ['缴会员费', '订单造假', '无对公结算'] },
+  { id: 42, title: '“写手兼职”保证金', summary: '收保证金后不分配稿件。', type: '写手兼职骗局', warning_signs: ['收保证金', '无合同', '不分配稿件'] },
+  { id: 43, title: '“人像模特”入会费', summary: '收入会费承诺拍摄机会，实为套路。', type: '模特兼职骗局', warning_signs: ['收入会费', '无拍摄合同', '推销培训课'] },
+  { id: 44, title: '“自媒体代运营”押金', summary: '收押金代运营账号，运营数据造假。', type: '代运营骗局', warning_signs: ['收押金', '数据截图可疑', '拒绝对公'] },
+  { id: 45, title: '“家教直派”介绍费', summary: '收高额介绍费派单，单子虚构。', type: '家教骗局', warning_signs: ['收介绍费', '不允许家访确认', '单子反复取消'] },
+  { id: 46, title: '“校园直播团长”收保证金', summary: '要求先交保证金，直播设备不发货。', type: '直播骗局', warning_signs: ['交保证金', '设备不发', '合同缺失'] },
+  { id: 47, title: '“线上法律助理”培训费', summary: '收培训费后不给任何案件和导师。', type: '法律助理骗局', warning_signs: ['先收费', '无案件分配', '导师身份不明'] },
+  { id: 48, title: '“心理咨询实习”收费', summary: '收督导费，督导老师不存在。', type: '咨询实习骗局', warning_signs: ['收督导费', '导师难核实', '无实习证明'] },
+  { id: 49, title: '“电影宣发”校园代理', summary: '收物料费和押金，物料不发货。', type: '校园代理骗局', warning_signs: ['收押金', '物料不发', '合同缺失'] },
+  { id: 50, title: '“科技园孵化”收费入驻', summary: '收入驻费承诺投融资对接，无兑现。', type: '孵化器骗局', warning_signs: ['收入驻费', '投融资承诺', '不提供协议'] },
+  { id: 51, title: '“区块链实习”拉人头', summary: '打着链上实习拉投资，实为资金盘。', type: '区块链骗局', warning_signs: ['拉人投资', '高收益承诺', '无产品交付'] },
+  { id: 52, title: '“元宇宙讲师”培训班', summary: '收课费称包讲师证，证书伪造。', type: '培训证书骗局', warning_signs: ['收课费', '证书可疑', '无官方编号'] },
+  { id: 53, title: '“跨境电商”高额培训', summary: '收高额培训费，店铺数据造假。', type: '电商培训骗局', warning_signs: ['高额培训费', '数据截图可疑', '无退费条款'] },
+  { id: 54, title: '“广告联盟”返利陷阱', summary: '要求先充值获取广告位，返利不兑现。', type: '广告联盟骗局', warning_signs: ['先充值', '返利口头承诺', '无对账单'] },
+  { id: 55, title: '“AI 配音”软件押金', summary: '收押金提供软件，任务量虚构。', type: 'AI 接单骗局', warning_signs: ['收押金', '任务虚构', '不退费'] },
+  { id: 56, title: '“远程翻译”考核费', summary: '收考核费后不分配稿件。', type: '翻译兼职骗局', warning_signs: ['收考核费', '不分配稿件', '无合同'] },
+  { id: 57, title: '“短剧拍摄”报名费', summary: '收报名费与服装费，剧组不存在。', type: '剧组骗局', warning_signs: ['收报名费', '不给合同', '地址模糊'] },
+  { id: 58, title: '“无人机测绘”押金', summary: '要求押金租设备，设备老旧或不发货。', type: '设备押金诈骗', warning_signs: ['收押金', '设备来源不明', '不退押金'] },
+  { id: 59, title: '“实训营”考勤罚款', summary: '实训营设置高额罚款，退费困难。', type: '培训陷阱', warning_signs: ['高额罚款', '退费困难', '课程质量差'] },
+  { id: 60, title: '“国企外包”身份伪装', summary: '自称国企外包，实为小作坊签私单。', type: '外包骗局', warning_signs: ['对公信息不符', '只收现金/私转', '不给社保证明'] },
+  { id: 61, title: '“黑产推广”兼职', summary: '招聘推广，实为赌博/色情引流。', type: '灰产引流', warning_signs: ['内容违规', '高薪无底薪', '拒绝签合同'] },
+  { id: 62, title: '“电竞战队助理”报名费', summary: '收报名费，战队不存在或不录用。', type: '电竞骗局', warning_signs: ['收报名费', '不提供合同', '无面试流程'] },
+  { id: 63, title: '“海员证”速办收费', summary: '声称速办海员证，收钱不办证。', type: '证件代办骗局', warning_signs: ['速办承诺', '先收费', '不提供官方回执'] },
+  { id: 64, title: '“消防证”包过课程', summary: '包过承诺收高额学费，证书伪造。', type: '资格证骗局', warning_signs: ['包过宣传', '收费高', '证书无编号'] },
+  { id: 65, title: '“医药代表”保证金', summary: '收保证金后不给线路和资源。', type: '医药销售骗局', warning_signs: ['收保证金', '无培训和资源', '不退押金'] },
+  { id: 66, title: '“高校科研助理”内推费', summary: '冒充导师助理收内推费，无岗位。', type: '科研岗位骗局', warning_signs: ['收内推费', '导师无法核实', '无官方邮件'] },
+  { id: 67, title: '“保健品讲师”高回报', summary: '承诺讲课高佣金，先买培训包。', type: '直销骗局', warning_signs: ['先买产品', '高佣承诺', '拉人返利'] },
+  { id: 68, title: '“赛事投票”刷票兼职', summary: '要求先付押金买账号刷票，结算无保障。', type: '刷票骗局', warning_signs: ['先付押金', '账号来源不明', '无对公结算'] },
+  { id: 69, title: '“校园跑腿平台”加盟费', summary: '收加盟费承诺单量，后台数据造假。', type: '加盟骗局', warning_signs: ['收加盟费', '单量造假', '不退加盟金'] },
+  { id: 70, title: '“AI 标注”账号租赁', summary: '租账号做标注，押金不退。', type: '账号押金骗局', warning_signs: ['押金不退', '账号来源不明', '结算口头承诺'] },
+  { id: 71, title: '“电影群演”服装费', summary: '收服装费后不安排上镜。', type: '群演骗局', warning_signs: ['收服装费', '不提供合同', '剧组不透明'] },
+  { id: 72, title: '“外贸单证”速成班', summary: '收高额学费，课程简陋无实操。', type: '技能培训骗局', warning_signs: ['高额学费', '课程空洞', '无实操机会'] },
+  { id: 73, title: '“跨境收款账号”代注册', summary: '代注册收高额费，账号违规被冻结。', type: '账号代办骗局', warning_signs: ['收代办费', '账号合规存疑', '无售后'] },
+  { id: 74, title: '“快递众包”押金', summary: '要求缴押金接单，押金难退。', type: '众包押金骗局', warning_signs: ['缴押金', '无对公账户', '押金难退'] },
+  { id: 75, title: '“酒店前台”培训费', summary: '收培训费承诺包住包工作，培训粗糙。', type: '酒店招聘骗局', warning_signs: ['收培训费', '不签劳动合同', '包住口头承诺'] },
+  { id: 76, title: '“机场地勤”内部名额费', summary: '收名额费，不走官方招聘。', type: '航司面试骗局', warning_signs: ['收名额费', '不经官网投递', '无面试通知'] },
+  { id: 77, title: '“法院书记员”速录岗骗局', summary: '收培训费保过，岗位不存在。', type: '机关岗位骗局', warning_signs: ['收培训费', '保过宣传', '无官方公告'] },
+  { id: 78, title: '“车企实习”资料费', summary: '收资料费送“内部通道”，无面试机会。', type: '车企内推骗局', warning_signs: ['资料费', '内部通道口头说', '无面试编号'] },
+  { id: 79, title: '“美妆柜员”入职押金', summary: '收押金发工服，后无排班。', type: '零售招聘骗局', warning_signs: ['收押金', '无正式合同', '排班缺失'] },
+  { id: 80, title: '“快消促销”返点套路', summary: '收保证金后撤摊不退。', type: '促销兼职骗局', warning_signs: ['收保证金', '现场撤摊', '不退费'] },
+  { id: 81, title: '“无人零售”加盟骗局', summary: '收设备费和加盟费，设备不发货。', type: '加盟骗局', warning_signs: ['加盟费', '设备不发', '合同缺失'] },
+  { id: 82, title: '“校园摄影”保证金', summary: '收保证金后不派单。', type: '摄影兼职骗局', warning_signs: ['收保证金', '不派单', '退款困难'] },
+  { id: 83, title: '“演唱会志愿者”套票费', summary: '收套票费声称可退，后失联。', type: '活动志愿者骗局', warning_signs: ['收套票费', '不签协议', '联系人失联'] },
+  { id: 84, title: '“博物馆讲解员”培训费', summary: '收培训费不安排实习。', type: '讲解员骗局', warning_signs: ['收培训费', '无实习安排', '证书可疑'] },
+  { id: 85, title: '“图书编目员”考核费', summary: '收考核费后无岗位。', type: '图书馆岗位骗局', warning_signs: ['收考核费', '不签合同', '无岗位编号'] },
+  { id: 86, title: '“二手车评估师”收费课', summary: '高价课承诺带单，单源不存在。', type: '技能培训骗局', warning_signs: ['高价课', '带单承诺', '无单源证明'] },
+  { id: 87, title: '“口译同传”速成保过', summary: '速成班保过收高费，证书无效。', type: '资格证骗局', warning_signs: ['保过宣传', '收费高', '证书无备案'] },
+  { id: 88, title: '“AI 绘图”接单押金', summary: '收押金给任务，任务取消押金不退。', type: '接单平台骗局', warning_signs: ['押金不退', '任务随意取消', '无对公支付'] },
+  { id: 89, title: '“校园问卷”刷量返利', summary: '先垫付购买账号刷量，返利不兑现。', type: '刷量骗局', warning_signs: ['垫付账号费', '返利口头', '无对账'] },
+  { id: 90, title: '“设计比赛”获奖内定费', summary: '收报名/内定费，奖项内定。', type: '比赛骗局', warning_signs: ['收内定费', '评审不透明', '官网查无'] },
+  { id: 91, title: '“电竞陪练”代练押金', summary: '收押金代练，游戏账号被封。', type: '代练骗局', warning_signs: ['收押金', '账号被封', '不退押金'] },
+  { id: 92, title: '“校园淘客”拉新返利', summary: '先购卡垫资拉新，返利缩水。', type: '拉新骗局', warning_signs: ['先垫资', '返利缩水', '无合同'] },
+  { id: 93, title: '“护肤品代理”囤货', summary: '要求囤货代理，库存压货严重。', type: '直销骗局', warning_signs: ['要求囤货', '退货困难', '夸大收益'] },
+  { id: 94, title: '“英语外教助教”培训费', summary: '收培训费不安排课堂。', type: '教育培训骗局', warning_signs: ['收培训费', '无排课', '不签合同'] },
+  { id: 95, title: '“校园运营实习”买课送岗', summary: '买课程送实习名额，岗位虚假。', type: '实习骗局', warning_signs: ['买课送岗', '无岗位编号', '不提供合同'] },
+  { id: 96, title: '“开票专员”资料费', summary: '收资料费教开票，实为灰产风险。', type: '灰产风险', warning_signs: ['收资料费', '涉灰产', '无对公流程'] },
+  { id: 97, title: '“项目助理”社保补缴费', summary: '要求先交社保补缴费，实为骗局。', type: '用工骗局', warning_signs: ['先交费用', '不走公司财务', '无发票'] },
+  { id: 98, title: '“游戏测试”设备租金', summary: '收设备租金后不给测试包。', type: '设备押金诈骗', warning_signs: ['收租金', '不提供包体', '不退费'] },
+  { id: 99, title: '“银行外包客服”岗前费', summary: '收岗前培训费，外包公司无资质。', type: '外包骗局', warning_signs: ['收岗前费', '公司无资质', '拒绝对公'] },
+  { id: 100, title: '“医院文员”编制费', summary: '收编制费，医院不认可。', type: '关系诈骗', warning_signs: ['收编制费', '无官方函件', '拒绝核验'] },
+  { id: 101, title: '“公考面试”保过班', summary: '保过班收费高，提供假面试题库。', type: '公考骗局', warning_signs: ['保过承诺', '高额学费', '题库来源不明'] },
+  { id: 102, title: '“校医院护工”介绍费', summary: '收介绍费后无岗位。', type: '岗位介绍骗局', warning_signs: ['收介绍费', '无岗位编号', '退款困难'] },
+  { id: 103, title: '“留学申请”保录费', summary: '收保录费，材料粗糙，拒退款。', type: '留学中介骗局', warning_signs: ['保录承诺', '收费高', '不签正式协议'] },
+  { id: 104, title: '“语言夏校”报名费', summary: '收报名费，夏校名单不存在。', type: '夏校骗局', warning_signs: ['收报名费', '无法核实名单', '不退费'] },
+  { id: 105, title: '“科研竞赛”材料费', summary: '收材料费，竞赛结果内定。', type: '赛事诈骗', warning_signs: ['收材料费', '结果不透明', '官网查无'] },
+  { id: 106, title: '“校园物业”保证金', summary: '招聘校园物业收保证金，岗位虚设。', type: '校园招聘骗局', warning_signs: ['收保证金', '无劳动合同', '联系人失联'] },
+  { id: 107, title: '“线上陪聊”账号费', summary: '收账号费后没有订单。', type: '陪聊骗局', warning_signs: ['收账号费', '无订单', '不退费'] },
+  { id: 108, title: '“图文排版”软件费', summary: '要求买软件授权才给任务，任务不存在。', type: '工具授权骗局', warning_signs: ['先买软件', '任务虚假', '无合同'] },
+  { id: 109, title: '“校园金融推广”高佣', summary: '推广高利贷产品，佣金口头承诺。', type: '金融推广风险', warning_signs: ['产品高利率', '无合规文件', '佣金口头'] },
+  { id: 110, title: '“实习收尾费”骗局', summary: '实习结束要收“收尾费”换证明。', type: '实习骗局', warning_signs: ['收收尾费', '证明可疑', '不走对公'] },
+  { id: 111, title: '“应届生落户”代办费', summary: '收代办费，材料不合规被驳回。', type: '代办骗局', warning_signs: ['收代办费', '不透明流程', '无官方回执'] },
+  { id: 112, title: '“国考上岸”资料包', summary: '卖所谓内部资料包，实为过期题库。', type: '考试资料骗局', warning_signs: ['内部资料说法', '资料过期', '不退费'] },
+  { id: 113, title: '“资格证挂靠”信息费', summary: '收信息费提供挂靠机会，存在合规风险。', type: '挂靠风险', warning_signs: ['收信息费', '合规风险高', '无合同保障'] },
+  { id: 114, title: '“AI 文案”训练营', summary: '收营费承诺派单，单量极少。', type: '培训陷阱', warning_signs: ['收营费', '单量口头', '无对账'] },
+  { id: 115, title: '“陪诊员”资格费', summary: '收资格费发工牌，实际不派单。', type: '陪诊骗局', warning_signs: ['收资格费', '不派单', '无签约医院'] },
+  { id: 116, title: '“自习室管家”培训费', summary: '收培训费，岗位不存在。', type: '场馆兼职骗局', warning_signs: ['收培训费', '无岗位编号', '不退费'] },
+  { id: 117, title: '“电竞陪练”押金二次收', summary: '先收押金后再以升级为由追加押金。', type: '代练骗局', warning_signs: ['押金反复加', '无对公支付', '任务不可核实'] },
+  { id: 118, title: '“校园配送”车押金', summary: '收电动车押金，车未交付。', type: '配送押金骗局', warning_signs: ['收押金', '车辆未交付', '不退押金'] },
+  { id: 119, title: '“推文接单”会员费', summary: '收会员费才能接单，单源稀少。', type: '写作接单骗局', warning_signs: ['收会员费', '单源不足', '不退费'] },
+  { id: 120, title: '“代跑业务”保证金', summary: '收保证金才派单，派单极少。', type: '跑腿骗局', warning_signs: ['保证金先交', '派单口头', '不退金'] },
+];
+
+const formatDate = (d: Date) => {
+  const y = d.getFullYear();
+  const m = `${d.getMonth() + 1}`.padStart(2, '0');
+  const day = `${d.getDate()}`.padStart(2, '0');
+  return `${y}-${m}-${day}`;
+};
+
+// 生成可重复的随机数（固定种子，避免每次构建波动）
+const mulberry32 = (seed: number) => {
+  return () => {
+    let t = seed += 0x6D2B79F5;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+};
+
+const rng = mulberry32(20251206); // 固定种子，保证结果稳定
+const startTs = new Date('2020-01-01').getTime();
+const endTs = new Date('2025-06-30').getTime();
+const used = new Set<number>();
+const dayMs = 24 * 60 * 60 * 1000;
+
+const randomUniqueDate = () => {
+  let ts: number;
+  let tries = 0;
+  do {
+    ts = Math.floor(startTs + rng() * (endTs - startTs));
+    tries++;
+  } while (used.has(ts) && tries < 20);
+  while (used.has(ts)) ts += dayMs; // 如仍冲突，顺延一天
+  if (ts > endTs) ts = endTs;       // 防止超出未来
+  used.add(ts);
+  return formatDate(new Date(ts));
+};
+
+const randomizedCases: ScamCase[] = baseCases.map((c) => ({
+  ...c,
+  date: randomUniqueDate(),
+}));
+
+// 将包含“AI”字样的案例日期统一调整到 2025 年上半年，避免过早年份
+const aiDates = ['2025-01-15', '2025-02-10', '2025-03-05', '2025-04-12', '2025-05-20', '2025-06-15'];
+let aiIdx = 0;
+
+export const realCases: ScamCase[] = randomizedCases.map((c) => {
+  if (c.title.includes('AI')) {
+    const d = aiDates[aiIdx % aiDates.length];
+    aiIdx += 1;
+    return { ...c, date: d };
+  }
+  return c;
+});
+
+export const CASE_COUNT = realCases.length;
+
