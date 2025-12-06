@@ -30,7 +30,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, onExportMarkdown
     : 'grid grid-cols-[auto,1fr] items-start w-full gap-2 md:gap-3';
 
   return (
-    <div className={`mb-3 md:mb-4 px-2 w-full`}>
+      <div className={`mb-3 md:mb-4 px-2 w-full`}>
       <div className={rowClass}>
         {/* 头像 */}
         <div

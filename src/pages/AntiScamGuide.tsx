@@ -16,9 +16,9 @@ import {
 // Warning categories data
 const warningCategories = [
   {
-    id: 'financial',
-    title: '金钱相关预警',
-    icon: DollarSignIcon,
+  id: 'financial',
+  title: '金钱相关预警',
+  icon: DollarSignIcon,
     color: '#ef4444',
     warnings: [
       '要求预先支付培训费、押金、材料费等',
@@ -28,9 +28,9 @@ const warningCategories = [
     ]
   },
   {
-    id: 'company',
-    title: '公司背景预警',
-    icon: BuildingIcon,
+  id: 'company',
+  title: '公司背景预警',
+  icon: BuildingIcon,
     color: '#f59e0b',
     warnings: [
       '公司信息模糊，无法在官方渠道查证',
@@ -40,9 +40,9 @@ const warningCategories = [
     ]
   },
   {
-    id: 'process',
-    title: '招聘流程预警',
-    icon: BriefcaseIcon,
+  id: 'process',
+  title: '招聘流程预警',
+  icon: BriefcaseIcon,
     color: '#a855f7',
     warnings: [
       '无需面试或简单聊天后立即录用',
@@ -52,9 +52,9 @@ const warningCategories = [
     ]
   },
   {
-    id: 'communication',
-    title: '沟通方式预警',
-    icon: MessageCircleIcon,
+  id: 'communication',
+  title: '沟通方式预警',
+  icon: MessageCircleIcon,
     color: '#3b82f6',
     warnings: [
       '只通过非正规渠道如个人社交账号联系',
@@ -99,7 +99,7 @@ const Pill = ({ children, variant = 'default' }: { children: React.ReactNode; va
   return (
     <div className={`pill ${variantClasses[variant]}`}>
       {children}
-    </div>
+      </div>
   );
 };
 
@@ -107,12 +107,12 @@ const AntiScamGuide = () => {
   const [reviewedWarnings, setReviewedWarnings] = useState<Record<string, boolean>>({});
 
   const toggleWarning = (categoryId: string, index: number) => {
-    const key = `${categoryId}-${index}`;
+      const key = `${categoryId}-${index}`;
     setReviewedWarnings(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
   const totalWarnings = warningCategories.reduce((sum, cat) => sum + cat.warnings.length, 0);
-  const reviewedCount = Object.values(reviewedWarnings).filter(Boolean).length;
+    const reviewedCount = Object.values(reviewedWarnings).filter(Boolean).length;
   const progress = Math.round((reviewedCount / totalWarnings) * 100);
 
   return (
@@ -164,7 +164,7 @@ const AntiScamGuide = () => {
                 style={{ clipPath: 'polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px)' }}
               >
                 <CheckIcon className="h-5 w-5 text-[var(--primary)]" />
-              </div>
+                </div>
               <div>
                 <h3 className="text-white font-semibold">学习进度</h3>
                 <p className="font-mono text-xs text-white/40">点击预警项标记为已学习</p>
@@ -185,7 +185,7 @@ const AntiScamGuide = () => {
               style={{ width: `${progress}%` }}
             />
           </div>
-        </div>
+                </div>
 
         {/* Warning Categories */}
         <section className="mb-24">
@@ -333,9 +333,9 @@ const AntiScamGuide = () => {
                 >
                   <div className="font-mono text-red-500 text-lg mb-2">{item.num}</div>
                   <p className="text-white/70 text-sm">{item.text}</p>
-                </div>
+        </div>
               ))}
-            </div>
+        </div>
 
             {/* Emergency Contacts */}
             <div className="mt-8 pt-6 border-t border-white/10 flex flex-wrap gap-6 justify-center">
@@ -355,7 +355,7 @@ const AntiScamGuide = () => {
                 <span className="font-mono text-[var(--primary)]">96110</span>
               </div>
             </div>
-          </div>
+        </div>
         </section>
       </div>
     </div>

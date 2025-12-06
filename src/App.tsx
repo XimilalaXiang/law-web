@@ -32,21 +32,21 @@ const Layout = () => {
       
       <main className="flex-grow">
         <Suspense fallback={<LoadingSpinner />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/cases" element={<CaseLibrary />} />
-            <Route path="/guide" element={<AntiScamGuide />} />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/cases" element={<CaseLibrary />} />
+                <Route path="/guide" element={<AntiScamGuide />} />
             <Route path="/auth" element={<Auth />} />
-          </Routes>
-        </Suspense>
-      </main>
+              </Routes>
+            </Suspense>
+          </main>
       
       {/* Auth 页面不显示 Footer */}
       {!isAuthPage && <Footer />}
-      
+          
       {/* AI防骗助手 - 全局悬浮（Auth页面也显示） */}
-      <AIAssistant />
-    </div>
+          <AIAssistant />
+        </div>
   );
 };
 
@@ -56,6 +56,6 @@ export function App() {
       <AuthProvider>
         <Layout />
       </AuthProvider>
-    </Router>
+      </Router>
   );
 }

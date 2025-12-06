@@ -86,7 +86,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
           {/* Logo 图标 */}
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--primary)] to-[#EBB800] flex items-center justify-center shadow-[0_4px_15px_rgba(255,199,0,0.3)]">
             <ShieldCheck className="h-5 w-5 text-black" />
-          </div>
+            </div>
           <div>
             <h3 className="text-sm font-semibold text-white">AI 反诈助手</h3>
             <p className="text-xs text-white/40">随时为你守护</p>
@@ -170,7 +170,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ onClose }) => {
             {/* 主图标 */}
             <div className="relative mb-6">
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[var(--primary)] to-[#EBB800] flex items-center justify-center shadow-[0_8px_30px_rgba(255,199,0,0.3)]">
-                <span className="text-4xl">🛡️</span>
+              <span className="text-4xl">🛡️</span>
               </div>
               {/* 状态指示灯 */}
               <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-[#050505] flex items-center justify-center">

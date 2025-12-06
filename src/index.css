@@ -200,22 +200,26 @@ body {
   transform: translateY(-2px);
 }
 
-/* 危险按钮 */
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+/* 警告按钮 */
 .btn-danger {
-  --poly-roundness: 12px;
+  --poly-roundness: 8px;
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.875rem 1.5rem;
+  padding: 0.75rem 1.5rem;
   font-family: var(--font-mono);
   font-size: 0.875rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--danger);
-  background: transparent;
-  border: 1px solid var(--danger);
+  color: #ff4d4d;
+  background: rgba(255, 77, 77, 0.1);
+  border: 1px solid #ff4d4d;
   cursor: pointer;
   transition: all var(--transition-normal) ease-out;
   clip-path: polygon(
@@ -228,135 +232,93 @@ body {
     0 calc(100% - var(--poly-roundness)),
     0 var(--poly-roundness)
   );
-  box-shadow: inset 0 0 30px 0px rgba(239, 68, 68, 0.1);
 }
 
 .btn-danger:hover {
-  background: rgba(239, 68, 68, 0.1);
-  box-shadow: inset 0 0 40px 0px rgba(239, 68, 68, 0.2),
-              0 0 20px 0px rgba(239, 68, 68, 0.3);
+  background: rgba(255, 77, 77, 0.2);
+  box-shadow: 0 0 15px rgba(255, 77, 77, 0.3);
+  transform: translateY(-2px);
 }
 
 /* ============================================
-   Pill Badge - 标签组件（八角切角）
+   Components - 自定义组件
    ============================================ */
+
+/* Pill 标签 */
 .pill {
-  --poly-roundness: 6px;
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1rem;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.6);
-  background: rgba(38, 38, 38, 0.5);
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
   backdrop-filter: blur(4px);
-  border: 1px solid var(--border);
-  clip-path: polygon(
-    var(--poly-roundness) 0,
-    calc(100% - var(--poly-roundness)) 0,
-    100% var(--poly-roundness),
-    100% calc(100% - var(--poly-roundness)),
-    calc(100% - var(--poly-roundness)) 100%,
-    var(--poly-roundness) 100%,
-    0 calc(100% - var(--poly-roundness)),
-    0 var(--poly-roundness)
-  );
 }
 
-.pill::before {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  margin-right: 8px;
-  border-radius: 50%;
-  background: var(--primary);
-  box-shadow: 0 0 10px 2px rgba(255, 199, 0, 0.5);
-  animation: pulse-glow 2s ease-in-out infinite;
+.pill-danger {
+  color: #ff4d4d;
+  background: rgba(255, 77, 77, 0.1);
+  border-color: rgba(255, 77, 77, 0.3);
+  box-shadow: 0 0 10px rgba(255, 77, 77, 0.2);
 }
 
-.pill-danger::before {
-  background: var(--danger);
-  box-shadow: 0 0 10px 2px rgba(239, 68, 68, 0.5);
+.pill-success {
+  color: var(--success);
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.3);
 }
 
-.pill-success::before {
-  background: var(--success);
-  box-shadow: 0 0 10px 2px rgba(34, 197, 94, 0.5);
+/* 玻璃卡片 */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.1); }
-}
-
-/* ============================================
-   Cards - 卡片系统
-   ============================================ */
-.card {
+/* 特性卡片 - 科技风格 */
+.feature-card {
   position: relative;
-  background: rgba(26, 26, 26, 0.8);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  background: rgba(10, 10, 10, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 2rem;
-  transition: all var(--transition-normal) ease-out;
   overflow: hidden;
+  transition: all var(--transition-normal) ease-out;
 }
 
-.card::before {
+.feature-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 199, 0, 0.3), transparent);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%);
+  z-index: 1;
   opacity: 0;
-  transition: opacity var(--transition-normal);
+  transition: opacity 0.5s;
 }
 
-.card:hover {
-  border-color: rgba(255, 199, 0, 0.3);
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-}
-
-.card:hover::before {
+.feature-card:hover::before {
   opacity: 1;
 }
 
-/* 特性卡片 */
-.feature-card {
-  position: relative;
-  background: linear-gradient(180deg, rgba(26, 26, 26, 0.9) 0%, rgba(13, 13, 13, 0.95) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 2rem;
-  transition: all var(--transition-normal) ease-out;
-}
-
 .feature-card:hover {
-  border-color: rgba(255, 199, 0, 0.4);
-  box-shadow: 0 0 40px rgba(255, 199, 0, 0.1);
+  border-color: rgba(255, 199, 0, 0.3);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
 }
-
-/* ============================================
-   Animated Background - 动态背景
-   ============================================ */
 
 /* 网格背景 */
 .grid-bg {
-  position: absolute;
-  inset: 0;
-  background-image: 
-    linear-gradient(rgba(255, 199, 0, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 199, 0, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
+  background-size: 50px 50px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
   mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
   -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
 }
@@ -477,46 +439,92 @@ body {
   }
 }
 
-/* 延迟动画类 */
-.delay-100 { animation-delay: 100ms; }
-.delay-200 { animation-delay: 200ms; }
-.delay-300 { animation-delay: 300ms; }
-.delay-400 { animation-delay: 400ms; }
-.delay-500 { animation-delay: 500ms; }
-
-/* 悬浮效果 */
-.hover-lift {
-  transition: transform var(--transition-normal) ease-out;
-}
-
-.hover-lift:hover {
-  transform: translateY(-4px);
-}
-
-/* 脉冲边框 */
-.pulse-border {
-  animation: pulseBorder 2s ease-in-out infinite;
-}
-
-@keyframes pulseBorder {
-  0%, 100% { border-color: rgba(255, 199, 0, 0.3); }
-  50% { border-color: rgba(255, 199, 0, 0.6); }
+/* 通用 Card 样式 */
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.5rem;
 }
 
 /* ============================================
-   Utility Classes - 工具类
+   Testimonials Marquee
    ============================================ */
+.testimonial-marquee {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
 
-/* 边框样式 */
-.border-primary { border-color: var(--primary); }
-.border-muted { border-color: var(--border); }
+.testimonial-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+  animation-play-state: running;
+}
 
-/* 背景 */
-.bg-dark { background-color: var(--background); }
-.bg-dark-secondary { background-color: var(--secondary); }
+.testimonial-marquee:hover .testimonial-track {
+  animation-play-state: paused;
+}
 
-/* 文字颜色 */
-.text-primary { color: var(--primary) !important; }
+.animate-marquee-left {
+  animation-name: marquee-left;
+  animation-duration: var(--marquee-duration, 40s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.animate-marquee-right {
+  animation-name: marquee-right;
+  animation-duration: var(--marquee-duration, 40s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+.testimonial-card {
+  min-width: 280px;
+  max-width: 360px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+  flex-shrink: 0;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 199, 0, 0.35);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 199, 0, 0.15);
+}
+
+@media screen and (max-width: 768px) {
+  .testimonial-track {
+    gap: 12px;
+  }
+  .testimonial-card {
+    min-width: 240px;
+  }
+}
+
+/* ============================================
+   Utility Classes - 通用类
+   ============================================ */
 .text-muted { color: var(--muted) !important; }
 .text-danger { color: var(--danger) !important; }
 .text-success { color: var(--success) !important; }
@@ -528,9 +536,16 @@ body {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    /* 保留 marquee 动画，其他减弱 */
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+  }
+
+  /* 强制开启 marquee */
+  .testimonial-track {
+    animation-duration: var(--marquee-duration, 30s) !important;
+    animation-iteration-count: infinite !important;
   }
 }
 

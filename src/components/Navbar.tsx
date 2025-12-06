@@ -109,16 +109,16 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center group">
-            <div className="relative">
+            <Link to="/" className="flex items-center group">
+              <div className="relative">
               <div className="absolute inset-0 bg-[var(--primary)]/30 rounded-lg transform scale-150 group-hover:scale-175 transition-all duration-500 blur-xl opacity-0 group-hover:opacity-100"></div>
               <div className="absolute inset-0 bg-[var(--primary)]/20 rounded-lg transform scale-125 transition-transform duration-300 blur-sm"></div>
               <ShieldCheckIcon className="h-7 w-7 md:h-8 md:w-8 text-[var(--primary)] relative z-10 transform group-hover:scale-110 transition-transform duration-300" />
-            </div>
+              </div>
             <span className="ml-3 text-lg md:text-xl font-semibold text-white tracking-tight group-hover:text-[var(--primary)] transition-colors duration-300">
               SafeCareer
             </span>
-          </Link>
+            </Link>
 
           {/* Desktop Navigation with Sliding Indicator */}
           <div className="hidden md:flex items-center gap-4">
@@ -159,7 +159,7 @@ const Navbar = () => {
                       <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-[var(--primary)] rounded-full shadow-[0_0_6px_var(--primary)]" />
                     )}
                   </span>
-                </Link>
+            </Link>
               ))}
             </div>
 
@@ -274,7 +274,7 @@ const Navbar = () => {
                 {isActive(link.path) && (
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-[var(--primary)] rounded-r-full shadow-[0_0_10px_var(--primary)]" />
                 )}
-              </Link>
+          </Link>
             ))}
 
             {/* Mobile 用户状态 */}

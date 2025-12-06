@@ -50,7 +50,7 @@ const Footer = () => {
                 className="nav-link text-xs"
               >
                 {link.label}
-              </Link>
+            </Link>
             ))}
           </div>
         </div>
@@ -60,7 +60,7 @@ const Footer = () => {
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-xs text-white/30 font-mono">
               © {new Date().getFullYear()} SafeCareer. 保护你的求职安全，从这里开始。
-            </p>
+          </p>
             
             {/* 装饰元素 */}
             <div className="flex items-center gap-2">

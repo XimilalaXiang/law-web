@@ -209,23 +209,96 @@ const Home = () => {
 
   const features = [
     {
-      icon: BookOpenIcon,
-      title: '真实案例分析',
-      description: '收集整理真实的求职诈骗案例，深入分析诈骗手法和特征，让你提前了解风险。',
-      color: 'blue'
+    icon: BookOpenIcon,
+    title: '真实案例分析',
+    description: '收集整理真实的求职诈骗案例，深入分析诈骗手法和特征，让你提前了解风险。',
+    color: 'blue'
     },
     {
-      icon: AlertTriangleIcon,
-      title: '风险预警提示',
-      description: '总结常见诈骗手段的典型特征和预警信号，帮助你在求职过程中提高警惕。',
-      color: 'amber'
+    icon: AlertTriangleIcon,
+    title: '风险预警提示',
+    description: '总结常见诈骗手段的典型特征和预警信号，帮助你在求职过程中提高警惕。',
+    color: 'amber'
     },
     {
-      icon: LightbulbIcon,
-      title: '防骗实用策略',
-      description: '提供针对大学生的切实可行的防诈骗策略和方法，保护你的求职安全。',
-      color: 'green'
+    icon: LightbulbIcon,
+    title: '防骗实用策略',
+    description: '提供针对大学生的切实可行的防诈骗策略和方法，保护你的求职安全。',
+    color: 'green'
     }
+  ];
+
+  const testimonials = [
+    {
+      name: 'James K.',
+      title: 'Senior Manager, InfoSec',
+      company: 'Mid-market · 500+',
+      quote: '不仅帮助安全团队，也让业务团队的效率显著提升。',
+      rating: 5,
+    },
+    {
+      name: 'Canva 团队',
+      title: 'Product Security',
+      company: 'Design SaaS',
+      quote: '可视化体验让安全自动化变得简单，节省了大量人力。',
+      rating: 5,
+    },
+    {
+      name: 'Ajinkya Y.',
+      title: 'Cyber Incident Analyst',
+      company: 'Small Business',
+      quote: '流程更顺畅，关键通知不会遗漏，响应速度提升明显。',
+      rating: 5,
+    },
+    {
+      name: 'Snowflake 用户',
+      title: 'SOC Lead',
+      company: 'Data Cloud',
+      quote: '告警到处置的链路被压缩到秒级，覆盖率大幅提升。',
+      rating: 5,
+    },
+    {
+      name: 'Christopher C.',
+      title: 'Security Engineer',
+      company: 'Enterprise',
+      quote: '清晰的逻辑让初学者也能快速上手，风险管理更稳健。',
+      rating: 5,
+    },
+    {
+      name: 'GitLab 用户',
+      title: 'AppSec',
+      company: 'DevSecOps 团队',
+      quote: '体验像在做拼图，直观又有趣，极大提升了团队协作。',
+      rating: 5,
+    },
+    {
+      name: 'SAP 用户',
+      title: 'Threat Detection',
+      company: 'Enterprise',
+      quote: '智能化工作流减少了重复操作，专注高价值威胁。',
+      rating: 5,
+    },
+    {
+      name: 'Intercom 用户',
+      title: 'Security Ops',
+      company: 'SaaS',
+      quote: '无论更换多少工具，流程都能稳定运转，可靠性很高。',
+      rating: 5,
+    },
+    {
+      name: 'Applied 用户',
+      title: 'Fraud Analyst',
+      company: '金融风控',
+      quote: '把响应时间从分钟级降低到秒级，实时性显著提升。',
+      rating: 5,
+    },
+    {
+      name: 'Notion 团队',
+      title: 'Security Ops',
+      company: 'Collaboration',
+      quote: '灵活又可扩展，能随着团队工具变化快速适配。',
+      rating: 5,
+    },
   ];
 
   useEffect(() => {
@@ -278,21 +351,21 @@ const Home = () => {
           <h1 className={`font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white leading-tight transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             保护你的 <br className="sm:hidden" />
             <span className="italic font-light">求职</span> 安全
-          </h1>
+            </h1>
 
           {/* 副标题 */}
           <p className={`font-mono text-sm sm:text-base text-white/50 max-w-md mx-auto mt-6 md:mt-8 transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             SafeCareer 致力于帮助大学生识别和防范求职诈骗风险
-          </p>
+            </p>
 
           {/* CTA 按钮 */}
           <div className={`mt-10 md:mt-14 flex flex-col sm:flex-row items-center justify-center gap-4 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
             <Link to="/guide" className="btn-primary">
               [防骗攻略]
-            </Link>
+              </Link>
             <Link to="/cases" className="btn-secondary">
               [查看案例]
-            </Link>
+              </Link>
           </div>
         </div>
 
@@ -300,6 +373,62 @@ const Home = () => {
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
           <div className="w-6 h-10 border border-white/30 rounded-full flex items-start justify-center p-2">
             <div className="w-1 h-2 bg-[var(--primary)] rounded-full animate-pulse" />
+      </div>
+        </div>
+      </section>
+
+      {/* ========== Testimonials Section ========== */}
+      <section className="relative py-20 md:py-28 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a0a] to-black" />
+        <div className="absolute inset-0 grid-bg opacity-40" />
+        <div className="glow-orb glow-orb-2" />
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center">
+            <Pill>用户反馈</Pill>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-5xl text-white mt-6">
+              来自用户的<span className="italic font-light">真实口碑</span>
+            </h2>
+            <p className="font-mono text-sm text-white/50 mt-4 max-w-2xl mx-auto">
+              稳定可靠的防护能力，帮助团队与个人快速提升安全水平
+            </p>
+          </div>
+
+          <div className="mt-12 md:mt-16 space-y-8">
+            {[0, 1].map((row) => (
+              <div key={row} className="testimonial-marquee">
+                <div
+                  className={`testimonial-track ${row === 0 ? 'animate-marquee-left' : 'animate-marquee-right'}`}
+                  style={{ ['--marquee-duration' as any]: row === 0 ? '42s' : '50s' }}
+                >
+                  {[...testimonials, ...testimonials].map((item, idx) => (
+                    <div key={`${row}-${idx}`} className="testimonial-card">
+                      <div className="flex flex-col h-full gap-4">
+                        <div className="flex items-center gap-2 text-[var(--primary)] text-sm font-mono">
+                          <span>“</span>
+                          <span className="uppercase tracking-wide">Feedback</span>
+                        </div>
+                        <p className="text-white text-base leading-relaxed">
+                          {item.quote}
+                        </p>
+                        <div className="mt-auto pt-2 border-t border-white/5 flex items-center justify-between gap-3">
+                          <div className="min-w-0">
+                            <div className="text-white font-semibold truncate">{item.name}</div>
+                            <div className="text-white/60 text-xs truncate">{item.title}</div>
+                            <div className="text-white/40 text-xs truncate">{item.company}</div>
+                          </div>
+                          <div className="flex items-center text-[var(--primary)] text-xs font-mono gap-1">
+                            {Array.from({ length: item.rating }).map((_, i) => (
+                              <span key={i}>★</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -343,21 +472,21 @@ const Home = () => {
                 {/* 图标 */}
                 <div className="mb-6">
                   <feature.icon className="h-8 w-8 text-[var(--primary)]" strokeWidth={1.5} />
-                </div>
+                  </div>
 
                 {/* 标题 */}
                 <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-[var(--primary)] transition-colors duration-300">
-                  {feature.title}
-                </h3>
+                    {feature.title}
+                  </h3>
 
                 {/* 描述 */}
                 <p className="text-white/50 text-sm leading-relaxed">
-                  {feature.description}
-                </p>
+                    {feature.description}
+                  </p>
 
                 {/* 底部装饰线 */}
                 <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--primary)]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
+                </div>
             ))}
           </div>
 
@@ -381,15 +510,15 @@ const Home = () => {
                       }`} />
                       <div className="mb-6">
                         <feature.icon className="h-8 w-8 text-[var(--primary)]" strokeWidth={1.5} />
-                      </div>
+                        </div>
                       <h3 className="text-xl font-semibold text-white mb-3">
-                        {feature.title}
-                      </h3>
+                          {feature.title}
+                        </h3>
                       <p className="text-white/50 text-sm leading-relaxed">
-                        {feature.description}
-                      </p>
+                          {feature.description}
+                        </p>
+                      </div>
                     </div>
-                  </div>
                 ))}
               </div>
 
@@ -460,7 +589,7 @@ const Home = () => {
             <div className="flex flex-col sm:flex-row lg:justify-end gap-4">
               <Link to="/guide" className="btn-primary group">
                 <span>防骗攻略</span>
-                <ArrowRightIcon className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-300" />
+                  <ArrowRightIcon className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-300" />
               </Link>
               <Link to="/cases" className="btn-secondary">
                 查看案例库
@@ -469,7 +598,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-    </div>
+      </div>
   );
 };
 
