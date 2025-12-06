@@ -232,7 +232,7 @@ const Quiz = () => {
       // 绘制网址
       ctx.fillStyle = 'rgba(255, 199, 0, 0.6)';
       ctx.font = '10px "Space Mono", monospace';
-      ctx.fillText('safecareer.vercel.app', width / 2, 410);
+      ctx.fillText('sysu-law.tech', width / 2, 410);
 
       // 下载图片
       const link = document.createElement('a');
@@ -249,7 +249,7 @@ const Quiz = () => {
 
   // 分享证书文本
   const shareCertificateText = () => {
-    const text = `🏆 SafeCareer 防骗达人证书\n\n恭喜 ${user?.username || '匿名用户'} 同学\n在求职反诈测验中获得 ${score}/${total} 分（${percentage}%）\n\n快来测测你的防骗能力！\nhttps://safecareer.vercel.app/quiz`;
+    const text = `🏆 SafeCareer 防骗达人证书\n\n恭喜 ${user?.username || '匿名用户'} 同学\n在求职反诈测验中获得 ${score}/${total} 分（${percentage}%）\n\n快来测测你的防骗能力！\nhttps://sysu-law.tech/quiz`;
     
     navigator.clipboard.writeText(text).then(() => {
       alert('证书内容已复制到剪贴板，快去分享吧！');
