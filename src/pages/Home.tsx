@@ -93,7 +93,7 @@ const WaveParticlesBackground = () => {
         
         // 应用旋转
         let x = p.baseX;
-        let y = p.baseY * Math.cos(rotateX) - (waveZ + waveZ2) * Math.sin(rotateX);
+        const y = p.baseY * Math.cos(rotateX) - (waveZ + waveZ2) * Math.sin(rotateX);
         let z = p.baseY * Math.sin(rotateX) + (waveZ + waveZ2) * Math.cos(rotateX);
         
         // Y轴旋转
@@ -205,7 +205,6 @@ const Pill = ({
 const Home = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [touchStartX, setTouchStartX] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   const features = [
@@ -230,27 +229,82 @@ const Home = () => {
   ];
 
   const testimonials = [
-    { name: '李同学', title: '大四 · 计算机', company: '中大 · 校园求职', quote: '原本差点交了“岗前培训费”，用 SafeCareer 一对照，就识别出套路，少走了弯路。', rating: 5 },
-    { name: '王同学', title: '实习 · 产品', company: '华工 · 互联网实习', quote: '在校招群里碰到“高薪兼职”，平台的案例库让我迅速判断是骗押金的老套路，避免了损失。', rating: 5 },
-    { name: '刘同学', title: '就业指导中心志愿者', company: '高校就业服务', quote: '把常见骗局和预警信号整理给学生，咨询量下降但命中率更高，大家更有安全感。', rating: 5 },
-    { name: '赵同学', title: '研一 · 数据分析', company: '暨大 · 校招面试', quote: '面试后对方让先买设备，查了防骗攻略才知道这是典型“设备采购”骗局，及时止损。', rating: 5 },
-    { name: '陈同学', title: '应届毕业生 · 市场', company: '华师 · 求职过渡', quote: '多看了真实案例，知道“培训贷”“包装简历”这类都是坑，避免了被收取高额手续费。', rating: 5 },
-    { name: '周同学', title: '大三 · 设计', company: '华农 · 兼职接单', quote: '以前接单会被压价甚至卷款，平台教的核验流程和合同要点，让我敢拒绝风险订单。', rating: 5 },
-    { name: '何同学', title: '大三 · 班委', company: '华师 · 校园分享', quote: '用预警清单做班会分享，大家反馈“终于知道哪些话术最危险”，防范意识明显提升。', rating: 5 },
-    { name: '黄同学', title: '大三 · 求职转码', company: '中大 · 求职转码', quote: '有人让我先交“内推费”，看了案例库发现这类多数是假内推，果断拒绝，感谢！', rating: 5 },
-    { name: '宋同学', title: '实习 · 新媒体', company: '远程面试', quote: '远程面试后要求“保证金”，平台提示这就是经典骗局，成功保住生活费。', rating: 5 },
-    { name: '朱同学', title: '校社联志愿者', company: '校园宣讲', quote: '把 SafeCareer 的材料做成宣讲 PPT，现场举例“培训贷”“冒充官方”骗局，反响很好。', rating: 5 },
+    {
+      name: '李晨',
+      title: '大四学生 · 计算机',
+      company: '中大 · 校园求职',
+      quote: '原本差点交了“岗前培训费”，用 SafeCareer 一对照，就识别出套路，少走了弯路。',
+      rating: 5,
+    },
+    {
+      name: '王同学',
+      title: '实习生 · 产品',
+      company: '华工 · 互联网实习',
+      quote: '在校招群里碰到“高薪兼职”，平台的案例库让我迅速判断是骗押金的老套路，避免了损失。',
+      rating: 5,
+    },
+    {
+      name: '刘学长',
+      title: '就业指导中心志愿者',
+      company: '高校就业服务',
+      quote: '把常见骗局和预警信号整理给学生，咨询量下降但命中率更高，大家更有安全感。',
+      rating: 5,
+    },
+    {
+      name: '赵同学',
+      title: '研一 · 数据分析',
+      company: '暨大 · 校招面试',
+      quote: '面试后对方让先买设备，查了防骗攻略才知道这是典型“设备采购”骗局，及时止损。',
+      rating: 5,
+    },
+    {
+      name: '陈学姐',
+      title: '应届毕业生 · 市场',
+      company: '华师 · 求职过渡',
+      quote: '多看了真实案例，知道“培训贷”“包装简历”这类都是坑，避免了被收取高额手续费。',
+      rating: 5,
+    },
+    {
+      name: '周同学',
+      title: '大三 · 设计',
+      company: '华农 · 兼职接单',
+      quote: '以前接单会被压价甚至卷款，平台教的核验流程和合同要点，让我敢拒绝风险订单。',
+      rating: 5,
+    },
+    {
+      name: '何同学',
+      title: '大三 · 班委',
+      company: '华师 · 校园分享',
+      quote: '用预警清单做班会分享，大家反馈“终于知道哪些话术最危险”，防范意识明显提升。',
+      rating: 5,
+    },
+    {
+      name: '黄同学',
+      title: '大三 · 求职转码',
+      company: '中大 · 求职转码',
+      quote: '有人让我先交“内推费”，看了案例库发现这类多数是假内推，果断拒绝，感谢！',
+      rating: 5,
+    },
+    {
+      name: '宋同学',
+      title: '实习 · 新媒体',
+      company: '远程面试',
+      quote: '远程面试后要求“保证金”，平台提示这就是经典骗局，成功保住生活费。',
+      rating: 5,
+    },
+    {
+      name: '朱同学',
+      title: '校社联志愿者',
+      company: '校园宣讲',
+      quote: '把 SafeCareer 的材料做成宣讲 PPT，现场举例“培训贷”“冒充官方”骗局，反响很好。',
+      rating: 5,
+    },
   ];
 
   useEffect(() => {
-    const checkIfMobile = () => setIsMobile(window.innerWidth < 768);
-    checkIfMobile();
-    window.addEventListener('resize', checkIfMobile);
-    
     // 触发入场动画
-    setTimeout(() => setIsVisible(true), 100);
-    
-    return () => window.removeEventListener('resize', checkIfMobile);
+    const timer = setTimeout(() => setIsVisible(true), 100);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleTouchStart = (e: React.TouchEvent) => setTouchStartX(e.touches[0].clientX);
@@ -343,7 +397,7 @@ const Home = () => {
               <div key={row} className="testimonial-marquee">
                 <div
                   className={`testimonial-track ${row === 0 ? 'animate-marquee-left' : 'animate-marquee-right'}`}
-                  style={{ ['--marquee-duration' as any]: row === 0 ? '42s' : '50s' }}
+                  style={{ '--marquee-duration': row === 0 ? '42s' : '50s' } as React.CSSProperties}
                 >
                   {[...testimonials, ...testimonials].map((item, idx) => (
                     <div key={`${row}-${idx}`} className="testimonial-card">

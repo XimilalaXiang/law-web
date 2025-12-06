@@ -51,7 +51,7 @@ const baseOptions = {
       grid: { color: 'rgba(255,255,255,0.05)' },
     },
     y: {
-      ticks: { color: 'rgba(255,255,255,0.7)', callback: (v: any) => `${v}%` },
+      ticks: { color: 'rgba(255,255,255,0.7)', callback: (v: number | string) => `${v}%` },
       grid: { color: 'rgba(255,255,255,0.05)' },
       beginAtZero: true,
       max: 100,
@@ -188,7 +188,7 @@ export const ResearchInsights: React.FC = () => {
                   ...baseOptions,
                   plugins: {
                     ...baseOptions.plugins,
-                    legend: { display: true, position: 'bottom', labels: { color: 'rgba(255,255,255,0.8)' } },
+                    legend: { display: true, position: 'bottom' as const, labels: { color: 'rgba(255,255,255,0.8)' } },
                   },
                   cutout: '55%',
                 }}
@@ -208,7 +208,7 @@ export const ResearchInsights: React.FC = () => {
                   ...baseOptions,
                   plugins: {
                     ...baseOptions.plugins,
-                    legend: { display: true, position: 'bottom', labels: { color: 'rgba(255,255,255,0.8)' } },
+                    legend: { display: true, position: 'bottom' as const, labels: { color: 'rgba(255,255,255,0.8)' } },
                   },
                 }}
               />
@@ -255,4 +255,3 @@ export const ResearchInsights: React.FC = () => {
 };
 
 export default ResearchInsights;
-

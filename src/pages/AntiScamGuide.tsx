@@ -230,7 +230,16 @@ const AntiScamGuide = () => {
                       return (
                         <button
                           key={index}
+                          type="button"
+                          role="checkbox"
+                          aria-checked={isChecked}
                           onClick={() => toggleWarning(category.id, index)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              toggleWarning(category.id, index);
+                            }
+                          }}
                           className={`w-full flex items-start gap-3 p-3 text-left transition-all duration-200 border ${
                             isChecked 
                               ? 'bg-white/5 border-[var(--primary)]/30' 
