@@ -12,6 +12,7 @@ const navLinks: NavLink[] = [
   { path: '/', label: '首页' },
   { path: '/cases', label: '案例库' },
   { path: '/guide', label: '反诈指南' },
+  { path: '/quiz', label: '防骗测验' },
 ];
 
 const Navbar = () => {

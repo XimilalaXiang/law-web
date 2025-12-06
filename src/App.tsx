@@ -8,6 +8,7 @@ import { AuthProvider } from './contexts/AuthContext';
 const Home = lazy(() => import('./pages/Home'));
 const CaseLibrary = lazy(() => import('./pages/CaseLibrary'));
 const AntiScamGuide = lazy(() => import('./pages/AntiScamGuide'));
+const Quiz = lazy(() => import('./pages/Quiz'));
 const Auth = lazy(() => import('./pages/Auth'));
 
 // Loading component with dark theme
@@ -36,6 +37,7 @@ const Layout = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/cases" element={<CaseLibrary />} />
                 <Route path="/guide" element={<AntiScamGuide />} />
+                <Route path="/quiz" element={<Quiz />} />
             <Route path="/auth" element={<Auth />} />
               </Routes>
             </Suspense>

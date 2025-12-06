@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   ShieldCheckIcon, 
   AlertCircleIcon, 
@@ -7,6 +8,8 @@ import {
   TrophyIcon,
   CloudIcon,
   HardDriveIcon,
+  PlayCircleIcon,
+  ArrowRightIcon,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { 
@@ -197,7 +200,7 @@ const AntiScamGuide = () => {
               <div className="flex items-center gap-2 mb-3">
                 <TrophyIcon className="h-4 w-4 text-[var(--primary)]" />
                 <span className="font-mono text-xs text-white/60">成就系统</span>
-                </div>
+              </div>
               <div className="flex flex-wrap gap-3">
                 {unlockedAchievements.map(achievement => (
                   <div 
@@ -220,6 +223,29 @@ const AntiScamGuide = () => {
             </div>
           )}
         </div>
+
+        {/* 测验入口 */}
+        <Link 
+          to="/quiz" 
+          className="card mb-16 bg-gradient-to-r from-purple-500/10 to-blue-500/10 border-purple-500/30 hover:border-purple-500/50 transition-all group cursor-pointer"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-purple-500/20 border border-purple-500/40 flex items-center justify-center rounded-xl">
+                <PlayCircleIcon className="h-6 w-6 text-purple-400" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white group-hover:text-purple-400 transition-colors">
+                  防骗能力测验
+                </h3>
+                <p className="font-mono text-xs text-white/50">
+                  通过情境题检验你的防骗知识，完成后可获得证书
+                </p>
+              </div>
+            </div>
+            <ArrowRightIcon className="h-5 w-5 text-white/40 group-hover:text-purple-400 group-hover:translate-x-1 transition-all" />
+          </div>
+        </Link>
 
         {/* Warning Categories */}
         <section className="mb-24">
