@@ -12,6 +12,8 @@ import {
   CloudIcon,
   UserPlusIcon,
   DownloadIcon,
+  TrophyIcon,
+  HistoryIcon,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -19,6 +21,17 @@ import {
   getRandomQuestions,
   difficultyConfig,
 } from '../data/quizQuestions';
+import {
+  QuizHistory,
+  QuizResult,
+  getQuizHistory,
+  saveQuizResult,
+  migrateLocalQuizToSupabase,
+  formatDate,
+  getDifficultyLabel,
+  getDifficultyColor,
+  Difficulty as QuizDifficulty,
+} from '../lib/quizProgress';
 
 type GameState = 'intro' | 'playing' | 'result';
 type Difficulty = 'easy' | 'medium' | 'hard';
@@ -50,6 +63,33 @@ const Quiz = () => {
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
   const [timeLeft, setTimeLeft] = useState(0);
   const [isTimerActive, setIsTimerActive] = useState(false);
+  
+  // 测验历史记录
+  const [quizHistory, setQuizHistory] = useState<QuizHistory | null>(null);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  // 加载历史记录
+  useEffect(() => {
+    const loadHistory = async () => {
+      setIsLoadingHistory(true);
+      try {
+        const history = await getQuizHistory(user?.id || null);
+        setQuizHistory(history);
+        
+        // 登录后迁移本地数据
+        if (user?.id) {
+          await migrateLocalQuizToSupabase(user.id);
+        }
+      } catch (e) {
+        console.error('加载测验历史失败:', e);
+      } finally {
+        setIsLoadingHistory(false);
+      }
+    };
+    
+    loadHistory();
+  }, [user?.id]);
 
   // 开始游戏
   const startGame = (selectedDifficulty: Difficulty) => {
@@ -97,7 +137,7 @@ const Quiz = () => {
   }, [selectedAnswer, questions, currentIndex, showExplanation]);
 
   // 下一题
-  const nextQuestion = () => {
+  const nextQuestion = async () => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setSelectedAnswer(null);
@@ -105,6 +145,30 @@ const Quiz = () => {
       setTimeLeft(difficultyConfig[difficulty].time);
       setIsTimerActive(true);
     } else {
+      // 测验完成，保存结果
+      // 此时 answers 数组已包含所有答案（包括最后一题，在 handleSubmitAnswer 中添加）
+      const finalScore = answers.filter(a => a.isCorrect).length;
+      const finalTotal = questions.length;
+      const finalPercentage = Math.round((finalScore / finalTotal) * 100);
+      
+      setIsSyncing(true);
+      try {
+        await saveQuizResult(user?.id || null, {
+          difficulty: difficulty as QuizDifficulty,
+          score: finalScore,
+          total: finalTotal,
+          percentage: finalPercentage,
+        });
+        
+        // 刷新历史记录
+        const history = await getQuizHistory(user?.id || null);
+        setQuizHistory(history);
+      } catch (e) {
+        console.error('保存测验结果失败:', e);
+      } finally {
+        setIsSyncing(false);
+      }
+      
       setGameState('result');
     }
   };
@@ -299,34 +363,125 @@ const Quiz = () => {
 
             {/* 难度选择 */}
             <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {(Object.entries(difficultyConfig) as [Difficulty, typeof difficultyConfig.easy][]).map(([key, config]) => (
-                <button
-                  key={key}
-                  onClick={() => startGame(key)}
-                  className="feature-card group cursor-pointer text-left hover:scale-[1.02] transition-transform"
-                >
-                  <div className="flex items-center gap-3 mb-4">
-                    <div 
-                      className="w-10 h-10 flex items-center justify-center rounded-lg"
-                      style={{ backgroundColor: `${config.color}20`, border: `1px solid ${config.color}50` }}
-                    >
-                      <PlayIcon className="h-5 w-5" style={{ color: config.color }} />
+              {(Object.entries(difficultyConfig) as [Difficulty, typeof difficultyConfig.easy][]).map(([key, config]) => {
+                const bestScore = quizHistory?.bestScores[key as QuizDifficulty];
+                return (
+                  <button
+                    key={key}
+                    onClick={() => startGame(key)}
+                    className="feature-card group cursor-pointer text-left hover:scale-[1.02] transition-transform"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <div 
+                        className="w-10 h-10 flex items-center justify-center rounded-lg"
+                        style={{ backgroundColor: `${config.color}20`, border: `1px solid ${config.color}50` }}
+                      >
+                        <PlayIcon className="h-5 w-5" style={{ color: config.color }} />
+                      </div>
+                      <div>
+                        <div className="text-lg font-semibold text-white">{config.label}模式</div>
+                        <div className="font-mono text-xs text-white/40">{config.questions}题 · {config.time}秒/题</div>
+                      </div>
                     </div>
-                    <div>
-                      <div className="text-lg font-semibold text-white">{config.label}模式</div>
-                      <div className="font-mono text-xs text-white/40">{config.questions}题 · {config.time}秒/题</div>
+                    
+                    {/* 显示最佳成绩 */}
+                    {bestScore && (
+                      <div className="mb-3 p-2 bg-white/5 rounded-lg border border-white/10">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <TrophyIcon className="h-3.5 w-3.5 text-[var(--primary)]" />
+                            <span className="font-mono text-xs text-white/60">最佳成绩</span>
+                          </div>
+                          <span className="font-mono text-sm font-bold" style={{ color: config.color }}>
+                            {bestScore.percentage}%
+                          </span>
+                        </div>
+                        <div className="font-mono text-xs text-white/40 mt-1">
+                          {bestScore.score}/{bestScore.total}题 · {formatDate(bestScore.completed_at)}
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-xs text-white/60">
+                        {bestScore ? '再测一次' : '开始测验'}
+                      </span>
+                      <ArrowRightIcon className="h-4 w-4 text-white/40 group-hover:text-[var(--primary)] transition-colors" />
                     </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs text-white/60">开始测验</span>
-                    <ArrowRightIcon className="h-4 w-4 text-white/40 group-hover:text-[var(--primary)] transition-colors" />
-                  </div>
-                </button>
-              ))}
+                  </button>
+                );
+              })}
             </div>
 
+            {/* 测验历史 */}
+            {quizHistory && quizHistory.results.length > 0 && (
+              <div className="mt-12 card">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <HistoryIcon className="h-5 w-5 text-[var(--primary)]" />
+                    <h3 className="text-lg font-semibold text-white">测验历史</h3>
+                  </div>
+                  {user && (
+                    <div className="flex items-center gap-1 text-white/40">
+                      <CloudIcon className="h-3.5 w-3.5" />
+                      <span className="font-mono text-xs">已同步</span>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="space-y-3 max-h-60 overflow-y-auto">
+                  {quizHistory.results.slice(0, 5).map((result, index) => (
+                    <div 
+                      key={index} 
+                      className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div 
+                          className="w-8 h-8 rounded-full flex items-center justify-center"
+                          style={{ 
+                            backgroundColor: `${getDifficultyColor(result.difficulty)}20`,
+                            border: `1px solid ${getDifficultyColor(result.difficulty)}50`
+                          }}
+                        >
+                          <span className="font-mono text-xs" style={{ color: getDifficultyColor(result.difficulty) }}>
+                            {getDifficultyLabel(result.difficulty).charAt(0)}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="font-mono text-sm text-white">
+                            {getDifficultyLabel(result.difficulty)}模式
+                          </div>
+                          <div className="font-mono text-xs text-white/40">
+                            {formatDate(result.completed_at)}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-mono text-lg font-bold" style={{ 
+                          color: result.percentage >= 70 ? '#22c55e' : result.percentage >= 50 ? '#FFC700' : '#ef4444'
+                        }}>
+                          {result.percentage}%
+                        </div>
+                        <div className="font-mono text-xs text-white/40">
+                          {result.score}/{result.total}题
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {quizHistory.results.length > 5 && (
+                  <div className="mt-3 text-center">
+                    <span className="font-mono text-xs text-white/40">
+                      共 {quizHistory.results.length} 条记录
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* 规则说明 */}
-            <div className="mt-16 card">
+            <div className="mt-8 card">
               <h3 className="text-lg font-semibold text-white mb-4">测验规则</h3>
               <div className="grid gap-4 md:grid-cols-3 text-left">
                 <div className="flex items-start gap-3">
