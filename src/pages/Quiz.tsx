@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import html2canvas from 'html2canvas';
 import {
   PlayIcon,
   ClockIcon,
@@ -12,6 +13,8 @@ import {
   ChevronLeftIcon,
   CloudIcon,
   UserPlusIcon,
+  DownloadIcon,
+  ImageIcon,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -120,19 +123,38 @@ const Quiz = () => {
     setAnswers([]);
   };
 
-  // 下载证书
-  const downloadCertificate = () => {
-    if (!certificateRef.current) return;
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  // 下载证书为PNG图片
+  const downloadCertificatePNG = async () => {
+    if (!certificateRef.current || isGenerating) return;
     
-    // 使用 html2canvas 或简单的截图方案
-    // 这里用简化方案：生成可分享的文本
-    const score = answers.filter(a => a.isCorrect).length;
-    const total = questions.length;
-    const percentage = Math.round((score / total) * 100);
-    
+    setIsGenerating(true);
+    try {
+      const canvas = await html2canvas(certificateRef.current, {
+        backgroundColor: '#000000',
+        scale: 2, // 2倍清晰度
+        useCORS: true,
+        allowTaint: true,
+      });
+      
+      // 转换为PNG并下载
+      const link = document.createElement('a');
+      link.download = `SafeCareer_防骗证书_${user?.username || '匿名用户'}_${new Date().toLocaleDateString('zh-CN').replace(/\//g, '-')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (error) {
+      console.error('生成证书失败:', error);
+      alert('生成证书失败，请重试');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  // 分享证书文本
+  const shareCertificateText = () => {
     const text = `🏆 SafeCareer 防骗达人证书\n\n恭喜 ${user?.username || '匿名用户'} 同学\n在求职反诈测验中获得 ${score}/${total} 分（${percentage}%）\n\n快来测测你的防骗能力！\nhttps://safecareer.vercel.app/quiz`;
     
-    // 复制到剪贴板
     navigator.clipboard.writeText(text).then(() => {
       alert('证书内容已复制到剪贴板，快去分享吧！');
     });
@@ -419,9 +441,26 @@ const Quiz = () => {
                 <RotateCcwIcon className="h-4 w-4 mr-2" />
                 再测一次
               </button>
-              <button onClick={downloadCertificate} className="btn-primary">
+              <button 
+                onClick={downloadCertificatePNG} 
+                disabled={isGenerating}
+                className="btn-primary disabled:opacity-50"
+              >
+                {isGenerating ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin mr-2" />
+                    生成中...
+                  </>
+                ) : (
+                  <>
+                    <DownloadIcon className="h-4 w-4 mr-2" />
+                    下载证书
+                  </>
+                )}
+              </button>
+              <button onClick={shareCertificateText} className="btn-secondary">
                 <ShareIcon className="h-4 w-4 mr-2" />
-                分享成绩
+                复制分享
               </button>
             </div>
 
