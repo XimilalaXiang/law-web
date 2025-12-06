@@ -402,34 +402,62 @@ const Quiz = () => {
         {/* ===== 结果页 ===== */}
         {gameState === 'result' && (
           <div className="text-center">
-            {/* 证书卡片 */}
-            <div ref={certificateRef} className="card bg-gradient-to-br from-[#1a1a1a] to-black border-[var(--primary)]/30">
-              <div className="text-6xl mb-4">{grade.emoji}</div>
+            {/* 证书卡片 - 使用纯内联样式以兼容html2canvas（不支持oklch颜色） */}
+            <div 
+              ref={certificateRef} 
+              style={{
+                background: 'linear-gradient(to bottom right, #1a1a1a, #000000)',
+                border: '1px solid rgba(255, 199, 0, 0.3)',
+                borderRadius: '16px',
+                padding: '32px',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+              }}
+            >
+              <div style={{ fontSize: '60px', marginBottom: '16px' }}>{grade.emoji}</div>
               
-              <Pill variant="success">测验完成</Pill>
+              <div style={{
+                display: 'inline-block',
+                padding: '6px 16px',
+                fontSize: '12px',
+                fontFamily: '"Space Mono", monospace',
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase',
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                color: '#22c55e',
+                border: '1px solid rgba(34, 197, 94, 0.3)',
+                borderRadius: '4px',
+              }}>
+                测验完成
+              </div>
               
-              <h1 className="font-display text-4xl text-white mt-6">{grade.text}</h1>
+              <h1 style={{
+                fontFamily: '"Playfair Display", serif',
+                fontSize: '36px',
+                color: '#ffffff',
+                marginTop: '24px',
+                fontWeight: 600,
+              }}>{grade.text}</h1>
               
-              <div className="mt-8 flex justify-center gap-8">
-                <div className="text-center">
-                  <div className="font-display text-5xl" style={{ color: grade.color }}>{score}</div>
-                  <div className="font-mono text-xs text-white/40 mt-1">正确</div>
+              <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'center', gap: '48px' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '48px', color: grade.color }}>{score}</div>
+                  <div style={{ fontFamily: '"Space Mono", monospace', fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>正确</div>
                 </div>
-                <div className="text-center">
-                  <div className="font-display text-5xl text-white/40">{total - score}</div>
-                  <div className="font-mono text-xs text-white/40 mt-1">错误</div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '48px', color: 'rgba(255,255,255,0.4)' }}>{total - score}</div>
+                  <div style={{ fontFamily: '"Space Mono", monospace', fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>错误</div>
                 </div>
-                <div className="text-center">
-                  <div className="font-display text-5xl text-[var(--primary)]">{percentage}%</div>
-                  <div className="font-mono text-xs text-white/40 mt-1">正确率</div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '48px', color: '#FFC700' }}>{percentage}%</div>
+                  <div style={{ fontFamily: '"Space Mono", monospace', fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>正确率</div>
                 </div>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-white/10">
-                <p className="font-mono text-sm text-white/60">
-                  恭喜 <span className="text-[var(--primary)]">{user?.username || '匿名用户'}</span> 同学完成测验
+              <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                <p style={{ fontFamily: '"Space Mono", monospace', fontSize: '14px', color: 'rgba(255,255,255,0.6)' }}>
+                  恭喜 <span style={{ color: '#FFC700' }}>{user?.username || '匿名用户'}</span> 同学完成测验
                 </p>
-                <p className="font-mono text-xs text-white/40 mt-2">
+                <p style={{ fontFamily: '"Space Mono", monospace', fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginTop: '8px' }}>
                   SafeCareer · {new Date().toLocaleDateString('zh-CN')}
                 </p>
               </div>
