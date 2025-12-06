@@ -171,7 +171,10 @@ const AntiScamGuide = () => {
                   ) : (
                     <>
                       <HardDriveIcon className="h-3 w-3" />
-                      <span>仅保存在本地（登录后可同步）</span>
+                      <span>仅保存在本地</span>
+                      <Link to="/auth" className="text-[var(--primary)] hover:underline ml-1">
+                        登录同步 →
+                      </Link>
                     </>
                   )}
                   {isSyncing && <span className="text-[var(--primary)]">同步中...</span>}

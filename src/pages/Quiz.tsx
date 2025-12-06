@@ -8,9 +8,10 @@ import {
   TrophyIcon,
   ArrowRightIcon,
   RotateCcwIcon,
-  DownloadIcon,
   ShareIcon,
   ChevronLeftIcon,
+  CloudIcon,
+  UserPlusIcon,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -230,6 +231,30 @@ const Quiz = () => {
                 </div>
               </div>
             </div>
+
+            {/* 未登录提示 */}
+            {!user && (
+              <div className="mt-8 card bg-blue-500/5 border-blue-500/20">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center">
+                      <CloudIcon className="h-5 w-5 text-blue-400" />
+                    </div>
+                    <div>
+                      <p className="text-white text-sm font-medium">登录后可保存测验成绩</p>
+                      <p className="text-white/50 text-xs">云端同步学习进度，跨设备继续学习</p>
+                    </div>
+                  </div>
+                  <Link 
+                    to="/auth" 
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors text-sm font-medium"
+                  >
+                    <UserPlusIcon className="h-4 w-4" />
+                    注册/登录
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
