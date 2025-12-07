@@ -252,7 +252,15 @@ const DecisionTreeComponent = ({
 };
 
 // 文书模板展示组件
-const DocumentTemplateCard = ({ template }: { template: typeof documentTemplates[0] }) => {
+const DocumentTemplateCard = ({
+  template,
+  isCompleted,
+  onToggle,
+}: {
+  template: typeof documentTemplates[0];
+  isCompleted: boolean;
+  onToggle: () => void;
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
   const TemplateIcon = template.icon;
@@ -270,8 +278,16 @@ const DocumentTemplateCard = ({ template }: { template: typeof documentTemplates
   return (
     <div className="border border-white/10 rounded-lg overflow-hidden">
       <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 transition-all"
+        onClick={() => {
+          onToggle();           // 可反复切换完成状态
+          setIsExpanded(prev => !prev);
+        }}
+        className="w-full flex items-center justify-between p-4 transition-all border rounded-lg"
+        style={{
+          backgroundColor: isCompleted ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.03)',
+          borderColor: isCompleted ? 'rgba(255,199,0,0.4)' : 'rgba(255,255,255,0.1)',
+          boxShadow: isCompleted ? '0 0 25px rgba(255,199,0,0.12)' : 'none',
+        }}
       >
         <div className="flex items-center gap-3">
           <div 
@@ -285,6 +301,7 @@ const DocumentTemplateCard = ({ template }: { template: typeof documentTemplates
             <p className="text-xs text-white/40">{template.description}</p>
           </div>
         </div>
+
         <ChevronDownIcon 
           className={`h-5 w-5 text-white/40 transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
         />
@@ -755,22 +772,19 @@ const LegalRemedy = () => {
                     return (
                       <div 
                         key={category.id} 
-                        className="card"
-                        style={{ borderColor: `${category.color}30` }}
+                        onClick={() => handleToggleStep(stepId)}
+                        className="card cursor-pointer transition-all"
+                        style={{
+                          backgroundColor: isCompleted ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.03)',
+                          borderColor: isCompleted ? 'rgba(255,199,0,0.4)' : `${category.color}30`,
+                          boxShadow: isCompleted ? '0 0 25px rgba(255,199,0,0.12)' : 'none',
+                        }}
                       >
                         <div className="flex items-start gap-4 mb-4">
-                          <button
-                            onClick={() => handleToggleStep(stepId)}
-                            className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
-                              isCompleted ? 'bg-[var(--primary)]' : 'border border-white/20'
-                            }`}
-                          >
-                            {isCompleted && <CheckIcon className="h-3 w-3 text-black" />}
-                          </button>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 flex-wrap">
                               <CategoryIcon className="h-5 w-5" style={{ color: category.color }} />
-                              <h3 className="font-semibold text-white">{category.title}</h3>
+                              <h3 className={`font-semibold ${isCompleted ? 'text-white' : 'text-white/90'}`}>{category.title}</h3>
                               <span 
                                 className="px-2 py-0.5 rounded text-xs font-mono"
                                 style={{ 
@@ -781,7 +795,7 @@ const LegalRemedy = () => {
                                 {category.typeName}
                               </span>
                             </div>
-                            <p className="text-sm text-white/50 mt-1">{category.description}</p>
+                            <p className={`text-sm mt-1 ${isCompleted ? 'text-white/70' : 'text-white/50'}`}>{category.description}</p>
                           </div>
                         </div>
 
@@ -862,9 +876,18 @@ const LegalRemedy = () => {
                 </div>
 
                 <div className="max-w-2xl mx-auto space-y-4">
-                  {documentTemplates.map(template => (
-                    <DocumentTemplateCard key={template.id} template={template} />
-                  ))}
+                  {documentTemplates.map(template => {
+                    const stepId = `document-${template.id}`;
+                    const isCompleted = !!completedSteps[stepId];
+                    return (
+                      <DocumentTemplateCard 
+                        key={template.id} 
+                        template={template} 
+                        isCompleted={isCompleted}
+                        onToggle={() => handleToggleStep(stepId)}
+                      />
+                    );
+                  })}
                 </div>
               </section>
             )}
