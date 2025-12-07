@@ -7,6 +7,7 @@ const Footer = () => {
     { path: '/', label: '首页' },
     { path: '/cases', label: '案例库' },
     { path: '/guide', label: '防骗指南' },
+    { path: '/legal-remedy', label: '维权指南' },
     { path: '/quiz', label: '防骗测验' },
   ];
 
