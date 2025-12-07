@@ -651,6 +651,42 @@ body {
 .text-success { color: var(--success) !important; }
 
 /* ============================================
+   Hero 底部"法"字标识
+   ============================================ */
+.hero-law-mark {
+  position: absolute;
+  left: 50%;
+  bottom: 20%;
+  transform: translateX(-50%);
+  width: 80vw;
+  max-width: 1100px;
+  text-align: center;
+  font-family: 'Noto Serif SC', 'SimSun', 'Songti SC', serif;
+  font-weight: 900;
+  font-size: clamp(200px, 45vw, 600px);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: rgba(0, 0, 0, 0.9);
+  text-shadow:
+    0 0 24px rgba(255, 199, 0, 0.45),
+    0 0 90px rgba(255, 199, 0, 0.3),
+    0 0 160px rgba(255, 199, 0, 0.2),
+    0 4px 22px rgba(0, 0, 0, 0.9);
+  opacity: 0.3;
+  z-index: 2;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media screen and (max-width: 768px) {
+  .hero-law-mark {
+    font-size: clamp(160px, 70vw, 400px);
+    bottom: 28%;
+  opacity: 0.24;
+  }
+}
+
+/* ============================================
    Responsive - 响应式调整
    ============================================ */
 @media (prefers-reduced-motion: reduce) {

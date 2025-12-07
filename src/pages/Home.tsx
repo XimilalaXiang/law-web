@@ -164,6 +164,9 @@ const Home = () => {
           {/* 渐晕效果 */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
+          
+          {/* 底部星光大字 - 法 */}
+          <div className="hero-law-mark">法</div>
         </div>
 
         {/* Hero 内容 */}
