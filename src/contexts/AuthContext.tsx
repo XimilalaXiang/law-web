@@ -38,11 +38,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // 注册
   const signUp = async (username: string, password: string): Promise<{ error: string | null }> => {
     try {
-      // 检查用户名是否已存在
+      // 检查用户名是否已存在（区分大小写）
       const { data: existingUser } = await supabase
         .from('users')
         .select('id')
-        .eq('username', username.toLowerCase())
+        .eq('username', username)
         .single();
 
       if (existingUser) {
@@ -52,12 +52,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       // 哈希密码
       const passwordHash = await hashPassword(password);
 
-      // 创建用户
+      // 创建用户（保留原始大小写）
       const { data, error } = await supabase
         .from('users')
         .insert([
           {
-            username: username.toLowerCase(),
+            username: username,
             password_hash: passwordHash,
           }
         ])
@@ -89,11 +89,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // 登录
   const signIn = async (username: string, password: string): Promise<{ error: string | null }> => {
     try {
-      // 查找用户
+      // 查找用户（区分大小写）
       const { data: userData, error } = await supabase
         .from('users')
         .select('*')
-        .eq('username', username.toLowerCase())
+        .eq('username', username)
         .single();
 
       if (error || !userData) {
