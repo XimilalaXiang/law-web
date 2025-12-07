@@ -6,60 +6,6 @@ const rateMap = new Map<string, RateInfo>();
 const WINDOW_MS = 10 * 60 * 1000; // 10 minutes
 const MAX_REQ = 20; // per window per IP
 
-// 系统提示词 - 基于SafeCareer案例库的防骗专家
-const SYSTEM_PROMPT = `你是SafeCareer的AI防骗顾问，专注于帮助大学生识别和防范求职诈骗。
-
-【你的知识库】
-你掌握了以下真实诈骗案例：
-
-1. **特大招聘诈骗案**（8000万元）：犯罪分子以能办理央企、国企入职为由，组织虚假培训和考试，诈骗400多名大学生。
-2. **央企内推骗局**：不法分子承诺"央企内推""直签保录"，收取费用后无法兑现。
-3. **横琴刷单诈骗**（43万元）：以求职为名诱导做任务刷单，声称操作失误需继续转账。
-4. **培训贷陷阱**：培训机构承诺"边学边赚""先学后付"，诱导学生贷款支付培训费。
-5. **共享经济创业骗局**：打着"共享经济"旗号，承诺高额快速回报，要求发展下线。
-6. **高薪招聘培训诈骗**：发布虚假高薪招聘，要求持证上岗，收取培训费后岗位并不存在。
-7. **托关系付费内推**：谎称认识企业领导，承诺安排正式编制，收取巨额费用。
-8. **网络传销骗局**（9亿元）：搭建APP平台，以"线上创业"为名，形成多级传销网络。
-9. **求职刷单诈骗**：以入职测试为名要求完成刷单任务，先给小额返利获取信任后要求大额充值。
-10. **黑中介陷阱**：要求交纳保证金，承诺高薪工作，实际工作与承诺不符。
-
-【核心诈骗特征】
-- **金钱预警**：要求支付培训费、押金、材料费、内推费
-- **公司可疑**：信息模糊、工作地点频繁变更、只有手机号
-- **流程异常**：无需面试即录用、急切催促决定、长期大量招聘
-- **沟通可疑**：只通过非正规渠道、拒绝视频面试、使用免费邮箱
-
-【你的能力】
-1. **风险分析**：评估招聘信息的风险等级（低/中/高）
-2. **特征识别**：识别培训贷、黑中介、刷单、内推、传销等10大类诈骗手法
-3. **防范建议**：提供具体可行的防范措施
-4. **案例引用**：引用真实案例增强说服力
-
-【交互风格】
-- 友善专业，像学长学姐般亲切
-- 具体务实，避免空泛说教
-- 结构清晰，使用Markdown格式
-- 适度警示，不过度恐吓
-
-【特殊指令】
-当用户提供招聘信息需要分析时，请按以下格式输出：
-
-**🎯 风险评估结果**
-
-**风险等级**：🟢 低风险 / 🟡 中风险 / 🔴 高风险
-
-**可疑点分析**：
-- ⚠️ 可疑点1：具体描述
-- ⚠️ 可疑点2：具体描述
-
-**防范建议**：
-1. 具体建议1
-2. 具体建议2
-
-**相似案例**：引用相关案例
-
-现在，准备好回答用户的防骗咨询！`;
-
 // 新增：中文 UTF-8 正常显示的系统提示词（替代上面已乱码版本）
 const SAFECAREER_SYSTEM_PROMPT = `你是 SafeCareer 的 AI 反诈助手，专注帮助大学生识别和防范求职诈骗。
 
@@ -90,6 +36,14 @@ const SAFECAREER_SYSTEM_PROMPT = `你是 SafeCareer 的 AI 反诈助手，专注
 现在开始回答用户问题。`;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // 预检请求快速返回，避免 405
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    return res.status(204).end();
+  }
+
   // 只允许POST请求
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -132,8 +86,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // 从环境变量获取配置
     const apiKey = process.env.AI_API_KEY;
-    const rawBaseURL = process.env.AI_BASE_URL || 'https://newapi.ximilala.com';
-    const model = process.env.AI_MODEL || 'ollama/deepseek-v3.1:671b';
+    const authScheme = (process.env.AI_AUTH_SCHEME || 'Bearer').trim();
+    const rawBaseURL = process.env.AI_BASE_URL || 'https://open.bigmodel.cn/api/paas/v4';
+    const model = process.env.AI_MODEL || 'glm-4.6';
 
     // 兼容 SiliconFlow 等供应商：若用户只填根域名（如 https://siliconflow.cn），自动规范化为 API 域名
     const normalizeBase = (url: string): string => {
@@ -151,12 +106,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     };
 
-    // 构造聊天补全端点
+    // 构造聊天补全端点（默认使用 /chat/completions，避免自动拼接 /v1）
     const buildChatURL = (base: string): string => {
       const b = base.replace(/\/+$/, '');
-      if (/\/v1\/chat\/completions$/i.test(b)) return b;
-      if (/\/v1$/i.test(b)) return `${b}/chat/completions`;
-      return `${b}/v1/chat/completions`;
+      if (/\/chat\/completions$/i.test(b)) return b;
+      return `${b}/chat/completions`;
     };
 
     const baseURL = normalizeBase(rawBaseURL);
@@ -177,7 +131,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        'Authorization': `${authScheme} ${apiKey}`,
         // 同时声明可接受 SSE 或 JSON，兼容不同提供商
         'Accept': 'text/event-stream, application/json',
       },
@@ -192,10 +146,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!response.ok) {
       let details: unknown = null;
+      let textFallback = '';
       try { details = await response.json(); } catch {
-        try { details = await response.text(); } catch { details = null; }
+        try { textFallback = await response.text(); details = textFallback; } catch { details = null; }
       }
-      console.error('API Error:', details);
+      console.error('API Error:', { status: response.status, details: details || textFallback });
       return res.status(response.status).json({ error: 'AI service error', details });
     }
 
