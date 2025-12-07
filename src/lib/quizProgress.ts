@@ -226,3 +226,6 @@ export const getDifficultyColor = (difficulty: Difficulty): string => {
   return colors[difficulty];
 };
 
+
+
+

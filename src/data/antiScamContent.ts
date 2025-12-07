@@ -251,3 +251,6 @@ export const getNextAchievement = (completedCount: number): Achievement | null =
   return achievements.find(a => completedCount < a.requiredCount) || null;
 };
 
+
+
+

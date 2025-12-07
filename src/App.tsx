@@ -10,6 +10,7 @@ const CaseLibrary = lazy(() => import('./pages/CaseLibrary'));
 const AntiScamGuide = lazy(() => import('./pages/AntiScamGuide'));
 const Quiz = lazy(() => import('./pages/Quiz'));
 const Auth = lazy(() => import('./pages/Auth'));
+const LegalRemedy = lazy(() => import('./pages/LegalRemedy'));
 
 // Loading component with dark theme
 const LoadingSpinner = () => (
@@ -38,6 +39,7 @@ const Layout = () => {
                 <Route path="/cases" element={<CaseLibrary />} />
                 <Route path="/guide" element={<AntiScamGuide />} />
                 <Route path="/quiz" element={<Quiz />} />
+                <Route path="/legal-remedy" element={<LegalRemedy />} />
             <Route path="/auth" element={<Auth />} />
               </Routes>
             </Suspense>
