@@ -89,6 +89,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const authScheme = (process.env.AI_AUTH_SCHEME || 'Bearer').trim();
     const rawBaseURL = process.env.AI_BASE_URL || 'https://open.bigmodel.cn/api/paas/v4';
     const model = process.env.AI_MODEL || 'glm-4.6';
+    const userAgent = process.env.AI_USER_AGENT || 'SafeCareer/1.0 (+https://www.sysu-law.tech)';
+    const clientEnv = process.env.AI_CLIENT_ENV; // 可选：标记具体客户端，如 cursor/roocode 等
 
     // 兼容 SiliconFlow 等供应商：若用户只填根域名（如 https://siliconflow.cn），自动规范化为 API 域名
     const normalizeBase = (url: string): string => {
@@ -132,6 +134,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `${authScheme} ${apiKey}`,
+        // 自定义 UA / 客户端标识，便于通过供应商环境校验
+        ...(userAgent ? { 'User-Agent': userAgent } : {}),
+        ...(clientEnv ? { 'X-Client-Env': clientEnv } : {}),
         // 同时声明可接受 SSE 或 JSON，兼容不同提供商
         'Accept': 'text/event-stream, application/json',
       },
