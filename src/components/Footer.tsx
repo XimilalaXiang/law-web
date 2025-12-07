@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldCheckIcon, HeartIcon, MailIcon } from 'lucide-react';
 
 const Footer = () => {
+  const [copied, setCopied] = useState(false);
+  const contactEmail = 'admin@sysu-law.tech';
+
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(contactEmail);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    } catch (e) {
+      console.error('复制邮箱失败', e);
+    }
+  };
+
   const navLinks = [
     { path: '/', label: '首页' },
     { path: '/cases', label: '案例库' },
@@ -43,18 +56,22 @@ const Footer = () => {
                 <span>守护每一位学生的职业梦想</span>
               </p>
               <div className="relative group">
-                <button className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white rounded-full border border-white/10 bg-white/5 backdrop-blur-sm shadow-[0_10px_40px_-20px_rgba(0,0,0,0.9)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--primary)]/60 hover:shadow-[0_12px_40px_-16px_rgba(0,0,0,0.9)]">
+                <button
+                  onClick={handleCopyEmail}
+                  className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white rounded-full border border-white/10 bg-white/5 backdrop-blur-sm shadow-[0_10px_40px_-20px_rgba(0,0,0,0.9)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--primary)]/60 hover:shadow-[0_12px_40px_-16px_rgba(0,0,0,0.9)]"
+                >
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-[var(--primary)] to-white/70 text-black shadow-lg shadow-[var(--primary)]/30">
                     <MailIcon className="h-3.5 w-3.5" />
                   </span>
-                  <span className="tracking-wide">联系我们</span>
+                  <span className="tracking-wide">{copied ? '已复制邮箱' : '联系我们'}</span>
                 </button>
                 <div className="absolute left-1/2 -translate-x-1/2 mt-3 px-4 py-3 text-[11px] text-white bg-black/80 border border-white/10 rounded-xl shadow-lg shadow-[var(--primary)]/20 backdrop-blur opacity-0 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 translate-y-2 transition-all duration-200">
                   <p className="text-[var(--primary)] font-semibold text-center mb-1">
                     邮件联系
                   </p>
                   <p className="font-mono text-xs text-white/70 whitespace-nowrap text-center">
-                    admin@sysu-law.tech
+                    {contactEmail}
+                    {copied && <span className="text-[var(--primary)] ml-1">已复制</span>}
                   </p>
                 </div>
               </div>
