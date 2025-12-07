@@ -43,8 +43,8 @@ const Auth = () => {
     setIsLoading(true);
 
     // 用户名验证
-    if (username.length < 3) {
-      setError('用户名至少需要3个字符');
+    if (username.length < 1) {
+      setError('请输入用户名');
       setIsLoading(false);
       return;
     }
@@ -171,12 +171,12 @@ const Auth = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="用户名（区分大小写）"
                   required
-                  minLength={3}
+                  minLength={1}
                   maxLength={20}
                   className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[var(--primary)]/50 focus:ring-2 focus:ring-[var(--primary)]/20 transition-all duration-200"
                 />
               </div>
-              <p className="mt-1.5 text-xs text-white/30">3-20位，支持中文、英文字母、数字、下划线（区分大小写）</p>
+              <p className="mt-1.5 text-xs text-white/30">支持中文、英文字母、数字、下划线（区分大小写）</p>
             </div>
 
             {/* 密码 */}
