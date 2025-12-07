@@ -61,7 +61,7 @@ const Home = () => {
 
   const testimonials = [
     {
-      name: '李晨',
+      name: '李同学',
       title: '大四学生 · 计算机',
       company: '中大 · 校园求职',
       quote: '原本差点交了“岗前培训费”，用 SafeCareer 一对照，就识别出套路，少走了弯路。',
