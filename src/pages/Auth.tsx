@@ -49,8 +49,8 @@ const Auth = () => {
       return;
     }
 
-    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-      setError('用户名只能包含字母、数字和下划线');
+    if (!/^[\u4e00-\u9fa5a-zA-Z0-9_]+$/.test(username)) {
+      setError('用户名只能包含中文、英文字母、数字和下划线');
       setIsLoading(false);
       return;
     }
@@ -168,16 +168,15 @@ const Auth = () => {
                 <input
                   type="text"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value.toLowerCase())}
-                  placeholder="your_username"
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="用户名（区分大小写）"
                   required
                   minLength={3}
                   maxLength={20}
-                  pattern="[a-zA-Z0-9_]+"
                   className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-[var(--primary)]/50 focus:ring-2 focus:ring-[var(--primary)]/20 transition-all duration-200"
                 />
               </div>
-              <p className="mt-1.5 text-xs text-white/30">3-20位，只能包含字母、数字和下划线</p>
+              <p className="mt-1.5 text-xs text-white/30">3-20位，支持中文、英文字母、数字、下划线（区分大小写）</p>
             </div>
 
             {/* 密码 */}

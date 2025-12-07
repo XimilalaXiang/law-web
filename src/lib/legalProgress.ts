@@ -221,3 +221,4 @@ export const migrateLocalLegalToSupabase = async (userId: string): Promise<void>
   }
 };
 
+
