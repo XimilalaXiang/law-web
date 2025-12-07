@@ -90,26 +90,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const rawBaseURL = process.env.AI_BASE_URL || 'https://open.bigmodel.cn/api/paas/v4';
     const model = process.env.AI_MODEL || 'glm-4.6';
 
-    // 兼容 SiliconFlow 等供应商：若用户只填根域名（如 https://siliconflow.cn），自动规范化为 API 域名
+    // 保留用户传入的完整路径，避免丢失 /api/... 前缀；仅做末尾斜杠裁剪 + siliconflow 域名规范化
     const normalizeBase = (url: string): string => {
       try {
         const u = new URL(url);
         const host = u.host.toLowerCase();
+        const pathname = u.pathname.replace(/\/+$/, '');
         if (host === 'siliconflow.cn' || host === 'www.siliconflow.cn' || host === 'cloud.siliconflow.cn') {
-          return 'https://api.siliconflow.cn';
+          // 如果用户带了路径，保留路径
+          return `https://api.siliconflow.cn${pathname}`;
         }
-        return `${u.protocol}//${u.host}`.replace(/\/$/, '');
+        return `${u.origin}${pathname}`;
       } catch {
-        // 允许直接写域名
+        // 允许直接写域名或带路径
         if (/siliconflow\.cn$/i.test(url)) return 'https://api.siliconflow.cn';
-        return url.replace(/\/$/, '');
+        return url.replace(/\/+$/, '');
       }
     };
 
-    // 构造聊天补全端点（默认使用 /chat/completions，避免自动拼接 /v1）
+    // 构造聊天补全端点（默认使用 /chat/completions），若用户已提供完整路径则不再拼接
     const buildChatURL = (base: string): string => {
       const b = base.replace(/\/+$/, '');
       if (/\/chat\/completions$/i.test(b)) return b;
+      if (/\/chat$/i.test(b)) return `${b}/completions`;
       return `${b}/chat/completions`;
     };
 
