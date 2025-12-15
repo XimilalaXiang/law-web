@@ -209,6 +209,100 @@ const Home = () => {
       {/* ========== Research Insights Section ========== */}
       <ResearchInsights />
 
+      {/* ========== Legal & Cases Tips Section ========== */}
+      <section className="relative py-16 md:py-20 border-t border-white/5 bg-gradient-to-b from-black to-[#050505]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <Pill variant="danger">来自合同审查与真实案例的提醒</Pill>
+            <h2 className="mt-4 font-display text-2xl sm:text-3xl text-white">
+              在“签字”和“交钱”之前，再多想三分钟
+            </h2>
+            <p className="mt-3 text-sm text-white/50 max-w-2xl mx-auto">
+              这些要点整理自合同审查视角与真实受骗访谈，希望在你点击“确认”之前，帮你多看到几个风险信号。
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:gap-8 lg:grid-cols-2">
+            {/* 左侧：合同与法律底线 */}
+            <div className="card h-full">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="inline-flex h-7 px-3 items-center rounded-full bg-[var(--primary)]/10 border border-[var(--primary)]/40 text-[10px] font-mono uppercase tracking-[0.14em] text-[var(--primary)]">
+                  合同与公章底线
+                </span>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-4">
+                从企业合同审查视角看求职防骗
+              </h3>
+              <ul className="space-y-3 text-sm text-white/70">
+                <li>
+                  <span className="font-mono text-[11px] text-white/40 mr-2">01</span>
+                  签约前先查清公司“是谁”：用国家企业信用信息公示系统、企查查等核对公司名称、统一社会信用代码、注册地址，不和无资质、被吊销或与招聘信息不一致的主体签约。
+                </li>
+                <li>
+                  <span className="font-mono text-[11px] text-white/40 mr-2">02</span>
+                  签约时只在双方确认的最终版本上签字：用最后一次确认的电子版打印，重要页面加骑缝章，只认公章或合同专用章，不以“部门章”“项目章”代替正式用印。
+                </li>
+                <li>
+                  <span className="font-mono text-[11px] text-white/40 mr-2">03</span>
+                  履行过程中要把证据链拉满：每一次转账、每一份通知、每一条聊天记录，都尽量保留截图或导出记录，出现违约及时书面提出异议并保留送达证明。
+                </li>
+                <li>
+                  <span className="font-mono text-[11px] text-white/40 mr-2">04</span>
+                  劳动合同的几个“硬底线”：不得只签“试用期合同”，试用期时长和工资必须符合《劳动合同法》规定；涉及竞业限制时，要写清适用对象、期限、范围以及补偿标准，没有补偿的竞业条款要格外警惕。
+                </li>
+                <li>
+                  <span className="font-mono text-[11px] text-white/40 mr-2">05</span>
+                  重点核查“章”和“人”是否匹配：通过公安备案、企查查等渠道核验公章编码与公司主体是否一致，签字人是否具备授权；对来路不明的章和签字，宁可暂缓签约。
+                </li>
+                <li>
+                  <span className="font-mono text-[11px] text-white/40 mr-2">06</span>
+                  发生纠纷或怀疑被骗时，先固定证据再处理情绪：整理合同、转账记录、聊天截图等材料，及时向 12315、市场监管部门或公安机关咨询/举报，并在必要时考虑提起诉讼。
+                </li>
+              </ul>
+            </div>
+
+            {/* 右侧：真实案例教训 */}
+            <div className="space-y-4 flex flex-col h-full">
+              <div className="card">
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <div>
+                    <h3 className="text-sm font-semibold text-white">
+                      案例一：身份证原件被拿去贷款
+                    </h3>
+                    <p className="mt-1 text-xs text-white/50 leading-relaxed">
+                      某同学在平台上看到“连锁企业行政助理”岗位，对方现场出示营业执照和“人力资源专用章”，要求先交工作证和保险费用，并收走身份证原件备案，后来身份被冒用办了网贷，征信严重受损。
+                    </p>
+                  </div>
+                </div>
+                <ul className="mt-3 space-y-2 text-xs text-white/65">
+                  <li>· 身份证原件原则上不交给招聘方，如确需核验，应在现场出示或提供标注用途的复印件/遮挡关键信息的扫描件，并索要书面收讫凭证。</li>
+                  <li>· 合同中“服务费不退”“费用自愿”等条款一旦落在纸面上，口头承诺很难推翻，签字前要核对抬头主体与岗位宣传是否一致。</li>
+                  <li>· 不仅看“有没有章”，还要看“章是不是对的”：对照工商信息核实公司全称、公章名称与招聘信息是否一致，必要时通过官方电话复核。</li>
+                </ul>
+              </div>
+
+              <div className="card flex-1">
+                <div className="flex items-start justify-between gap-3 mb-2">
+                  <div>
+                    <h3 className="text-sm font-semibold text白">
+                      案例二：“岗前培训费”换内推
+                    </h3>
+                    <p className="mt-1 text-xs text-white/50 leading-relaxed">
+                      另一位工科同学被告知“先交 1500 元岗前培训费，培训合格就内推进知名互联网公司”，对方用“名额有限”“这是在投资自己”不断施压，签完所谓培训协议并转账后，对方失联、办公地点人去楼空。
+                    </p>
+                  </div>
+                </div>
+                <ul className="mt-3 space-y-2 text-xs text-white/65">
+                  <li>· 记住一个底线：正规用人单位在入职前不会以任何名义向求职者收费，无论是培训费、服装费、押金还是“内推费”。</li>
+                  <li>· 遇到“今天不交就没名额”“机会难得”的强烈催促话术时，先给自己设置冷静期，至少多问几位学长学姐或老师的意见。</li>
+                  <li>· 看到打着知名企业旗号的岗位，一定要用企业官网官方渠道、企业认证的招聘账号进行反向核实，而不是只看第三方平台页面。</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ========== Testimonials Section ========== */}
       <section className="relative py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0a0a0a] to-black" />
