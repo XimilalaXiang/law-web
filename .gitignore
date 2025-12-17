@@ -38,4 +38,28 @@ lerna-debug.log*
 # Vercel
 .vercel
 
-.vercel
+# Cursor IDE
+.cursor
+
+# Playwright MCP
+.playwright-mcp
+
+# Super Design
+.superdesign
+
+# Windsurf
+.windsurfrules
+
+# Local rules
+rules.txt
+
+# Capacitor local files
+android/app/build
+android/build
+android/capacitor-cordova-android-plugins/build
+ios/App/Pods
+ios/App/App.xcworkspace/xcuserdata
+*.xcuserstate
+
+# Local properties
+android/local.properties
